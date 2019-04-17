@@ -12,14 +12,15 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import { styled } from "@material-ui/styles";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import Collapse from "@material-ui/core/Collapse";
 
-interface IProps {
+import { styled } from "@material-ui/styles";
+
+type TProps = {
   header: string;
-}
+};
 
 const ToolBar = styled(Toolbar)({
   background: "rgba(73,155,234,1)",
@@ -30,17 +31,7 @@ const ToolBar = styled(Toolbar)({
   font: "20px solid"
 });
 
-const MenuItems = styled(MenuItem)({
-  background: "rgba(123,177,239,1)",
-  border: 0,
-  color: "white",
-  height: 48,
-  padding: "0 30px",
-  width: 200,
-  textAlign: "center"
-});
-
-export default class NavBar extends React.Component<IProps, {}> {
+export default class NavBar extends React.Component<TProps, {}> {
   state = {
     open: false,
     openList: true

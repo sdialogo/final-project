@@ -1,12 +1,12 @@
 import * as React from "react";
 
-interface IProps {
+type TProps = {
   compiler: string;
   framework: string;
   bundler: string;
-}
+};
 
-export class Hello extends React.Component<IProps, {}> {
+export class Hello extends React.Component<TProps, {}> {
   render() {
     return (
       <h1>
