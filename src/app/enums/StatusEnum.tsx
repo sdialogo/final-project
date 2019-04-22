@@ -1,7 +1,7 @@
 enum Status {
-  NotStarted,
-  InProgress,
-  Done
+  NotStarted = "Not Started",
+  InProgress = "In Progress",
+  Done = "Done"
 }
 
 export { Status };
