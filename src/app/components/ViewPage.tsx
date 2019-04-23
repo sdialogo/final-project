@@ -1,27 +1,23 @@
 import * as React from "react";
-import PropTypes, { any } from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import MoreVertical from "@material-ui/icons/MoreVert";
 import Drawer from "@material-ui/core/Drawer";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import ListSubheader from "@material-ui/core/ListSubheader";
 
 import { styled } from "@material-ui/styles";
 import { Status } from "../enums/StatusEnum";
@@ -226,6 +222,7 @@ export default class ViewPage extends React.Component<{}, TState> {
             <TableBody>
               {data.map(n => {
                 const isSelected = this.isSelected(n.id);
+                const currStatus = n.status;
                 return (
                   <TableRow
                     hover
@@ -254,7 +251,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                       >
                         <HeaderCard>
                           <CardContent>
-                            <Typography>
+                            <Typography variant="headline">
                               <h3 style={{ color: "white" }}>{n.title}</h3>
                             </Typography>
                             <div>
@@ -314,10 +311,84 @@ export default class ViewPage extends React.Component<{}, TState> {
                           </CardContent>
                         </HeaderCard>
                         <Card>
+                          <Grid
+                            container
+                            spacing={16}
+                            style={{
+                              marginLeft: "10px",
+                              marginTop: "5px",
+                              marginBottom: "5px"
+                            }}
+                          >
+                            <Grid item xs={12}>
+                              <Typography variant="subheading">
+                                Details
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Typography component="p" variant="subtitle2">
+                                Title
+                                <br />
+                                {n.title}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Typography component="p" variant="subtitle2">
+                                Description
+                                <br />
+                                string
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Typography component="p" variant="subtitle2">
+                                Due Date
+                                <br />
+                                {n.dueDate}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Typography component="p" variant="subtitle2">
+                                Completed Date
+                                <br />-
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                              {currStatus === Status.NotStarted ? (
+                                <Button
+                                  style={{ background: "red", color: "white" }}
+                                >
+                                  {n.status}
+                                </Button>
+                              ) : currStatus === Status.Done ? (
+                                <Button
+                                  style={{
+                                    background: "green",
+                                    color: "white"
+                                  }}
+                                >
+                                  {n.status}
+                                </Button>
+                              ) : (
+                                <Button
+                                  style={{
+                                    background: "orange",
+                                    color: "white"
+                                  }}
+                                >
+                                  {n.status}
+                                </Button>
+                              )}
+                            </Grid>
+                          </Grid>
+                        </Card>
+                        <Card>
                           <CardActions>
-                            <Button size="medium" onClick={this.handleClose}>
-                              Close
-                            </Button>
+                            <Grid justify="flex-end" container>
+                              <Button size="medium">Edit</Button>
+                              <Button size="medium" onClick={this.handleClose}>
+                                Close
+                              </Button>
+                            </Grid>
                           </CardActions>
                         </Card>
                       </Drawer>
