@@ -8,16 +8,18 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import MoreVertical from "@material-ui/icons/MoreVert";
 import Drawer from "@material-ui/core/Drawer";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import ListSubheader from "@material-ui/core/ListSubheader";
+
+import IconButton from "@material-ui/core/IconButton";
+import MoreVertical from "@material-ui/icons/MoreVert";
+import Edit from "@material-ui/icons/Edit";
+import Close from "@material-ui/icons/Close";
 
 import { styled } from "@material-ui/styles";
 import { Status } from "../enums/StatusEnum";
@@ -251,9 +253,15 @@ export default class ViewPage extends React.Component<{}, TState> {
                       >
                         <HeaderCard>
                           <CardContent>
-                            <Typography variant="headline">
-                              <h3 style={{ color: "white" }}>{n.title}</h3>
-                            </Typography>
+                            <div>
+                              <Typography
+                                variant="headline"
+                                style={{ color: "white" }}
+                              >
+                                {n.title}
+                              </Typography>
+                            </div>
+                            <br />
                             <div>
                               <Typography
                                 variant="caption"
@@ -384,10 +392,12 @@ export default class ViewPage extends React.Component<{}, TState> {
                         <Card>
                           <CardActions>
                             <Grid justify="flex-end" container>
-                              <Button size="medium">Edit</Button>
-                              <Button size="medium" onClick={this.handleClose}>
-                                Close
-                              </Button>
+                              <IconButton>
+                                <Edit />
+                              </IconButton>
+                              <IconButton onClick={this.handleClose}>
+                                <Close />
+                              </IconButton>
                             </Grid>
                           </CardActions>
                         </Card>
