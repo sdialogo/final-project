@@ -12,13 +12,17 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertical from "@material-ui/icons/MoreVert";
+import AddIcon from "@material-ui/icons/Add";
 
 import { Status } from "../enums/StatusEnum";
 import DetailsView from "./DetailsView";
 import EnhancedTableHead from "./EnhancedTableHead";
+
+import { styled } from "@material-ui/styles";
 
 type TData = {
   id: number;
@@ -41,6 +45,15 @@ type TState = {
   toDelete: number;
 };
 
+type TProps = {
+  functionality: string; //devPlan or employee
+};
+
+const ActionButtons = styled(Button)({
+  background: "rgba(73,155,234,1)",
+  color: "white"
+});
+
 let counter = 0;
 function createData(
   title: string,
@@ -53,14 +66,6 @@ function createData(
 }
 
 function findDataToDelete(toDelete: number, arr: TData[]): TData {
-  let dataToDelete: TData = {
-    id: 0,
-    title: "",
-    asignee: "",
-    status: Status.Done,
-    dueDate: ""
-  };
-
   for (var i = 0; i < arr.length; i++) {
     if (arr[i].id === toDelete) {
       return arr[i];
@@ -70,7 +75,7 @@ function findDataToDelete(toDelete: number, arr: TData[]): TData {
   return { id: 0, title: "", asignee: "", status: Status.Done, dueDate: "" };
 }
 
-export default class ViewPage extends React.Component<{}, TState> {
+export default class ViewPage extends React.Component<TProps, TState> {
   state: TState = {
     order: "asc",
     orderBy: "asignee",
@@ -189,94 +194,128 @@ export default class ViewPage extends React.Component<{}, TState> {
       page,
       editData
     } = this.state;
-    const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+    const { functionality } = this.props;
     return (
-      <Paper>
-        {/* Enhanced Toolbar */}
+      <div>
         <div>
-          <Table aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <TableBody>
-              {data.map(n => {
-                const isSelected = this.isSelected(n.id);
-                return (
-                  <TableRow
-                    hover
-                    onClick={event => this.handleDrawerOpen(event, n.id)}
-                    role="checkbox"
-                    aria-checked={isSelected}
-                    tabIndex={-1}
-                    key={n.id}
-                    selected={isSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isSelected}
-                        // onChange={event => this.handleClick(event, n.id)}
-                      />
-                    </TableCell>
-                    <TableCell padding="none">{n.title}</TableCell>
-                    <TableCell align="left">{n.asignee}</TableCell>
-                    <TableCell align="left">{n.status}</TableCell>
-                    <TableCell align="left">{n.dueDate}</TableCell>
-                    <TableCell align="left">
-                      <IconButton
-                        onClick={event => this.handleClickDelete(event, n.id)}
-                      >
-                        <MoreVertical />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-          {this.state.open ? (
-            <DetailsView
-              data={editData}
-              toggleDrawer={this.handleToggle.bind(this)}
-              closeDrawer={this.handleClose.bind(this)}
-            />
-          ) : (
-            <div />
-          )}
-          {this.state.onDelete ? (
-            <div>
-              <Dialog
-                open={this.state.onDelete}
-                onClose={this.handleCloseDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
+          <Grid container alignItems="center" style={{ flexGrow: 1 }}>
+            <Grid item xs={6}>
+              <h2 style={{ marginLeft: "25px", color: "rgba(73,155,234,1)" }}>
+                {functionality}
+              </h2>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid
+                container
+                spacing={16}
+                alignItems="center"
+                direction="row"
+                justify="flex-end"
+                style={{ height: 80 }}
               >
-                <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    Are you sure you want to delete this data?
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleDelete} color="primary" autoFocus>
-                    Delete
-                  </Button>
-                  <Button onClick={this.handleCloseDialog} color="primary">
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-          ) : (
-            ""
-          )}
+                <Grid item>
+                  <ActionButtons variant="contained">Search</ActionButtons>
+                </Grid>
+                <Grid item>
+                  <ActionButtons variant="contained">
+                    Add
+                    <AddIcon />
+                  </ActionButtons>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         </div>
-      </Paper>
+        <Paper>
+          {/* Enhanced Toolbar */}
+          <div>
+            <Table aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
+              <TableBody>
+                {data.map(n => {
+                  const isSelected = this.isSelected(n.id);
+                  return (
+                    <TableRow
+                      hover
+                      onClick={event => this.handleDrawerOpen(event, n.id)}
+                      role="checkbox"
+                      aria-checked={isSelected}
+                      tabIndex={-1}
+                      key={n.id}
+                      selected={isSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isSelected}
+                          // onChange={event => this.handleClick(event, n.id)}
+                        />
+                      </TableCell>
+                      <TableCell padding="none">{n.title}</TableCell>
+                      <TableCell align="left">{n.asignee}</TableCell>
+                      <TableCell align="left">{n.status}</TableCell>
+                      <TableCell align="left">{n.dueDate}</TableCell>
+                      <TableCell align="left">
+                        <IconButton
+                          onClick={event => this.handleClickDelete(event, n.id)}
+                        >
+                          <MoreVertical />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+            {this.state.open ? (
+              <DetailsView
+                data={editData}
+                toggleDrawer={this.handleToggle.bind(this)}
+                closeDrawer={this.handleClose.bind(this)}
+              />
+            ) : (
+              <div />
+            )}
+            {this.state.onDelete ? (
+              <div>
+                <Dialog
+                  open={this.state.onDelete}
+                  onClose={this.handleCloseDialog}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure you want to delete this data?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={this.handleDelete}
+                      color="primary"
+                      autoFocus
+                    >
+                      Delete
+                    </Button>
+                    <Button onClick={this.handleCloseDialog} color="primary">
+                      Cancel
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        </Paper>
+      </div>
     );
   }
 }

@@ -1,7 +1,8 @@
 import * as React from "react";
 
+import ViewPage from "./ViewPage";
 export default class Hello extends React.Component<{}, {}> {
   render() {
-    return <h3>Hello </h3>;
+    return <ViewPage functionality="Development Plan" />;
   }
 }
