@@ -11,3 +11,15 @@ ReactDOM.render(
   </div>,
   document.getElementById("root")
 );
+
+// const Main = <div>
+//     <NavBar header="Development Plans" />
+//     <ViewPage />
+//   </div>;
+
+// ReactDOM.render(
+//   <Provider>
+//     {Main}
+//   </Provider>,
+//   document.getElementById("root")
+// );

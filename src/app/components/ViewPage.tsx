@@ -23,6 +23,7 @@ import Close from "@material-ui/icons/Close";
 
 import { styled } from "@material-ui/styles";
 import { Status } from "../enums/StatusEnum";
+import { any } from "prop-types";
 
 type TData = {
   id: number;
@@ -41,6 +42,7 @@ type TState = {
   rowsPerPage: number;
   open?: boolean;
   isCheckbox?: boolean;
+  editData: TData;
 };
 
 type TProps = {
@@ -139,7 +141,14 @@ export default class ViewPage extends React.Component<{}, TState> {
     ],
     page: 0,
     rowsPerPage: 10,
-    isCheckbox: true
+    isCheckbox: true,
+    editData: {
+      id: 0,
+      title: "",
+      asignee: "",
+      status: Status.Done,
+      dueDate: ""
+    }
   };
 
   handleRequestSort = (event: any, property: any) => {
@@ -166,11 +175,6 @@ export default class ViewPage extends React.Component<{}, TState> {
     const selectedIndex = selected.indexOf(id);
     let newSelected: any[] = [];
 
-    console.log("id: ", id);
-    console.log("selected index: ", selectedIndex);
-    console.log("selected: ", selected);
-    console.log("checkbox?: ", isCheckbox);
-
     if (!isCheckbox) {
       this.setState({ isCheckbox: true });
       return;
@@ -196,16 +200,30 @@ export default class ViewPage extends React.Component<{}, TState> {
 
   handleToggle = () => this.setState({ open: !this.state.open });
 
-  handleDrawerOpen = () => {
-    this.setState({ open: true });
-    this.setState({ isCheckbox: false });
+  handleDrawerOpen = (event: any, id: number) => {
+    const { editData, data } = this.state;
+    console.log("Clicked row with id " + id);
+    console.log("from ", data);
+    let currData = data[id - 1];
+    console.log("Current data: ", currData);
+    this.setState({ editData: currData, open: true, isCheckbox: false });
+    console.log("Edit data: ", editData);
   };
 
   handleClose = () => {
     this.setState({ open: false });
   };
+
   render() {
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+    const {
+      data,
+      order,
+      orderBy,
+      selected,
+      rowsPerPage,
+      page,
+      editData
+    } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
     return (
@@ -224,7 +242,7 @@ export default class ViewPage extends React.Component<{}, TState> {
             <TableBody>
               {data.map(n => {
                 const isSelected = this.isSelected(n.id);
-                const currStatus = n.status;
+                const currStatus = editData.status;
                 return (
                   <TableRow
                     hover
@@ -243,7 +261,9 @@ export default class ViewPage extends React.Component<{}, TState> {
                     <TableCell align="left">{n.status}</TableCell>
                     <TableCell align="left">{n.dueDate}</TableCell>
                     <TableCell align="left">
-                      <IconButton onClick={this.handleDrawerOpen}>
+                      <IconButton
+                        onClick={event => this.handleDrawerOpen(event, n.id)}
+                      >
                         <MoreVertical />
                       </IconButton>
                       <Drawer
@@ -258,7 +278,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                                 variant="headline"
                                 style={{ color: "white" }}
                               >
-                                {n.title}
+                                {editData.title}
                               </Typography>
                             </div>
                             <br />
@@ -277,7 +297,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                                   marginLeft: "10px"
                                 }}
                               >
-                                {n.asignee}
+                                {editData.asignee}
                               </Typography>
                             </div>
                             <div>
@@ -295,7 +315,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                                   marginLeft: "10px"
                                 }}
                               >
-                                {n.status}
+                                {editData.status}
                               </Typography>
                             </div>
                             <div>
@@ -313,7 +333,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                                   marginLeft: "10px"
                                 }}
                               >
-                                {n.dueDate}
+                                {editData.dueDate}
                               </Typography>
                             </div>
                           </CardContent>
@@ -337,7 +357,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                               <Typography component="p" variant="subtitle2">
                                 Title
                                 <br />
-                                {n.title}
+                                {editData.title}
                               </Typography>
                             </Grid>
                             <Grid item xs={6}>
@@ -351,7 +371,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                               <Typography component="p" variant="subtitle2">
                                 Due Date
                                 <br />
-                                {n.dueDate}
+                                {editData.dueDate}
                               </Typography>
                             </Grid>
                             <Grid item xs={6}>
@@ -365,7 +385,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                                 <Button
                                   style={{ background: "red", color: "white" }}
                                 >
-                                  {n.status}
+                                  {editData.status}
                                 </Button>
                               ) : currStatus === Status.Done ? (
                                 <Button
@@ -374,7 +394,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                                     color: "white"
                                   }}
                                 >
-                                  {n.status}
+                                  {editData.status}
                                 </Button>
                               ) : (
                                 <Button
@@ -383,7 +403,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                                     color: "white"
                                   }}
                                 >
-                                  {n.status}
+                                  {editData.status}
                                 </Button>
                               )}
                             </Grid>
