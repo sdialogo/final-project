@@ -52,6 +52,24 @@ function createData(
   return { id: counter, title, asignee, status, dueDate };
 }
 
+function findDataToDelete(toDelete: number, arr: TData[]): TData {
+  let dataToDelete: TData = {
+    id: 0,
+    title: "",
+    asignee: "",
+    status: Status.Done,
+    dueDate: ""
+  };
+
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].id === toDelete) {
+      return arr[i];
+    }
+  }
+
+  return { id: 0, title: "", asignee: "", status: Status.Done, dueDate: "" };
+}
+
 export default class ViewPage extends React.Component<{}, TState> {
   state: TState = {
     order: "asc",
@@ -142,7 +160,7 @@ export default class ViewPage extends React.Component<{}, TState> {
     console.log("Deleting data...");
     event.stopPropagation();
 
-    this.setState({ onDelete: true, toDelete: id - 1 });
+    this.setState({ onDelete: true, toDelete: id });
   };
 
   handleCloseDialog = () => {
@@ -151,10 +169,14 @@ export default class ViewPage extends React.Component<{}, TState> {
   };
 
   handleDelete = () => {
-    const { data } = this.state;
+    const { data, toDelete } = this.state;
+    let deleteData: TData = findDataToDelete(toDelete, data);
 
-    this.setState({ onDelete: false });
-    console.log(data[this.state.toDelete]);
+    this.setState({
+      onDelete: false,
+      data: data.filter(d => d !== deleteData)
+    });
+    console.log("Deleted");
   };
 
   render() {
@@ -245,7 +267,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                     Delete
                   </Button>
                   <Button onClick={this.handleCloseDialog} color="primary">
-                    Close
+                    Cancel
                   </Button>
                 </DialogActions>
               </Dialog>
