@@ -1,4 +1,6 @@
 import * as React from "react";
+
+import { styled } from "@material-ui/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -6,11 +8,11 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+
 import IconButton from "@material-ui/core/IconButton";
 import Edit from "@material-ui/icons/Edit";
 import Close from "@material-ui/icons/Close";
 
-import { styled } from "@material-ui/styles";
 import { Status } from "../enums/StatusEnum";
 
 type TData = {
@@ -37,9 +39,19 @@ const HeaderCard = styled(Card)({
   color: "white"
 });
 
+const LeftLabel = styled(Typography)({
+  display: "inline-block",
+  color: "white",
+  marginLeft: "10px"
+});
+
 export default class DetailsView extends React.Component<TProps, TState> {
   state: TState = {
     open: true
+  };
+
+  handleEdit = () => {
+    console.log("Edit...");
   };
 
   render() {
@@ -78,31 +90,13 @@ export default class DetailsView extends React.Component<TProps, TState> {
               <Typography variant="caption" style={{ display: "inline-block" }}>
                 Status
               </Typography>
-              <Typography
-                variant="button"
-                style={{
-                  display: "inline-block",
-                  color: "white",
-                  marginLeft: "10px"
-                }}
-              >
-                {data.status}
-              </Typography>
+              <LeftLabel variant="button">{data.status}</LeftLabel>
             </div>
             <div>
               <Typography variant="caption" style={{ display: "inline-block" }}>
                 Due Date
               </Typography>
-              <Typography
-                variant="button"
-                style={{
-                  display: "inline-block",
-                  color: "white",
-                  marginLeft: "10px"
-                }}
-              >
-                {data.dueDate}
-              </Typography>
+              <LeftLabel variant="button">{data.dueDate}</LeftLabel>
             </div>
           </CardContent>
         </HeaderCard>
@@ -122,29 +116,26 @@ export default class DetailsView extends React.Component<TProps, TState> {
             <Grid item xs={6}>
               <Typography component="p" variant="subtitle2">
                 Title
-                <br />
-                {data.title}
               </Typography>
+              {data.title}
             </Grid>
             <Grid item xs={6}>
               <Typography component="p" variant="subtitle2">
                 Description
-                <br />
-                string
               </Typography>
+              string
             </Grid>
             <Grid item xs={6}>
               <Typography component="p" variant="subtitle2">
                 Due Date
-                <br />
-                {data.dueDate}
               </Typography>
+              {data.dueDate}
             </Grid>
             <Grid item xs={6}>
               <Typography component="p" variant="subtitle2">
                 Completed Date
-                <br />-
               </Typography>
+              n/a
             </Grid>
             <Grid item xs={6}>
               {data.status === Status.NotStarted ? (
@@ -176,7 +167,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
         <Card>
           <CardActions>
             <Grid justify="flex-end" container>
-              <IconButton>
+              <IconButton onClick={this.handleEdit}>
                 <Edit />
               </IconButton>
               <IconButton onClick={event => closeDrawer(event)}>

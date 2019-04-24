@@ -1,30 +1,24 @@
 import * as React from "react";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import Tooltip from "@material-ui/core/Tooltip";
-import Drawer from "@material-ui/core/Drawer";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
 
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertical from "@material-ui/icons/MoreVert";
-import Edit from "@material-ui/icons/Edit";
-import Close from "@material-ui/icons/Close";
 
-import { styled } from "@material-ui/styles";
 import { Status } from "../enums/StatusEnum";
-import { any } from "prop-types";
 import DetailsView from "./DetailsView";
+import EnhancedTableHead from "./EnhancedTableHead";
 
 type TData = {
   id: number;
@@ -41,27 +35,11 @@ type TState = {
   data: TData[];
   page: number;
   rowsPerPage: number;
-  open?: boolean;
-  isCheckbox?: boolean;
+  open: boolean;
   editData: TData;
+  onDelete: boolean;
+  toDelete: number;
 };
-
-type TProps = {
-  onSelectAllClick: any;
-  order: any;
-  orderBy: any;
-  numSelected: number;
-  rowCount: number;
-  onRequestSort: any;
-};
-
-const rows = [
-  { id: "title", disablePadding: true, label: "Title" },
-  { id: "assignee", disablePadding: false, label: "Assignee" },
-  { id: "status", disablePadding: false, label: "Progress Status" },
-  { id: "dueDate", disablePadding: false, label: "Due Date" },
-  { id: "action", disablePadding: false, label: "Actions" }
-];
 
 let counter = 0;
 function createData(
@@ -72,61 +50,6 @@ function createData(
 ) {
   counter += 1;
   return { id: counter, title, asignee, status, dueDate };
-}
-
-const HeaderCard = styled(Card)({
-  background: "rgba(73,155,234,1)",
-  width: 700,
-  color: "white"
-});
-
-class EnhancedTableHead extends React.Component<TProps, {}> {
-  createSortHandler = (property: any) => (event: any) => {
-    this.props.onRequestSort(event, property);
-  };
-  render() {
-    const {
-      onSelectAllClick,
-      order,
-      orderBy,
-      numSelected,
-      rowCount
-    } = this.props;
-
-    return (
-      <TableHead>
-        <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
-          {rows.map(
-            row => (
-              <TableCell
-                key={row.id}
-                padding={row.disablePadding ? "none" : "default"}
-                sortDirection={orderBy === row.id ? order : false}
-              >
-                <Tooltip title="Sort" enterDelay={300}>
-                  <TableSortLabel
-                    active={orderBy === row.id}
-                    direction={order}
-                    onClick={this.createSortHandler(row.id)}
-                  >
-                    {row.label}
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-            ),
-            this
-          )}
-        </TableRow>
-      </TableHead>
-    );
-  }
 }
 
 export default class ViewPage extends React.Component<{}, TState> {
@@ -142,14 +65,16 @@ export default class ViewPage extends React.Component<{}, TState> {
     ],
     page: 0,
     rowsPerPage: 10,
-    isCheckbox: true,
+    open: null,
     editData: {
       id: 0,
       title: "",
       asignee: "",
       status: Status.Done,
       dueDate: ""
-    }
+    },
+    onDelete: false,
+    toDelete: 0
   };
 
   handleRequestSort = (event: any, property: any) => {
@@ -172,14 +97,11 @@ export default class ViewPage extends React.Component<{}, TState> {
   };
 
   handleClick = (event: any, id: number) => {
-    const { selected, isCheckbox } = this.state;
+    console.log("Row " + id + " checkbox");
+    event.stopPropagation();
+    const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected: any[] = [];
-
-    if (!isCheckbox) {
-      this.setState({ isCheckbox: true });
-      return;
-    }
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
@@ -207,18 +129,32 @@ export default class ViewPage extends React.Component<{}, TState> {
     const { data } = this.state;
     let currData = data[id - 1];
 
-    this.setState({ editData: currData, open: true, isCheckbox: false });
-  };
-
-  handleDelete = (event: any, id: number) => {
-    console.log("Delete...");
-    event.stopPropagation();
+    this.setState({ editData: currData, open: true });
   };
 
   handleClose = (event: any) => {
     event.stopPropagation();
     console.log("Closing drawer...");
     this.setState({ open: false });
+  };
+
+  handleClickDelete = (event: any, id: number) => {
+    console.log("Deleting data...");
+    event.stopPropagation();
+
+    this.setState({ onDelete: true, toDelete: id - 1 });
+  };
+
+  handleCloseDialog = () => {
+    console.log("Delete cancelled");
+    this.setState({ onDelete: false });
+  };
+
+  handleDelete = () => {
+    const { data } = this.state;
+
+    this.setState({ onDelete: false });
+    console.log(data[this.state.toDelete]);
   };
 
   render() {
@@ -249,19 +185,21 @@ export default class ViewPage extends React.Component<{}, TState> {
             <TableBody>
               {data.map(n => {
                 const isSelected = this.isSelected(n.id);
-                const currStatus = editData.status;
                 return (
                   <TableRow
                     hover
                     onClick={event => this.handleDrawerOpen(event, n.id)}
-                    // role="checkbox"
+                    role="checkbox"
                     aria-checked={isSelected}
                     tabIndex={-1}
                     key={n.id}
                     selected={isSelected}
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox checked={isSelected} />
+                      <Checkbox
+                        checked={isSelected}
+                        // onChange={event => this.handleClick(event, n.id)}
+                      />
                     </TableCell>
                     <TableCell padding="none">{n.title}</TableCell>
                     <TableCell align="left">{n.asignee}</TableCell>
@@ -269,7 +207,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                     <TableCell align="left">{n.dueDate}</TableCell>
                     <TableCell align="left">
                       <IconButton
-                        onClick={event => this.handleDelete(event, n.id)}
+                        onClick={event => this.handleClickDelete(event, n.id)}
                       >
                         <MoreVertical />
                       </IconButton>
@@ -287,6 +225,33 @@ export default class ViewPage extends React.Component<{}, TState> {
             />
           ) : (
             <div />
+          )}
+          {this.state.onDelete ? (
+            <div>
+              <Dialog
+                open={this.state.onDelete}
+                onClose={this.handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to delete this data?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleDelete} color="primary" autoFocus>
+                    Delete
+                  </Button>
+                  <Button onClick={this.handleCloseDialog} color="primary">
+                    Close
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          ) : (
+            ""
           )}
         </div>
       </Paper>
