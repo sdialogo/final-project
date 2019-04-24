@@ -24,6 +24,7 @@ import Close from "@material-ui/icons/Close";
 import { styled } from "@material-ui/styles";
 import { Status } from "../enums/StatusEnum";
 import { any } from "prop-types";
+import DetailsView from "./DetailsView";
 
 type TData = {
   id: number;
@@ -137,7 +138,7 @@ export default class ViewPage extends React.Component<{}, TState> {
       createData("Sample 1", "Asignee 1", Status.Done, "04-18-2019"),
       createData("Sample 2", "Asignee 2", Status.InProgress, "04-19-2019"),
       createData("Sample 3", "Asignee 3", Status.NotStarted, "04-20-2019"),
-      createData("Sample 4", "Asignee 4", Status.NotStarted, "04-20-2019")
+      createData("Sample 4", "Asignee 4", Status.Done, "04-20-2019")
     ],
     page: 0,
     rowsPerPage: 10,
@@ -201,16 +202,22 @@ export default class ViewPage extends React.Component<{}, TState> {
   handleToggle = () => this.setState({ open: !this.state.open });
 
   handleDrawerOpen = (event: any, id: number) => {
-    const { editData, data } = this.state;
-    console.log("Clicked row with id " + id);
-    console.log("from ", data);
+    event.stopPropagation();
+    console.log("Drawer opened");
+    const { data } = this.state;
     let currData = data[id - 1];
-    console.log("Current data: ", currData);
+
     this.setState({ editData: currData, open: true, isCheckbox: false });
-    console.log("Edit data: ", editData);
   };
 
-  handleClose = () => {
+  handleDelete = (event: any, id: number) => {
+    console.log("Delete...");
+    event.stopPropagation();
+  };
+
+  handleClose = (event: any) => {
+    event.stopPropagation();
+    console.log("Closing drawer...");
     this.setState({ open: false });
   };
 
@@ -246,8 +253,8 @@ export default class ViewPage extends React.Component<{}, TState> {
                 return (
                   <TableRow
                     hover
-                    onClick={event => this.handleClick(event, n.id)}
-                    role="checkbox"
+                    onClick={event => this.handleDrawerOpen(event, n.id)}
+                    // role="checkbox"
                     aria-checked={isSelected}
                     tabIndex={-1}
                     key={n.id}
@@ -262,172 +269,25 @@ export default class ViewPage extends React.Component<{}, TState> {
                     <TableCell align="left">{n.dueDate}</TableCell>
                     <TableCell align="left">
                       <IconButton
-                        onClick={event => this.handleDrawerOpen(event, n.id)}
+                        onClick={event => this.handleDelete(event, n.id)}
                       >
                         <MoreVertical />
                       </IconButton>
-                      <Drawer
-                        anchor="right"
-                        open={this.state.open}
-                        onClose={this.handleToggle}
-                      >
-                        <HeaderCard>
-                          <CardContent>
-                            <div>
-                              <Typography
-                                variant="headline"
-                                style={{ color: "white" }}
-                              >
-                                {editData.title}
-                              </Typography>
-                            </div>
-                            <br />
-                            <div>
-                              <Typography
-                                variant="caption"
-                                style={{ display: "inline-block" }}
-                              >
-                                Asignee
-                              </Typography>
-                              <Typography
-                                variant="button"
-                                style={{
-                                  display: "inline-block",
-                                  color: "white",
-                                  marginLeft: "10px"
-                                }}
-                              >
-                                {editData.asignee}
-                              </Typography>
-                            </div>
-                            <div>
-                              <Typography
-                                variant="caption"
-                                style={{ display: "inline-block" }}
-                              >
-                                Status
-                              </Typography>
-                              <Typography
-                                variant="button"
-                                style={{
-                                  display: "inline-block",
-                                  color: "white",
-                                  marginLeft: "10px"
-                                }}
-                              >
-                                {editData.status}
-                              </Typography>
-                            </div>
-                            <div>
-                              <Typography
-                                variant="caption"
-                                style={{ display: "inline-block" }}
-                              >
-                                Due Date
-                              </Typography>
-                              <Typography
-                                variant="button"
-                                style={{
-                                  display: "inline-block",
-                                  color: "white",
-                                  marginLeft: "10px"
-                                }}
-                              >
-                                {editData.dueDate}
-                              </Typography>
-                            </div>
-                          </CardContent>
-                        </HeaderCard>
-                        <Card>
-                          <Grid
-                            container
-                            spacing={16}
-                            style={{
-                              marginLeft: "10px",
-                              marginTop: "5px",
-                              marginBottom: "5px"
-                            }}
-                          >
-                            <Grid item xs={12}>
-                              <Typography variant="subheading">
-                                Details
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Typography component="p" variant="subtitle2">
-                                Title
-                                <br />
-                                {editData.title}
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Typography component="p" variant="subtitle2">
-                                Description
-                                <br />
-                                string
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Typography component="p" variant="subtitle2">
-                                Due Date
-                                <br />
-                                {editData.dueDate}
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Typography component="p" variant="subtitle2">
-                                Completed Date
-                                <br />-
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                              {currStatus === Status.NotStarted ? (
-                                <Button
-                                  style={{ background: "red", color: "white" }}
-                                >
-                                  {editData.status}
-                                </Button>
-                              ) : currStatus === Status.Done ? (
-                                <Button
-                                  style={{
-                                    background: "green",
-                                    color: "white"
-                                  }}
-                                >
-                                  {editData.status}
-                                </Button>
-                              ) : (
-                                <Button
-                                  style={{
-                                    background: "orange",
-                                    color: "white"
-                                  }}
-                                >
-                                  {editData.status}
-                                </Button>
-                              )}
-                            </Grid>
-                          </Grid>
-                        </Card>
-                        <Card>
-                          <CardActions>
-                            <Grid justify="flex-end" container>
-                              <IconButton>
-                                <Edit />
-                              </IconButton>
-                              <IconButton onClick={this.handleClose}>
-                                <Close />
-                              </IconButton>
-                            </Grid>
-                          </CardActions>
-                        </Card>
-                      </Drawer>
                     </TableCell>
                   </TableRow>
                 );
               })}
             </TableBody>
           </Table>
+          {this.state.open ? (
+            <DetailsView
+              data={editData}
+              toggleDrawer={this.handleToggle.bind(this)}
+              closeDrawer={this.handleClose.bind(this)}
+            />
+          ) : (
+            <div />
+          )}
         </div>
       </Paper>
     );
