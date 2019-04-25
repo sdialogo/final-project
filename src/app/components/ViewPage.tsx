@@ -214,20 +214,27 @@ export default class ViewPage extends React.Component<TProps, TState> {
                 style={{ height: 80 }}
               >
                 <Grid item>
-                  <ActionButtons variant="contained">Search</ActionButtons>
+                  <Button
+                    variant="contained"
+                    style={{ background: "rgba(73,155,234,1)", color: "white" }}
+                  >
+                    Search
+                  </Button>
                 </Grid>
                 <Grid item>
-                  <ActionButtons variant="contained">
+                  <Button
+                    variant="contained"
+                    style={{ background: "rgba(73,155,234,1)", color: "white" }}
+                  >
                     Add
                     <AddIcon />
-                  </ActionButtons>
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
         </div>
         <Paper>
-          {/* Enhanced Toolbar */}
           <div>
             <Table aria-labelledby="tableTitle">
               <EnhancedTableHead
