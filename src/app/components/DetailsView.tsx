@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { styled } from "@material-ui/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -32,19 +31,6 @@ type TProps = {
   toggleDrawer: any;
   closeDrawer: any;
 };
-
-const HeaderCard = styled(Card)({
-  background: "rgba(73,155,234,1)",
-  width: 700,
-  color: "white"
-});
-
-const LeftLabel = styled(Typography)({
-  display: "inline-block",
-  color: "white",
-  marginLeft: "10px"
-});
-
 export default class DetailsView extends React.Component<TProps, TState> {
   state: TState = {
     open: true
@@ -63,7 +49,13 @@ export default class DetailsView extends React.Component<TProps, TState> {
         open={this.state.open}
         onClose={event => toggleDrawer(event)}
       >
-        <HeaderCard>
+        <Card
+          style={{
+            background: "rgba(73,155,234,1)",
+            width: 700,
+            color: "white"
+          }}
+        >
           <CardContent>
             <div>
               <Typography variant="headline" style={{ color: "white" }}>
@@ -90,16 +82,34 @@ export default class DetailsView extends React.Component<TProps, TState> {
               <Typography variant="caption" style={{ display: "inline-block" }}>
                 Status
               </Typography>
-              <LeftLabel variant="button">{data.status}</LeftLabel>
+              <Typography
+                variant="button"
+                style={{
+                  display: "inline-block",
+                  color: "white",
+                  marginLeft: "10px"
+                }}
+              >
+                {data.status}
+              </Typography>
             </div>
             <div>
               <Typography variant="caption" style={{ display: "inline-block" }}>
                 Due Date
               </Typography>
-              <LeftLabel variant="button">{data.dueDate}</LeftLabel>
+              <Typography
+                variant="button"
+                style={{
+                  display: "inline-block",
+                  color: "white",
+                  marginLeft: "10px"
+                }}
+              >
+                {data.dueDate}
+              </Typography>
             </div>
           </CardContent>
-        </HeaderCard>
+        </Card>
         <Card>
           <Grid
             container

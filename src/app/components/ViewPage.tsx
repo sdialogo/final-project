@@ -65,9 +65,9 @@ function createData(
   return { id: counter, title, asignee, status, dueDate };
 }
 
-function findDataToDelete(toDelete: number, arr: TData[]): TData {
+function findDataById(id: number, arr: TData[]): TData {
   for (var i = 0; i < arr.length; i++) {
-    if (arr[i].id === toDelete) {
+    if (arr[i].id === id) {
       return arr[i];
     }
   }
@@ -150,7 +150,7 @@ export default class ViewPage extends React.Component<TProps, TState> {
     event.stopPropagation();
     console.log("Drawer opened");
     const { data } = this.state;
-    let currData = data[id - 1];
+    let currData = findDataById(id, data);
 
     this.setState({ editData: currData, open: true });
   };
@@ -175,7 +175,7 @@ export default class ViewPage extends React.Component<TProps, TState> {
 
   handleDelete = () => {
     const { data, toDelete } = this.state;
-    let deleteData: TData = findDataToDelete(toDelete, data);
+    let deleteData: TData = findDataById(toDelete, data);
 
     this.setState({
       onDelete: false,
