@@ -22,11 +22,10 @@ import { Status } from "../enums/StatusEnum";
 import DetailsView from "./DetailsView";
 import EnhancedTableHead from "./EnhancedTableHead";
 
-import { styled } from "@material-ui/styles";
-
 type TData = {
   id: number;
   title: string;
+  description: string;
   asignee: string;
   status: Status;
   dueDate: string;
@@ -49,20 +48,16 @@ type TProps = {
   functionality: string; //devPlan or employee
 };
 
-const ActionButtons = styled(Button)({
-  background: "rgba(73,155,234,1)",
-  color: "white"
-});
-
 let counter = 0;
 function createData(
   title: string,
-  asignee: string,
+  description: string,
   status: Status,
+  asignee: string,
   dueDate: string
 ) {
   counter += 1;
-  return { id: counter, title, asignee, status, dueDate };
+  return { id: counter, title, description, status, asignee, dueDate };
 }
 
 function findDataById(id: number, arr: TData[]): TData {
@@ -72,7 +67,14 @@ function findDataById(id: number, arr: TData[]): TData {
     }
   }
 
-  return { id: 0, title: "", asignee: "", status: Status.Done, dueDate: "" };
+  return {
+    id: 0,
+    title: "",
+    description: "",
+    status: Status.Done,
+    asignee: "",
+    dueDate: ""
+  };
 }
 
 export default class ViewPage extends React.Component<TProps, TState> {
@@ -81,10 +83,34 @@ export default class ViewPage extends React.Component<TProps, TState> {
     orderBy: "asignee",
     selected: [],
     data: [
-      createData("Sample 1", "Asignee 1", Status.Done, "04-18-2019"),
-      createData("Sample 2", "Asignee 2", Status.InProgress, "04-19-2019"),
-      createData("Sample 3", "Asignee 3", Status.NotStarted, "04-20-2019"),
-      createData("Sample 4", "Asignee 4", Status.Done, "04-20-2019")
+      createData(
+        "Sample 1",
+        "Description",
+        Status.Done,
+        "Asignee 1",
+        "04-18-2019"
+      ),
+      createData(
+        "Sample 2",
+        "Description",
+        Status.InProgress,
+        "Asignee 2",
+        "04-19-2019"
+      ),
+      createData(
+        "Sample 3",
+        "Description",
+        Status.NotStarted,
+        "Asignee 3",
+        "04-20-2019"
+      ),
+      createData(
+        "Sample 4",
+        "Description",
+        Status.Done,
+        "Asignee 4",
+        "04-20-2019"
+      )
     ],
     page: 0,
     rowsPerPage: 10,
@@ -92,6 +118,7 @@ export default class ViewPage extends React.Component<TProps, TState> {
     editData: {
       id: 0,
       title: "",
+      description: "",
       asignee: "",
       status: Status.Done,
       dueDate: ""
@@ -264,9 +291,11 @@ export default class ViewPage extends React.Component<TProps, TState> {
                           // onChange={event => this.handleClick(event, n.id)}
                         />
                       </TableCell>
-                      <TableCell padding="none">{n.title}</TableCell>
-                      <TableCell align="left">{n.asignee}</TableCell>
+                      <TableCell padding="none">{n.id}</TableCell>
+                      <TableCell align="left">{n.title}</TableCell>
+                      <TableCell align="left">{n.description}</TableCell>
                       <TableCell align="left">{n.status}</TableCell>
+                      <TableCell align="left">{n.asignee}</TableCell>
                       <TableCell align="left">{n.dueDate}</TableCell>
                       <TableCell align="left">
                         <IconButton

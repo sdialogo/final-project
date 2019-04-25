@@ -7,6 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
 
 import IconButton from "@material-ui/core/IconButton";
 import Edit from "@material-ui/icons/Edit";
@@ -17,13 +18,16 @@ import { Status } from "../enums/StatusEnum";
 type TData = {
   id: number;
   title: string;
-  asignee: string;
+  description: string;
   status: Status;
+  asignee: string;
   dueDate: string;
 };
 
 type TState = {
   open: boolean;
+  data: TData;
+  disabled: boolean;
 };
 
 type TProps = {
@@ -31,17 +35,38 @@ type TProps = {
   toggleDrawer: any;
   closeDrawer: any;
 };
+
 export default class DetailsView extends React.Component<TProps, TState> {
-  state: TState = {
-    open: true
+  constructor(props: TProps) {
+    super(props);
+    this.state = { open: true, data: this.props.data, disabled: true };
+  }
+
+  handleEdit = (event: any, tempData: TData) => {
+    console.log("Edit...");
+
+    this.setState({ data: tempData, disabled: !this.state.disabled });
+    console.log(this.state.data);
   };
 
-  handleEdit = () => {
-    console.log("Edit...");
+  handleChange = (name: string) => (event: any) => {
+    console.log(name);
+    let newData: TData = { ...this.state.data };
+    let input = event.target.value;
+
+    if (name === "title") {
+      newData.title = input;
+    } else if (name === "description") {
+      newData.description = input;
+    } else if (name === "dueDate") {
+      newData.dueDate = input;
+    }
+    this.setState({ data: newData });
   };
 
   render() {
-    const { data, toggleDrawer, closeDrawer } = this.props;
+    const { toggleDrawer, closeDrawer } = this.props;
+    const { data, disabled } = this.state;
 
     return (
       <Drawer
@@ -52,7 +77,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
         <Card
           style={{
             background: "rgba(73,155,234,1)",
-            width: 700,
+            width: "full",
             color: "white"
           }}
         >
@@ -111,73 +136,100 @@ export default class DetailsView extends React.Component<TProps, TState> {
           </CardContent>
         </Card>
         <Card>
-          <Grid
-            container
-            spacing={16}
-            style={{
-              marginLeft: "10px",
-              marginTop: "5px",
-              marginBottom: "5px"
-            }}
-          >
-            <Grid item xs={12}>
-              <Typography variant="subheading">Details</Typography>
+          <form noValidate autoComplete="off">
+            <Grid
+              container
+              spacing={16}
+              style={{
+                marginLeft: "10px",
+                marginTop: "5px",
+                marginBottom: "5px"
+              }}
+            >
+              <Grid item xs={12}>
+                <Typography variant="subheading">Details</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="title"
+                  label="Title"
+                  value={data.title}
+                  onChange={this.handleChange("title")}
+                  margin="normal"
+                  variant="outlined"
+                  disabled={disabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="description"
+                  label="Description"
+                  value={data.description}
+                  onChange={this.handleChange("description")}
+                  margin="normal"
+                  variant="outlined"
+                  disabled={disabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="dueDate"
+                  label="Due Date"
+                  value={data.dueDate}
+                  onChange={this.handleChange("dueDate")}
+                  margin="normal"
+                  variant="outlined"
+                  disabled={disabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="dateCompleted"
+                  label="Date Completed"
+                  value={data.dueDate}
+                  onChange={this.handleChange("dateCompleted")}
+                  margin="normal"
+                  variant="outlined"
+                  disabled={disabled}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                {data.status === Status.NotStarted ? (
+                  <Button
+                    disabled
+                    style={{ background: "red", color: "white" }}
+                  >
+                    {data.status}
+                  </Button>
+                ) : data.status === Status.Done ? (
+                  <Button
+                    disabled
+                    style={{
+                      background: "green",
+                      color: "white"
+                    }}
+                  >
+                    {data.status}
+                  </Button>
+                ) : (
+                  <Button
+                    disabled
+                    style={{
+                      background: "orange",
+                      color: "white"
+                    }}
+                  >
+                    {data.status}
+                  </Button>
+                )}
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Typography component="p" variant="subtitle2">
-                Title
-              </Typography>
-              {data.title}
-            </Grid>
-            <Grid item xs={6}>
-              <Typography component="p" variant="subtitle2">
-                Description
-              </Typography>
-              string
-            </Grid>
-            <Grid item xs={6}>
-              <Typography component="p" variant="subtitle2">
-                Due Date
-              </Typography>
-              {data.dueDate}
-            </Grid>
-            <Grid item xs={6}>
-              <Typography component="p" variant="subtitle2">
-                Completed Date
-              </Typography>
-              n/a
-            </Grid>
-            <Grid item xs={6}>
-              {data.status === Status.NotStarted ? (
-                <Button style={{ background: "red", color: "white" }}>
-                  {data.status}
-                </Button>
-              ) : data.status === Status.Done ? (
-                <Button
-                  style={{
-                    background: "green",
-                    color: "white"
-                  }}
-                >
-                  {data.status}
-                </Button>
-              ) : (
-                <Button
-                  style={{
-                    background: "orange",
-                    color: "white"
-                  }}
-                >
-                  {data.status}
-                </Button>
-              )}
-            </Grid>
-          </Grid>
+          </form>
         </Card>
         <Card>
           <CardActions>
             <Grid justify="flex-end" container>
-              <IconButton onClick={this.handleEdit}>
+              <IconButton onClick={event => this.handleEdit(event, data)}>
                 <Edit />
               </IconButton>
               <IconButton onClick={event => closeDrawer(event)}>

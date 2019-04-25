@@ -17,9 +17,11 @@ type TProps = {
 };
 
 const rows = [
-  { id: "title", disablePadding: true, label: "Title" },
+  { id: "id", disablePadding: true, label: "ID" },
+  { id: "title", disablePadding: false, label: "Title" },
+  { id: "description", disablePadding: false, label: "Description" },
+  { id: "status", disablePadding: false, label: "Status" },
   { id: "assignee", disablePadding: false, label: "Assignee" },
-  { id: "status", disablePadding: false, label: "Progress Status" },
   { id: "dueDate", disablePadding: false, label: "Due Date" },
   { id: "action", disablePadding: false, label: "Actions" }
 ];
