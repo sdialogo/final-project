@@ -64,9 +64,9 @@ export default class SubViewPage extends React.Component<TProps, TState> {
             container
             spacing={16}
             style={{
-              marginLeft: "10px",
-              marginTop: "5px",
-              marginBottom: "5px"
+              paddingLeft: "10px",
+              paddingTop: "10px",
+              paddingBottom: "10px"
             }}
           >
             <Grid item xs={6}>
@@ -92,11 +92,12 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 variant="outlined"
                 disabled={!isEdit}
                 multiline
-                rows={4}
+                // rows={4}
               />
             </Grid>
             <Grid item xs={6}>
               <TextField
+                style={{ width: "90%" }}
                 id="dueDate"
                 label="Due Date"
                 value={data.dueDate}
@@ -108,6 +109,7 @@ export default class SubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6}>
               <TextField
+                style={{ width: "90%" }}
                 id="dateCompleted"
                 label="Date Completed"
                 value={data.dueDate}
@@ -145,9 +147,7 @@ export default class SubViewPage extends React.Component<TProps, TState> {
               )}
             </Grid>
             <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
-              {/*STATUS  DROPDOWN */}
               <StatusDropdown />
-              {/*STATUS  DROPDOWN */}
             </Grid>
           </Grid>
         </form>

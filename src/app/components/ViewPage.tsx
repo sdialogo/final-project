@@ -22,6 +22,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { Status } from "../enums/StatusEnum";
 import DetailsView from "./DetailsView";
 import EnhancedTableHead from "./EnhancedTableHead";
+import { Redirect } from "react-router";
 
 type TData = {
   id: number;
@@ -43,6 +44,7 @@ type TState = {
   editData: TData;
   onDelete: boolean;
   toDelete: number;
+  redirectToAddPage: boolean;
 };
 
 type TProps = {
@@ -125,7 +127,8 @@ export default class ViewPage extends React.Component<TProps, TState> {
       dueDate: ""
     },
     onDelete: false,
-    toDelete: 0
+    toDelete: 0,
+    redirectToAddPage: false
   };
 
   handleRequestSort = (event: any, property: any) => {
@@ -217,6 +220,10 @@ export default class ViewPage extends React.Component<TProps, TState> {
     //push new data from eit page
   };
 
+  handleRedirectToAddPage = () => {
+    this.setState({ redirectToAddPage: true });
+  };
+
   render() {
     const {
       data,
@@ -258,6 +265,7 @@ export default class ViewPage extends React.Component<TProps, TState> {
                   <Button
                     variant="contained"
                     style={{ background: "rgba(73,155,234,1)", color: "white" }}
+                    onClick={this.handleRedirectToAddPage}
                   >
                     Add
                     <AddIcon />
@@ -267,6 +275,7 @@ export default class ViewPage extends React.Component<TProps, TState> {
             </Grid>
           </Grid>
         </div>
+        {this.state.redirectToAddPage && <Redirect to="/addDevPlan" />}
         <Paper>
           <div>
             <Table aria-labelledby="tableTitle">

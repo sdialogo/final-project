@@ -11,7 +11,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
 import { Status } from "../enums/StatusEnum";
-import SubViewPage from "./SubViewPage";
+import SubDetailsView from "./SubDetailsView";
 
 type TData = {
   id: number;
@@ -55,10 +55,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
   }
 
   handleEdit = (event: any, tempData: TData) => {
-    console.log("Edit...");
-
     this.setState({ data: tempData });
-    console.log(this.state.data);
   };
 
   handleTabChange = (event: any, tabValue: number) => {
@@ -175,7 +172,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
             </AppBar>
             {tabValue === 0 && (
               <TabContainer>
-                <SubViewPage
+                <SubDetailsView
                   data={data}
                   isEdit={false}
                   closeDrawer={closeDrawer.bind(this)}
@@ -185,7 +182,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
             )}
             {tabValue === 1 && (
               <TabContainer>
-                <SubViewPage
+                <SubDetailsView
                   data={data}
                   isEdit={true}
                   closeDrawer={closeDrawer.bind(this)}
