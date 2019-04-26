@@ -2,18 +2,16 @@ import * as React from "react";
 
 import Drawer from "@material-ui/core/Drawer";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-
-import IconButton from "@material-ui/core/IconButton";
-import Edit from "@material-ui/icons/Edit";
-import Close from "@material-ui/icons/Close";
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 import { Status } from "../enums/StatusEnum";
+import SubViewPage from "./SubViewPage";
 
 type TData = {
   id: number;
@@ -27,7 +25,8 @@ type TData = {
 type TState = {
   open: boolean;
   data: TData;
-  disabled: boolean;
+  enableEdit: boolean;
+  tabValue: number;
 };
 
 type TProps = {
@@ -36,37 +35,39 @@ type TProps = {
   closeDrawer: any;
 };
 
+function TabContainer(props: any) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
 export default class DetailsView extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
-    this.state = { open: true, data: this.props.data, disabled: true };
+    this.state = {
+      open: true,
+      data: this.props.data,
+      enableEdit: true,
+      tabValue: 0
+    };
   }
 
   handleEdit = (event: any, tempData: TData) => {
     console.log("Edit...");
 
-    this.setState({ data: tempData, disabled: !this.state.disabled });
+    this.setState({ data: tempData });
     console.log(this.state.data);
   };
 
-  handleChange = (name: string) => (event: any) => {
-    console.log(name);
-    let newData: TData = { ...this.state.data };
-    let input = event.target.value;
-
-    if (name === "title") {
-      newData.title = input;
-    } else if (name === "description") {
-      newData.description = input;
-    } else if (name === "dueDate") {
-      newData.dueDate = input;
-    }
-    this.setState({ data: newData });
+  handleTabChange = (event: any, tabValue: number) => {
+    this.setState({ tabValue });
   };
 
   render() {
     const { toggleDrawer, closeDrawer } = this.props;
-    const { data, disabled } = this.state;
+    const { data, tabValue } = this.state;
 
     return (
       <Drawer
@@ -88,155 +89,110 @@ export default class DetailsView extends React.Component<TProps, TState> {
               </Typography>
             </div>
             <br />
-            <div>
-              <Typography variant="caption" style={{ display: "inline-block" }}>
-                Asignee
-              </Typography>
-              <Typography
-                variant="button"
-                style={{
-                  display: "inline-block",
-                  color: "white",
-                  marginLeft: "10px"
-                }}
-              >
-                {data.asignee}
-              </Typography>
-            </div>
-            <div>
-              <Typography variant="caption" style={{ display: "inline-block" }}>
-                Status
-              </Typography>
-              <Typography
-                variant="button"
-                style={{
-                  display: "inline-block",
-                  color: "white",
-                  marginLeft: "10px"
-                }}
-              >
-                {data.status}
-              </Typography>
-            </div>
-            <div>
-              <Typography variant="caption" style={{ display: "inline-block" }}>
-                Due Date
-              </Typography>
-              <Typography
-                variant="button"
-                style={{
-                  display: "inline-block",
-                  color: "white",
-                  marginLeft: "10px"
-                }}
-              >
-                {data.dueDate}
-              </Typography>
-            </div>
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Grid item>
+                <Grid container spacing={16}>
+                  <Grid item>
+                    <Typography variant="subheading" style={{ color: "white" }}>
+                      Asignee
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      disabled
+                      style={{
+                        background: "white",
+                        color: "grey"
+                      }}
+                    >
+                      {data.asignee}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Grid container spacing={16}>
+                  <Grid item>
+                    <Typography variant="subheading" style={{ color: "white" }}>
+                      Status
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      disabled
+                      style={{
+                        background: "white",
+                        color: "grey"
+                      }}
+                    >
+                      {data.status}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Grid container spacing={16}>
+                  <Grid item>
+                    <Typography variant="subheading" style={{ color: "white" }}>
+                      Due Date
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      disabled
+                      style={{
+                        background: "white",
+                        color: "grey"
+                      }}
+                    >
+                      {data.dueDate}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
         <Card>
-          <form noValidate autoComplete="off">
-            <Grid
-              container
-              spacing={16}
-              style={{
-                marginLeft: "10px",
-                marginTop: "5px",
-                marginBottom: "5px"
-              }}
-            >
-              <Grid item xs={12}>
-                <Typography variant="subheading">Details</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  id="title"
-                  label="Title"
-                  value={data.title}
-                  onChange={this.handleChange("title")}
-                  margin="normal"
-                  variant="outlined"
-                  disabled={disabled}
+          <Grid item xs={12}>
+            <AppBar position="static">
+              <Tabs
+                value={tabValue}
+                onChange={this.handleTabChange}
+                variant="fullWidth"
+                style={{ background: "#a8aeb7" }}
+                onClick={event => this.handleEdit(event, data)}
+              >
+                <Tab label="View Details" />
+                <Tab label="Edit Details" />
+              </Tabs>
+            </AppBar>
+            {tabValue === 0 && (
+              <TabContainer>
+                <SubViewPage
+                  data={data}
+                  isEdit={false}
+                  closeDrawer={closeDrawer.bind(this)}
+                  tabValue={tabValue}
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  id="description"
-                  label="Description"
-                  value={data.description}
-                  onChange={this.handleChange("description")}
-                  margin="normal"
-                  variant="outlined"
-                  disabled={disabled}
+              </TabContainer>
+            )}
+            {tabValue === 1 && (
+              <TabContainer>
+                <SubViewPage
+                  data={data}
+                  isEdit={true}
+                  closeDrawer={closeDrawer.bind(this)}
+                  tabValue={tabValue}
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  id="dueDate"
-                  label="Due Date"
-                  value={data.dueDate}
-                  onChange={this.handleChange("dueDate")}
-                  margin="normal"
-                  variant="outlined"
-                  disabled={disabled}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  id="dateCompleted"
-                  label="Date Completed"
-                  value={data.dueDate}
-                  onChange={this.handleChange("dateCompleted")}
-                  margin="normal"
-                  variant="outlined"
-                  disabled={disabled}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                {data.status === Status.NotStarted ? (
-                  <Button
-                    disabled
-                    style={{ background: "red", color: "white" }}
-                  >
-                    {data.status}
-                  </Button>
-                ) : data.status === Status.Done ? (
-                  <Button
-                    disabled
-                    style={{
-                      background: "green",
-                      color: "white"
-                    }}
-                  >
-                    {data.status}
-                  </Button>
-                ) : (
-                  <Button
-                    disabled
-                    style={{
-                      background: "orange",
-                      color: "white"
-                    }}
-                  >
-                    {data.status}
-                  </Button>
-                )}
-              </Grid>
-            </Grid>
-          </form>
-        </Card>
-        <Card>
-          <CardActions>
-            <Grid justify="flex-end" container>
-              <IconButton onClick={event => this.handleEdit(event, data)}>
-                <Edit />
-              </IconButton>
-              <IconButton onClick={event => closeDrawer(event)}>
-                <Close />
-              </IconButton>
-            </Grid>
-          </CardActions>
+              </TabContainer>
+            )}
+          </Grid>
         </Card>
       </Drawer>
     );

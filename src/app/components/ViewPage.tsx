@@ -17,6 +17,7 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertical from "@material-ui/icons/MoreVert";
 import AddIcon from "@material-ui/icons/Add";
+import SearchIcon from "@material-ui/icons/Search";
 
 import { Status } from "../enums/StatusEnum";
 import DetailsView from "./DetailsView";
@@ -188,16 +189,16 @@ export default class ViewPage extends React.Component<TProps, TState> {
     this.setState({ open: false });
   };
 
+  handleCloseDialog = () => {
+    console.log("Delete cancelled");
+    this.setState({ onDelete: false });
+  };
+
   handleClickDelete = (event: any, id: number) => {
     console.log("Deleting data...");
     event.stopPropagation();
 
     this.setState({ onDelete: true, toDelete: id });
-  };
-
-  handleCloseDialog = () => {
-    console.log("Delete cancelled");
-    this.setState({ onDelete: false });
   };
 
   handleDelete = () => {
@@ -209,6 +210,11 @@ export default class ViewPage extends React.Component<TProps, TState> {
       data: data.filter(d => d !== deleteData)
     });
     console.log("Deleted");
+  };
+
+  updateDataFromEditPage = (id: number, newData: TData) => {
+    //delete current data with same id
+    //push new data from eit page
   };
 
   render() {
