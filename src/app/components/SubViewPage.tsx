@@ -7,6 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 
 import { Status } from "../enums/StatusEnum";
+import StatusDropdown from "./StatusDropdown";
 
 type TData = {
   id: number;
@@ -116,7 +117,7 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 disabled={!isEdit}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={tabValue === 0 ? false : true}>
               {data.status === Status.NotStarted ? (
                 <Button disabled style={{ background: "red", color: "white" }}>
                   {data.status}
@@ -142,6 +143,11 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                   {data.status}
                 </Button>
               )}
+            </Grid>
+            <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
+              {/*STATUS  DROPDOWN */}
+              <StatusDropdown />
+              {/*STATUS  DROPDOWN */}
             </Grid>
           </Grid>
         </form>

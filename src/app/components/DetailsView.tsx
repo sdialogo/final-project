@@ -92,11 +92,12 @@ export default class DetailsView extends React.Component<TProps, TState> {
             <Grid
               container
               direction="row"
-              justify="space-between"
+              justify="flex-start"
               alignItems="center"
+              spacing={24}
             >
               <Grid item>
-                <Grid container spacing={16}>
+                <Grid container spacing={8}>
                   <Grid item>
                     <Typography variant="subheading" style={{ color: "white" }}>
                       Asignee
@@ -116,7 +117,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
                 </Grid>
               </Grid>
               <Grid item>
-                <Grid container spacing={16}>
+                <Grid container spacing={8}>
                   <Grid item>
                     <Typography variant="subheading" style={{ color: "white" }}>
                       Status
@@ -136,7 +137,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
                 </Grid>
               </Grid>
               <Grid item>
-                <Grid container spacing={16}>
+                <Grid container spacing={8}>
                   <Grid item>
                     <Typography variant="subheading" style={{ color: "white" }}>
                       Due Date
