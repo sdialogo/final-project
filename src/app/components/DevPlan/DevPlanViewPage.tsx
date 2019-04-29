@@ -20,8 +20,8 @@ import MoreVertical from "@material-ui/icons/MoreVert";
 import AddIcon from "@material-ui/icons/Add";
 
 import { Status } from "../../enums/StatusEnum";
-import DetailsView from "./DetailsView";
-import EnhancedTableHead from "./EnhancedTableHead";
+import DetailsView from "./DevPlanDetailsView";
+import EnhancedTableHead from "./DevPlanEnhancedTableHead";
 
 type TData = {
   id: number;
@@ -44,10 +44,6 @@ type TState = {
   onDelete: boolean;
   toDelete: number;
   redirectToAddPage: boolean;
-};
-
-type TProps = {
-  functionality: string; //devPlan or employee
 };
 
 let counter = 0;
@@ -79,7 +75,7 @@ function findDataById(id: number, arr: TData[]): TData {
   };
 }
 
-export default class ViewPage extends React.Component<TProps, TState> {
+export default class ViewPage extends React.Component<{}, TState> {
   state: TState = {
     order: "asc",
     orderBy: "title",
@@ -233,14 +229,13 @@ export default class ViewPage extends React.Component<TProps, TState> {
       page,
       editData
     } = this.state;
-    const { functionality } = this.props;
     return (
       <div>
         <div>
           <Grid container alignItems="center" style={{ flexGrow: 1 }}>
             <Grid item xs={6}>
               <h2 style={{ marginLeft: "25px", color: "rgba(73,155,234,1)" }}>
-                {functionality}
+                Development Plan
               </h2>
             </Grid>
             <Grid item xs={6}>

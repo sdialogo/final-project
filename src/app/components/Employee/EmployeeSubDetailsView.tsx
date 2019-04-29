@@ -118,9 +118,6 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
-                InputLabelProps={{
-                  shrink: true
-                }}
               />
             </Grid>
           </Grid>

@@ -3,8 +3,8 @@ import * as ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import NavDrawer from "./components/NavDrawer";
 import Hello from "./components/Hello";
-import DevPlan from "./components/DevPlan/DevPlan";
-import Employee from "./components/Employee/Employee";
+import DevPlanViewPage from "./components/DevPlan/DevPlanViewPage";
+import EmployeeViewPage from "./components/Employee/EmployeeViewPage";
 import AddDevPlan from "./components/DevPlan/AddDevPlan";
 import AddEmployee from "./components/Employee/AddEmployee";
 
@@ -15,8 +15,8 @@ ReactDOM.render(
       menuList={
         <Switch>
           <Route exact path="/" component={Hello} />
-          <Route exact path="/devplans" component={DevPlan} />
-          <Route exact path="/employees" component={Employee} />
+          <Route exact path="/devplans" component={DevPlanViewPage} />
+          <Route exact path="/employees" component={EmployeeViewPage} />
           <Route exact path="/addDevPlan" component={AddDevPlan} />
           <Route exact path="/addEmployee" component={AddEmployee} />
         </Switch>

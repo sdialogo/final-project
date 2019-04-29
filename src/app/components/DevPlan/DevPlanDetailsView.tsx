@@ -11,7 +11,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
 import { Status } from "../../enums/StatusEnum";
-import SubDetailsView from "./SubDetailsView";
+import SubDetailsView from "./DevPlanSubDetailsView";
 
 type TData = {
   id: number;
