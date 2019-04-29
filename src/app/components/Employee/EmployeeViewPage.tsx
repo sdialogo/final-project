@@ -21,6 +21,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { Status } from "../../enums/StatusEnum";
 import EmployeeDetailsView from "./EmployeeDetailsView";
 import EmployeeEnhancedTableHead from "../Employee/EmployeeEnhancedTableHead";
+import { Redirect } from "react-router";
 
 type TEmployee = {
   id: number;
@@ -243,7 +244,7 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
             </Grid>
           </Grid>
         </div>
-        {/* {this.state.redirectToAddPage && <Redirect to="/addDevPlan" />} */}
+        {this.state.redirectToAddPage && <Redirect to="/addEmployee" />}
         <Paper>
           <div>
             <Table aria-labelledby="tableTitle">

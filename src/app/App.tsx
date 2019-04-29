@@ -6,6 +6,7 @@ import Hello from "./components/Hello";
 import DevPlan from "./components/DevPlan/DevPlan";
 import Employee from "./components/Employee/Employee";
 import AddDevPlan from "./components/DevPlan/AddDevPlan";
+import AddEmployee from "./components/Employee/AddEmployee";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -17,6 +18,7 @@ ReactDOM.render(
           <Route exact path="/devplans" component={DevPlan} />
           <Route exact path="/employees" component={Employee} />
           <Route exact path="/addDevPlan" component={AddDevPlan} />
+          <Route exact path="/addEmployee" component={AddEmployee} />
         </Switch>
       }
     />
