@@ -303,7 +303,7 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
             ) : (
               <div />
             )}
-            {/* {this.state.onDelete ? (
+            {this.state.onDelete ? (
               <div>
                 <Dialog
                   open={this.state.onDelete}
@@ -333,7 +333,7 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
               </div>
             ) : (
               ""
-            )} */}
+            )}
           </div>
         </Paper>
       </div>

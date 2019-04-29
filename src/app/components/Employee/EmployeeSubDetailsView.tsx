@@ -72,10 +72,10 @@ export default class SubViewPage extends React.Component<TProps, TState> {
             <Grid item xs={6}>
               <TextField
                 style={{ width: "90%" }}
-                id="title"
-                label="Title"
+                id="firstname"
+                label="First Name"
                 value={data.firstName}
-                onChange={this.handleChange("title")}
+                onChange={this.handleChange("firstname")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -84,10 +84,10 @@ export default class SubViewPage extends React.Component<TProps, TState> {
             <Grid item xs={6}>
               <TextField
                 style={{ width: "90%" }}
-                id="description"
-                label="Description"
+                id="lastname"
+                label="Last Name"
                 value={data.lastName}
-                onChange={this.handleChange("description")}
+                onChange={this.handleChange("lastname")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -98,10 +98,10 @@ export default class SubViewPage extends React.Component<TProps, TState> {
             <Grid item xs={6}>
               <TextField
                 style={{ width: "90%" }}
-                id="dueDate"
-                label="Due Date"
+                id="middlename"
+                label="Middle Name"
                 value={data.middleName}
-                onChange={this.handleChange("dueDate")}
+                onChange={this.handleChange("middlename")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -110,10 +110,10 @@ export default class SubViewPage extends React.Component<TProps, TState> {
             <Grid item xs={6}>
               <TextField
                 style={{ width: "90%" }}
-                id="dateCompleted"
-                label="Date Completed"
+                id="hiredate"
+                label="Hire Date"
                 value={data.hireDate}
-                onChange={this.handleChange("dateCompleted")}
+                onChange={this.handleChange("hiredate")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
