@@ -17,11 +17,9 @@ type TProps = {
 };
 
 const rows = [
-  { id: "id", disablePadding: true, label: "ID" },
+  { id: "lastName", disablePadding: false, label: "Last Name" },
   { id: "firstName", disablePadding: false, label: "First Name" },
   { id: "middleName", disablePadding: false, label: "Middle Name" },
-  { id: "lastName", disablePadding: false, label: "Last Name" },
-  { id: "archived", disablePadding: false, label: "Archived" },
   { id: "hireDate", disablePadding: false, label: "Hire Date" },
   { id: "action", disablePadding: false, label: "Actions" }
 ];
@@ -45,13 +43,13 @@ export default class EmployeeEnhancedTableHead extends React.Component<
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
+          {/* <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount}
               onChange={onSelectAllClick}
             />
-          </TableCell>
+          </TableCell> */}
           {rows.map(
             row => (
               <TableCell

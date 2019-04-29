@@ -17,11 +17,11 @@ type TProps = {
 };
 
 const rows = [
-  { id: "id", disablePadding: true, label: "ID" },
+  // { id: "id", disablePadding: true, label: "ID" },
   { id: "title", disablePadding: false, label: "Title" },
-  { id: "description", disablePadding: false, label: "Description" },
-  { id: "status", disablePadding: false, label: "Status" },
+  // { id: "description", disablePadding: false, label: "Description" },
   { id: "assignee", disablePadding: false, label: "Assignee" },
+  { id: "status", disablePadding: false, label: "Status" },
   { id: "dueDate", disablePadding: false, label: "Due Date" },
   { id: "action", disablePadding: false, label: "Actions" }
 ];
@@ -42,13 +42,13 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
+          {/* <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount}
               onChange={onSelectAllClick}
             />
-          </TableCell>
+          </TableCell> */}
           {rows.map(
             row => (
               <TableCell

@@ -89,7 +89,8 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
     selected: [],
     data: [
       createData("Yuri", "Jo", "Jogoori", false, "04-01-2019"),
-      createData("Yena", "Choi", "Duck", false, "04-01-2019")
+      createData("Yena", "Choi", "Duck", false, "04-01-2019"),
+      createData("Eunbi", "Kwon", "Leader", false, "04-20-2019")
     ],
     page: 0,
     rowsPerPage: 10,
@@ -269,19 +270,17 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
                       key={n.id}
                       selected={isSelected}
                     >
-                      <TableCell padding="checkbox">
+                      {/* <TableCell padding="checkbox">
                         <Checkbox
                           checked={isSelected}
                           // onChange={event => this.handleClick(event, n.id)}
                         />
-                      </TableCell>
-                      <TableCell padding="none">{n.id}</TableCell>
+                      </TableCell> */}
                       <TableCell align="left" className={styles.texColor}>
                         {n.lastName}
                       </TableCell>
                       <TableCell align="left">{n.firstName}</TableCell>
                       <TableCell align="left">{n.middleName}</TableCell>
-                      <TableCell align="left">{n.archived}</TableCell>
                       <TableCell align="left">{n.hireDate}</TableCell>
                       <TableCell align="left">
                         <IconButton

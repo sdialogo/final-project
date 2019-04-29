@@ -82,7 +82,7 @@ function findDataById(id: number, arr: TData[]): TData {
 export default class ViewPage extends React.Component<TProps, TState> {
   state: TState = {
     order: "asc",
-    orderBy: "assignee",
+    orderBy: "title",
     selected: [],
     data: [
       createData(
@@ -299,17 +299,15 @@ export default class ViewPage extends React.Component<TProps, TState> {
                       key={n.id}
                       selected={isSelected}
                     >
-                      <TableCell padding="checkbox">
+                      {/* <TableCell padding="checkbox">
                         <Checkbox
                           checked={isSelected}
                           // onChange={event => this.handleClick(event, n.id)}
                         />
-                      </TableCell>
-                      <TableCell padding="none">{n.id}</TableCell>
+                      </TableCell> */}
                       <TableCell align="left">{n.title}</TableCell>
-                      <TableCell align="left">{n.description}</TableCell>
-                      <TableCell align="left">{n.status}</TableCell>
                       <TableCell align="left">{n.asignee}</TableCell>
+                      <TableCell align="left">{n.status}</TableCell>
                       <TableCell align="left">{n.dueDate}</TableCell>
                       <TableCell align="left">
                         <IconButton
