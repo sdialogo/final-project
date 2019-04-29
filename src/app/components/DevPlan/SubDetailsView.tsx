@@ -100,11 +100,15 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 style={{ width: "90%" }}
                 id="dueDate"
                 label="Due Date"
+                type="date"
                 value={data.dueDate}
                 onChange={this.handleChange("dueDate")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
+                InputLabelProps={{
+                  shrink: true
+                }}
               />
             </Grid>
             <Grid item xs={6}>
@@ -112,11 +116,15 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 style={{ width: "90%" }}
                 id="dateCompleted"
                 label="Date Completed"
+                type="date"
                 value={data.dueDate}
                 onChange={this.handleChange("dateCompleted")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
+                InputLabelProps={{
+                  shrink: true
+                }}
               />
             </Grid>
             <Grid item xs={6} hidden={tabValue === 0 ? false : true}>

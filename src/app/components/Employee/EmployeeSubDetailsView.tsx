@@ -112,11 +112,15 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 style={{ width: "90%" }}
                 id="hiredate"
                 label="Hire Date"
+                type="date"
                 value={data.hireDate}
                 onChange={this.handleChange("hiredate")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
+                InputLabelProps={{
+                  shrink: true
+                }}
               />
             </Grid>
           </Grid>

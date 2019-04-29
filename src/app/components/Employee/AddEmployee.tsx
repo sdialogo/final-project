@@ -122,10 +122,14 @@ export default class AddEmployee extends React.Component<{}, TState> {
                   <TextField
                     id="hiredate"
                     label="Hire Date"
+                    type="date"
                     value={this.state.hireDate}
                     onChange={this.handleChange("hiredate")}
                     margin="normal"
                     fullWidth
+                    InputLabelProps={{
+                      shrink: true
+                    }}
                   />
                 </Grid>
                 <Grid item xs={6}>

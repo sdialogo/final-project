@@ -122,10 +122,14 @@ export default class AddDevPlan extends React.Component<{}, TState> {
                   <TextField
                     id="dueDate"
                     label="Due Date"
+                    type="date"
                     value={this.state.dueDate}
                     onChange={this.handleChange("dueDate")}
                     margin="normal"
                     fullWidth
+                    InputLabelProps={{
+                      shrink: true
+                    }}
                   />
                 </Grid>
                 <Grid item xs={6}>
