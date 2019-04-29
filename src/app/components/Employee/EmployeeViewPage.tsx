@@ -19,8 +19,8 @@ import MoreVertical from "@material-ui/icons/MoreVert";
 import AddIcon from "@material-ui/icons/Add";
 
 import { Status } from "../../enums/StatusEnum";
-// import DetailsView from "./DetailsView";
-import EnhancedTableHead from "../DevPlan/EnhancedTableHead";
+import EmployeeDetailsView from "./EmployeeDetailsView";
+import EmployeeEnhancedTableHead from "../Employee/EmployeeEnhancedTableHead";
 
 type TEmployee = {
   id: number;
@@ -44,6 +44,12 @@ type TState = {
   toDelete: number;
   redirectToAddPage: boolean;
 };
+
+type TStyles = {
+  texColor: string;
+};
+
+const styles: TStyles = require("./EmployeeStyles.less");
 
 let counter = 0;
 
@@ -78,7 +84,7 @@ function findDataById(id: number, arr: TEmployee[]): TEmployee {
 export default class EmployeeViewPage extends React.Component<{}, TState> {
   state: TState = {
     order: "asc",
-    orderBy: "lastname",
+    orderBy: "lastName",
     selected: [],
     data: [
       createData("Yuri", "Jo", "Jogoori", false, "04-01-2019"),
@@ -197,6 +203,140 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
       page,
       editData
     } = this.state;
-    return <div>sdfasd</div>;
+    return (
+      <div>
+        <div>
+          <Grid container alignItems="center" style={{ flexGrow: 1 }}>
+            <Grid item xs={6}>
+              <h2 style={{ marginLeft: "25px", color: "rgba(73,155,234,1)" }}>
+                Employee
+              </h2>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid
+                container
+                spacing={16}
+                alignItems="center"
+                direction="row"
+                justify="flex-end"
+                style={{ height: 80 }}
+              >
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    style={{ background: "rgba(73,155,234,1)", color: "white" }}
+                  >
+                    Search
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    style={{ background: "rgba(73,155,234,1)", color: "white" }}
+                    onClick={this.handleRedirectToAddPage}
+                  >
+                    Add
+                    <AddIcon />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </div>
+        {/* {this.state.redirectToAddPage && <Redirect to="/addDevPlan" />} */}
+        <Paper>
+          <div>
+            <Table aria-labelledby="tableTitle">
+              <EmployeeEnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
+              <TableBody>
+                {data.map(n => {
+                  const isSelected = this.isSelected(n.id);
+                  return (
+                    <TableRow
+                      hover
+                      onClick={event => this.handleDrawerOpen(event, n.id)}
+                      role="checkbox"
+                      aria-checked={isSelected}
+                      tabIndex={-1}
+                      key={n.id}
+                      selected={isSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isSelected}
+                          // onChange={event => this.handleClick(event, n.id)}
+                        />
+                      </TableCell>
+                      <TableCell padding="none">{n.id}</TableCell>
+                      <TableCell align="left" className={styles.texColor}>
+                        {n.lastName}
+                      </TableCell>
+                      <TableCell align="left">{n.firstName}</TableCell>
+                      <TableCell align="left">{n.middleName}</TableCell>
+                      <TableCell align="left">{n.archived}</TableCell>
+                      <TableCell align="left">{n.hireDate}</TableCell>
+                      <TableCell align="left">
+                        <IconButton
+                          onClick={event => this.handleClickDelete(event, n.id)}
+                        >
+                          <MoreVertical />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+            {this.state.open ? (
+              <EmployeeDetailsView
+                data={editData}
+                toggleDrawer={this.handleToggle.bind(this)}
+                closeDrawer={this.handleClose.bind(this)}
+              />
+            ) : (
+              <div />
+            )}
+            {/* {this.state.onDelete ? (
+              <div>
+                <Dialog
+                  open={this.state.onDelete}
+                  onClose={this.handleCloseDialog}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure you want to delete this data?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={this.handleDelete}
+                      color="primary"
+                      autoFocus
+                    >
+                      Delete
+                    </Button>
+                    <Button onClick={this.handleCloseDialog} color="primary">
+                      Cancel
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+            ) : (
+              ""
+            )} */}
+          </div>
+        </Paper>
+      </div>
+    );
   }
 }

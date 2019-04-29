@@ -6,27 +6,27 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 
-import { Status } from "../enums/StatusEnum";
-import StatusDropdown from "./StatusDropdown";
+import { Status } from "../../enums/StatusEnum";
+import StatusDropdown from "../StatusDropdown";
 
-type TData = {
+type TEmployee = {
   id: number;
-  title: string;
-  description: string;
-  status: Status;
-  asignee: string;
-  dueDate: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  archived: boolean;
+  hireDate: string;
 };
 
 type TProps = {
-  data: TData;
+  data: TEmployee;
   isEdit: boolean;
   closeDrawer: any;
   tabValue: number;
 };
 
 type TState = {
-  data: TData;
+  data: TEmployee;
 };
 
 export default class SubViewPage extends React.Component<TProps, TState> {
@@ -42,15 +42,15 @@ export default class SubViewPage extends React.Component<TProps, TState> {
   };
 
   handleChange = (name: string) => (event: any) => {
-    let newData: TData = { ...this.state.data };
+    let newData: TEmployee = { ...this.state.data };
     let input = event.target.value;
 
-    if (name === "title") {
-      newData.title = input;
-    } else if (name === "description") {
-      newData.description = input;
-    } else if (name === "dueDate") {
-      newData.dueDate = input;
+    if (name === "firstname") {
+      newData.firstName = input;
+    } else if (name === "lastname") {
+      newData.lastName = input;
+    } else if (name === "middlename") {
+      newData.middleName = input;
     }
     this.setState({ data: newData });
   };
@@ -74,7 +74,7 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 style={{ width: "90%" }}
                 id="title"
                 label="Title"
-                value={data.title}
+                value={data.firstName}
                 onChange={this.handleChange("title")}
                 margin="normal"
                 variant="outlined"
@@ -86,7 +86,7 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 style={{ width: "90%" }}
                 id="description"
                 label="Description"
-                value={data.description}
+                value={data.lastName}
                 onChange={this.handleChange("description")}
                 margin="normal"
                 variant="outlined"
@@ -100,7 +100,7 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 style={{ width: "90%" }}
                 id="dueDate"
                 label="Due Date"
-                value={data.dueDate}
+                value={data.middleName}
                 onChange={this.handleChange("dueDate")}
                 margin="normal"
                 variant="outlined"
@@ -112,42 +112,12 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 style={{ width: "90%" }}
                 id="dateCompleted"
                 label="Date Completed"
-                value={data.dueDate}
+                value={data.hireDate}
                 onChange={this.handleChange("dateCompleted")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
               />
-            </Grid>
-            <Grid item xs={6} hidden={tabValue === 0 ? false : true}>
-              {data.status === Status.NotStarted ? (
-                <Button disabled style={{ background: "red", color: "white" }}>
-                  {data.status}
-                </Button>
-              ) : data.status === Status.Completed ? (
-                <Button
-                  disabled
-                  style={{
-                    background: "green",
-                    color: "white"
-                  }}
-                >
-                  {data.status}
-                </Button>
-              ) : (
-                <Button
-                  disabled
-                  style={{
-                    background: "orange",
-                    color: "white"
-                  }}
-                >
-                  {data.status}
-                </Button>
-              )}
-            </Grid>
-            <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
-              <StatusDropdown />
             </Grid>
           </Grid>
         </form>

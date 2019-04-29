@@ -3,9 +3,9 @@ import * as ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import NavDrawer from "./components/NavDrawer";
 import Hello from "./components/Hello";
-import DevPlan from "./components/DevPlan";
-import Employee from "./components/Employee";
-import AddDevPlan from "./components/AddDevPlan";
+import DevPlan from "./components/DevPlan/DevPlan";
+import Employee from "./components/Employee/Employee";
+import AddDevPlan from "./components/DevPlan/AddDevPlan";
 
 ReactDOM.render(
   <BrowserRouter>

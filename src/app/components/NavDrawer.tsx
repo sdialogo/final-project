@@ -88,6 +88,7 @@ class NavBar extends React.Component<TProps, {}> {
                     classes={{ primary: classes.primary }}
                     inset
                     primary="Development Plan"
+                    style={{ width: 200 }}
                   />
                 </MenuItem>
               </NavLink>

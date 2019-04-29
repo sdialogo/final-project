@@ -10,27 +10,27 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
-import { Status } from "../enums/StatusEnum";
-import SubDetailsView from "./SubDetailsView";
+import { Status } from "../../enums/StatusEnum";
+import EmployeeSubDetailsView from "./EmployeeSubDetailsView";
 
-type TData = {
+type TEmployee = {
   id: number;
-  title: string;
-  description: string;
-  status: Status;
-  asignee: string;
-  dueDate: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  archived: boolean;
+  hireDate: string;
 };
 
 type TState = {
   open: boolean;
-  data: TData;
+  data: TEmployee;
   enableEdit: boolean;
   tabValue: number;
 };
 
 type TProps = {
-  data: TData;
+  data: TEmployee;
   toggleDrawer: any;
   closeDrawer: any;
 };
@@ -54,7 +54,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
     };
   }
 
-  handleEdit = (event: any, tempData: TData) => {
+  handleEdit = (event: any, tempData: TEmployee) => {
     this.setState({ data: tempData });
   };
 
@@ -65,6 +65,11 @@ export default class DetailsView extends React.Component<TProps, TState> {
   render() {
     const { toggleDrawer, closeDrawer } = this.props;
     const { data, tabValue } = this.state;
+    const fullname = data.firstName
+      .concat(" ")
+      .concat(data.middleName)
+      .concat(" ")
+      .concat(data.lastName);
 
     return (
       <Drawer
@@ -82,78 +87,9 @@ export default class DetailsView extends React.Component<TProps, TState> {
           <CardContent>
             <div>
               <Typography variant="headline" style={{ color: "white" }}>
-                {data.title}
+                {fullname}
               </Typography>
             </div>
-            <br />
-            <Grid
-              container
-              direction="row"
-              justify="flex-start"
-              alignItems="center"
-              spacing={24}
-            >
-              <Grid item>
-                <Grid container spacing={8}>
-                  <Grid item>
-                    <Typography variant="subheading" style={{ color: "white" }}>
-                      Asignee
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      disabled
-                      style={{
-                        background: "white",
-                        color: "grey"
-                      }}
-                    >
-                      {data.asignee}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container spacing={8}>
-                  <Grid item>
-                    <Typography variant="subheading" style={{ color: "white" }}>
-                      Status
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      disabled
-                      style={{
-                        background: "white",
-                        color: "grey"
-                      }}
-                    >
-                      {data.status}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container spacing={8}>
-                  <Grid item>
-                    <Typography variant="subheading" style={{ color: "white" }}>
-                      Due Date
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      disabled
-                      style={{
-                        background: "white",
-                        color: "grey"
-                      }}
-                    >
-                      {data.dueDate}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
           </CardContent>
         </Card>
         <Card>
@@ -172,7 +108,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
             </AppBar>
             {tabValue === 0 && (
               <TabContainer>
-                <SubDetailsView
+                <EmployeeSubDetailsView
                   data={data}
                   isEdit={false}
                   closeDrawer={closeDrawer.bind(this)}
@@ -182,7 +118,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
             )}
             {tabValue === 1 && (
               <TabContainer>
-                <SubDetailsView
+                <EmployeeSubDetailsView
                   data={data}
                   isEdit={true}
                   closeDrawer={closeDrawer.bind(this)}

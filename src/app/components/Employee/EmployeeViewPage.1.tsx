@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Redirect } from "react-router";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -20,49 +19,52 @@ import MoreVertical from "@material-ui/icons/MoreVert";
 import AddIcon from "@material-ui/icons/Add";
 
 import { Status } from "../../enums/StatusEnum";
-import DetailsView from "./DetailsView";
-import EnhancedTableHead from "./EnhancedTableHead";
+// import DetailsView from "./DetailsView";
+import EmployeeEnhancedTable from "./EmployeeEnhancedTableHead";
 
-type TData = {
+type TEmployee = {
   id: number;
-  title: string;
-  description: string;
-  asignee: string;
-  status: Status;
-  dueDate: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  archived: boolean;
+  hireDate: string;
 };
 
 type TState = {
   order: string;
   orderBy: string;
   selected: number[];
-  data: TData[];
+  data: TEmployee[];
   page: number;
   rowsPerPage: number;
   open: boolean;
-  editData: TData;
+  editData: TEmployee;
   onDelete: boolean;
   toDelete: number;
   redirectToAddPage: boolean;
 };
 
-type TProps = {
-  functionality: string; //devPlan or employee
+type TStyles = {
+  texColor: string;
 };
 
+const styles: TStyles = require("./EmployeeStyles.less");
+
 let counter = 0;
+
 function createData(
-  title: string,
-  description: string,
-  status: Status,
-  asignee: string,
-  dueDate: string
+  firstName: string,
+  lastName: string,
+  middleName: string,
+  archived: boolean,
+  hireDate: string
 ) {
   counter += 1;
-  return { id: counter, title, description, status, asignee, dueDate };
+  return { id: counter, firstName, lastName, middleName, archived, hireDate };
 }
 
-function findDataById(id: number, arr: TData[]): TData {
+function findDataById(id: number, arr: TEmployee[]): TEmployee {
   for (var i = 0; i < arr.length; i++) {
     if (arr[i].id === id) {
       return arr[i];
@@ -71,59 +73,33 @@ function findDataById(id: number, arr: TData[]): TData {
 
   return {
     id: 0,
-    title: "",
-    description: "",
-    status: Status.Blank,
-    asignee: "",
-    dueDate: ""
+    firstName: "",
+    lastName: "",
+    middleName: "",
+    archived: false,
+    hireDate: ""
   };
 }
 
-export default class ViewPage extends React.Component<TProps, TState> {
+export default class EmployeeViewPage extends React.Component<{}, TState> {
   state: TState = {
     order: "asc",
-    orderBy: "assignee",
+    orderBy: "lastName",
     selected: [],
     data: [
-      createData(
-        "Sample 1",
-        "Description",
-        Status.Completed,
-        "Asignee 1",
-        "04-18-2019"
-      ),
-      createData(
-        "Sample 2",
-        "Description",
-        Status.InProgress,
-        "Asignee 2",
-        "04-19-2019"
-      ),
-      createData(
-        "Sample 3",
-        "Description",
-        Status.NotStarted,
-        "Asignee 3",
-        "04-20-2019"
-      ),
-      createData(
-        "Sample 4",
-        "Description",
-        Status.Completed,
-        "Asignee 4",
-        "04-20-2019"
-      )
+      createData("Yuri", "Jo", "Jogoori", false, "04-01-2019"),
+      createData("Yena", "Choi", "Duck", false, "04-01-2019")
     ],
     page: 0,
     rowsPerPage: 10,
     open: null,
     editData: {
       id: 0,
-      title: "",
-      description: "",
-      asignee: "",
-      status: Status.Completed,
-      dueDate: ""
+      firstName: "",
+      lastName: "",
+      middleName: "",
+      archived: false,
+      hireDate: ""
     },
     onDelete: false,
     toDelete: 0,
@@ -205,7 +181,7 @@ export default class ViewPage extends React.Component<TProps, TState> {
 
   handleDelete = () => {
     const { data, toDelete } = this.state;
-    let deleteData: TData = findDataById(toDelete, data);
+    let deleteData: TEmployee = findDataById(toDelete, data);
 
     this.setState({
       onDelete: false,
@@ -214,15 +190,9 @@ export default class ViewPage extends React.Component<TProps, TState> {
     console.log("Deleted");
   };
 
-  updateDataFromEditPage = (id: number, newData: TData) => {
-    //delete current data with same id
-    //push new data from eit page
-  };
-
   handleRedirectToAddPage = () => {
     this.setState({ redirectToAddPage: true });
   };
-
   render() {
     const {
       data,
@@ -233,14 +203,13 @@ export default class ViewPage extends React.Component<TProps, TState> {
       page,
       editData
     } = this.state;
-    const { functionality } = this.props;
     return (
       <div>
         <div>
           <Grid container alignItems="center" style={{ flexGrow: 1 }}>
             <Grid item xs={6}>
               <h2 style={{ marginLeft: "25px", color: "rgba(73,155,234,1)" }}>
-                {functionality}
+                Employee
               </h2>
             </Grid>
             <Grid item xs={6}>
@@ -274,97 +243,21 @@ export default class ViewPage extends React.Component<TProps, TState> {
             </Grid>
           </Grid>
         </div>
-        {this.state.redirectToAddPage && <Redirect to="/addDevPlan" />}
-        <Paper>
-          <div>
-            <Table aria-labelledby="tableTitle">
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={this.handleSelectAllClick}
-                onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
-              />
-              <TableBody>
-                {data.map(n => {
-                  const isSelected = this.isSelected(n.id);
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => this.handleDrawerOpen(event, n.id)}
-                      role="checkbox"
-                      aria-checked={isSelected}
-                      tabIndex={-1}
-                      key={n.id}
-                      selected={isSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isSelected}
-                          // onChange={event => this.handleClick(event, n.id)}
-                        />
-                      </TableCell>
-                      <TableCell padding="none">{n.id}</TableCell>
-                      <TableCell align="left">{n.title}</TableCell>
-                      <TableCell align="left">{n.description}</TableCell>
-                      <TableCell align="left">{n.status}</TableCell>
-                      <TableCell align="left">{n.asignee}</TableCell>
-                      <TableCell align="left">{n.dueDate}</TableCell>
-                      <TableCell align="left">
-                        <IconButton
-                          onClick={event => this.handleClickDelete(event, n.id)}
-                        >
-                          <MoreVertical />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-            {this.state.open ? (
-              <DetailsView
-                data={editData}
-                toggleDrawer={this.handleToggle.bind(this)}
-                closeDrawer={this.handleClose.bind(this)}
-              />
-            ) : (
-              <div />
-            )}
-            {this.state.onDelete ? (
-              <div>
-                <Dialog
-                  open={this.state.onDelete}
-                  onClose={this.handleCloseDialog}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Are you sure you want to delete this data?
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      onClick={this.handleDelete}
-                      color="primary"
-                      autoFocus
-                    >
-                      Delete
-                    </Button>
-                    <Button onClick={this.handleCloseDialog} color="primary">
-                      Cancel
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-        </Paper>
+        {/* {this.state.redirectToAddPage && <Redirect to="/addDevPlan" />} */}
+        <EmployeeEnhancedTable
+          numSelected={selected.length}
+          order={order}
+          orderBy={orderBy}
+          onSelectAllClick={this.handleSelectAllClick}
+          onRequestSort={this.handleRequestSort}
+          rowCount={data.length}
+          data={data}
+          handleSelectAllClick={this.handleClick.bind(this)}
+          // isSelected={this.isSelected(id: number).bind(this)}
+          handleDrawerOpen={this.handleDrawerOpen.bind(this)}
+          handleClickDelete={this.handleClickDelete.bind(this)}
+          selected={this.state.selected}
+        />
       </div>
     );
   }

@@ -18,15 +18,18 @@ type TProps = {
 
 const rows = [
   { id: "id", disablePadding: true, label: "ID" },
-  { id: "title", disablePadding: false, label: "Title" },
-  { id: "description", disablePadding: false, label: "Description" },
-  { id: "status", disablePadding: false, label: "Status" },
-  { id: "assignee", disablePadding: false, label: "Assignee" },
-  { id: "dueDate", disablePadding: false, label: "Due Date" },
+  { id: "firstName", disablePadding: false, label: "First Name" },
+  { id: "middleName", disablePadding: false, label: "Middle Name" },
+  { id: "lastName", disablePadding: false, label: "Last Name" },
+  { id: "archived", disablePadding: false, label: "Archived" },
+  { id: "hireDate", disablePadding: false, label: "Hire Date" },
   { id: "action", disablePadding: false, label: "Actions" }
 ];
 
-export default class EnhancedTableHead extends React.Component<TProps, {}> {
+export default class EmployeeEnhancedTableHead extends React.Component<
+  TProps,
+  {}
+> {
   createSortHandler = (property: any) => (event: any) => {
     this.props.onRequestSort(event, property);
   };
