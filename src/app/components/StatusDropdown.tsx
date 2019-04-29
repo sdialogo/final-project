@@ -39,7 +39,7 @@ export default class StatusDropdown extends React.Component<{}, TState> {
           }
         >
           <option value="" />
-          <option value={Status.Done}>{Status.Done}</option>
+          <option value={Status.Completed}>{Status.Completed}</option>
           <option value={Status.InProgress}>{Status.InProgress}</option>
           <option value={Status.NotStarted}>{Status.NotStarted}</option>
         </Select>

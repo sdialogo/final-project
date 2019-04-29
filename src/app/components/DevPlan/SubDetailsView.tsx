@@ -6,8 +6,8 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 
-import { Status } from "../enums/StatusEnum";
-import StatusDropdown from "./StatusDropdown";
+import { Status } from "../../enums/StatusEnum";
+import StatusDropdown from "../StatusDropdown";
 
 type TData = {
   id: number;

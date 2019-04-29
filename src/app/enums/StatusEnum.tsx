@@ -2,7 +2,7 @@ enum Status {
   Blank = "",
   NotStarted = "Not Started",
   InProgress = "In Progress",
-  Done = "Completed"
+  Completed = "Completed"
 }
 
 export { Status };

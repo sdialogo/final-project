@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Redirect } from "react-router";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -17,12 +18,10 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertical from "@material-ui/icons/MoreVert";
 import AddIcon from "@material-ui/icons/Add";
-import SearchIcon from "@material-ui/icons/Search";
 
-import { Status } from "../enums/StatusEnum";
+import { Status } from "../../enums/StatusEnum";
 import DetailsView from "./DetailsView";
 import EnhancedTableHead from "./EnhancedTableHead";
-import { Redirect } from "react-router";
 
 type TData = {
   id: number;
@@ -74,7 +73,7 @@ function findDataById(id: number, arr: TData[]): TData {
     id: 0,
     title: "",
     description: "",
-    status: Status.Completed,
+    status: Status.Blank,
     asignee: "",
     dueDate: ""
   };
