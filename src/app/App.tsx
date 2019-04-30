@@ -7,22 +7,28 @@ import DevPlanViewPage from "./components/DevPlan/DevPlanViewPage";
 import EmployeeViewPage from "./components/Employee/EmployeeViewPage";
 import AddDevPlan from "./components/DevPlan/AddDevPlan";
 import AddEmployee from "./components/Employee/AddEmployee";
+import configureStore from "./redux/configureStore";
+import { Provider } from "react-redux";
+
+const store = configureStore([]);
 
 ReactDOM.render(
-  <BrowserRouter>
-    <NavDrawer
-      header="Final Project"
-      menuList={
-        <Switch>
-          <Route exact path="/" component={Hello} />
-          <Route exact path="/devplans" component={DevPlanViewPage} />
-          <Route exact path="/employees" component={EmployeeViewPage} />
-          <Route exact path="/addDevPlan" component={AddDevPlan} />
-          <Route exact path="/addEmployee" component={AddEmployee} />
-        </Switch>
-      }
-    />
-  </BrowserRouter>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <NavDrawer
+        header="Final Project"
+        menuList={
+          <Switch>
+            <Route exact path="/" component={Hello} />
+            <Route exact path="/devplans" component={DevPlanViewPage} />
+            <Route exact path="/employees" component={EmployeeViewPage} />
+            <Route exact path="/addDevPlan" component={AddDevPlan} />
+            <Route exact path="/addEmployee" component={AddEmployee} />
+          </Switch>
+        }
+      />
+    </BrowserRouter>
+  </Provider>,
   document.getElementById("root")
 );
 

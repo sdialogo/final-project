@@ -1,52 +1,74 @@
 import * as React from "react";
 import { Redirect } from "react-router";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
+import { connect } from "react-redux";
+import * as devPlanActions from "../../redux/actions/devPlanActions";
 
 import { Status } from "../../enums/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
 
+import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
+
 type TState = {
-  title: string;
-  description: string;
-  status: Status;
-  asignee: string;
-  dueDate: string;
+  devPlan: {
+    title: string;
+    description: string;
+    status: Status;
+    asignee: string;
+    dueDate: string;
+  };
   redirectToViewPage: any;
 };
 
-export default class AddDevPlan extends React.Component<{}, TState> {
+type TProps = {
+  dispatch: any;
+};
+
+class AddDevPlan extends React.Component<TProps, TState> {
   state: TState = {
-    title: "",
-    description: "",
-    status: Status.Blank,
-    asignee: "",
-    dueDate: "",
+    devPlan: {
+      title: "",
+      description: "",
+      status: Status.Blank,
+      asignee: "",
+      dueDate: ""
+    },
     redirectToViewPage: false
   };
 
   handleChange = (name: string) => (event: any) => {
     let input = event.target.value;
+    let devPlan;
     console.log(input);
 
     if (name === "title") {
-      this.setState({ title: input });
+      devPlan = { ...this.state.devPlan, title: input };
+      //this.setState({ title: input });
     } else if (name === "description") {
-      this.setState({ description: input });
+      devPlan = { ...this.state.devPlan, description: input };
+      //this.setState({ description: input });
     } else if (name === "asignee") {
-      this.setState({ asignee: input });
+      devPlan = { ...this.state.devPlan, asignee: input };
+      //this.setState({ asignee: input });
     } else if (name === "dueDate") {
-      this.setState({ dueDate: input });
+      devPlan = { ...this.state.devPlan, dueDate: input };
+      //this.setState({ dueDate: input });
     }
+
+    this.setState({ devPlan: devPlan });
   };
 
   handleSave = () => {
     console.log("Save...");
-    //update app state
+
     this.setState({ redirectToViewPage: true });
+    //update app state
+    this.props.dispatch(devPlanActions.addDevPlan(this.state.devPlan));
+
+    // alert(
+    //   this.state.devPlan.title
+    //     .concat(this.state.devPlan.description)
+    //     .concat(this.state.devPlan.asignee)
+    // );
   };
 
   handleCancel = () => {
@@ -92,7 +114,7 @@ export default class AddDevPlan extends React.Component<{}, TState> {
                   <TextField
                     id="title"
                     label="Title"
-                    value={this.state.title}
+                    value={this.state.devPlan.title}
                     onChange={this.handleChange("title")}
                     margin="normal"
                     fullWidth
@@ -102,7 +124,7 @@ export default class AddDevPlan extends React.Component<{}, TState> {
                   <TextField
                     id="description"
                     label="Description"
-                    value={this.state.description}
+                    value={this.state.devPlan.description}
                     onChange={this.handleChange("description")}
                     margin="normal"
                     fullWidth
@@ -112,7 +134,7 @@ export default class AddDevPlan extends React.Component<{}, TState> {
                   <TextField
                     id="asignee"
                     label="Asignee"
-                    value={this.state.asignee}
+                    value={this.state.devPlan.asignee}
                     onChange={this.handleChange("asignee")}
                     margin="normal"
                     fullWidth
@@ -123,7 +145,7 @@ export default class AddDevPlan extends React.Component<{}, TState> {
                     id="dueDate"
                     label="Due Date"
                     type="date"
-                    value={this.state.dueDate}
+                    value={this.state.devPlan.dueDate}
                     onChange={this.handleChange("dueDate")}
                     margin="normal"
                     fullWidth
@@ -169,3 +191,14 @@ export default class AddDevPlan extends React.Component<{}, TState> {
     );
   }
 }
+
+function mapStateToProps(state: any, ownProps: any) {
+  return {
+    devPlans: state.devPlans
+  };
+}
+
+export default connect(
+  mapStateToProps
+  // mapDispatchToProps
+)(AddDevPlan);
