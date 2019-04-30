@@ -2,6 +2,8 @@ import * as React from "react";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import * as devPlanActions from "../../redux/actions/devPlanActions";
+import * as employeeActions from "../../redux/actions/employeeActions";
 
 import {
   Table,
@@ -25,8 +27,6 @@ import AddIcon from "@material-ui/icons/Add";
 import { Status } from "../../enums/StatusEnum";
 import DetailsView from "./DevPlanDetailsView";
 import EnhancedTableHead from "./DevPlanEnhancedTableHead";
-import * as devPlanActions from "../../redux/actions/devPlanActions";
-import * as employeeActions from "../../redux/actions/employeeActions";
 
 type TData = {
   id: number;

@@ -1,27 +1,30 @@
 import * as React from "react";
+import * as employeeActions from "../../redux/actions/employeeActions";
+import { Redirect } from "react-router";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+  Grid
+} from "@material-ui/core";
 
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertical from "@material-ui/icons/MoreVert";
 import AddIcon from "@material-ui/icons/Add";
 
-import { Status } from "../../enums/StatusEnum";
 import EmployeeDetailsView from "./EmployeeDetailsView";
 import EmployeeEnhancedTableHead from "../Employee/EmployeeEnhancedTableHead";
-import { Redirect } from "react-router";
 
 type TEmployee = {
   id: number;
@@ -36,7 +39,7 @@ type TState = {
   order: string;
   orderBy: string;
   selected: number[];
-  data: TEmployee[];
+  // data: TEmployee[];
   page: number;
   rowsPerPage: number;
   open: boolean;
@@ -46,24 +49,16 @@ type TState = {
   redirectToAddPage: boolean;
 };
 
+type TProps = {
+  employees: TEmployee[];
+  actions: any;
+};
+
 type TStyles = {
   texColor: string;
 };
 
 const styles: TStyles = require("./EmployeeStyles.less");
-
-let counter = 0;
-
-function createData(
-  firstName: string,
-  lastName: string,
-  middleName: string,
-  archived: boolean,
-  hireDate: string
-) {
-  counter += 1;
-  return { id: counter, firstName, lastName, middleName, archived, hireDate };
-}
 
 function findDataById(id: number, arr: TEmployee[]): TEmployee {
   for (var i = 0; i < arr.length; i++) {
@@ -82,16 +77,11 @@ function findDataById(id: number, arr: TEmployee[]): TEmployee {
   };
 }
 
-export default class EmployeeViewPage extends React.Component<{}, TState> {
+class EmployeeViewPage extends React.Component<TProps, TState> {
   state: TState = {
     order: "asc",
     orderBy: "lastName",
     selected: [],
-    data: [
-      createData("Yuri", "Jo", "Jogoori", false, "04-01-2019"),
-      createData("Yena", "Choi", "Duck", false, "04-01-2019"),
-      createData("Eunbi", "Kwon", "Leader", false, "04-20-2019")
-    ],
     page: 0,
     rowsPerPage: 10,
     open: null,
@@ -108,6 +98,15 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
     redirectToAddPage: false
   };
 
+  componentDidMount() {
+    const { employees, actions } = this.props;
+
+    if (employees.length === 0) {
+      actions.loadEmployees().catch((error: any) => {
+        alert("Loading employees failed: " + error);
+      });
+    }
+  }
   handleRequestSort = (event: any, property: any) => {
     const orderBy = property;
     let order = "desc";
@@ -119,46 +118,13 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
     this.setState({ order, orderBy });
   };
 
-  handleSelectAllClick = (event: any) => {
-    if (event.target.checked) {
-      this.setState(state => ({ selected: state.data.map(n => n.id) }));
-      return;
-    }
-    this.setState({ selected: [] });
-  };
-
-  handleClick = (event: any, id: number) => {
-    console.log("Row " + id + " checkbox");
-    event.stopPropagation();
-    const { selected } = this.state;
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: any[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    this.setState({ selected: newSelected });
-  };
-
-  isSelected = (id: number) => this.state.selected.indexOf(id) !== -1;
-
   handleToggle = () => this.setState({ open: !this.state.open });
 
   handleDrawerOpen = (event: any, id: number) => {
     event.stopPropagation();
     console.log("Drawer opened");
-    const { data } = this.state;
-    let currData = findDataById(id, data);
+    // const { data } = this.state;
+    let currData = findDataById(id, this.props.employees);
 
     this.setState({ editData: currData, open: true });
   };
@@ -181,23 +147,23 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
     this.setState({ onDelete: true, toDelete: id });
   };
 
-  handleDelete = () => {
-    const { data, toDelete } = this.state;
-    let deleteData: TEmployee = findDataById(toDelete, data);
+  // handleDelete = () => {
+  //   const { data, toDelete } = this.state;
+  //   let deleteData: TEmployee = findDataById(toDelete, data);
 
-    this.setState({
-      onDelete: false,
-      data: data.filter(d => d !== deleteData)
-    });
-    console.log("Deleted");
-  };
+  //   this.setState({
+  //     onDelete: false,
+  //     data: data.filter(d => d !== deleteData)
+  //   });
+  //   console.log("Deleted");
+  // };
 
   handleRedirectToAddPage = () => {
     this.setState({ redirectToAddPage: true });
   };
   render() {
     const {
-      data,
+      // data,
       order,
       orderBy,
       selected,
@@ -253,29 +219,22 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={this.handleSelectAllClick}
+                // onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
+                // rowCount={data.length}
               />
               <TableBody>
-                {data.map(n => {
-                  const isSelected = this.isSelected(n.id);
+                {this.props.employees.map((n: any) => {
                   return (
                     <TableRow
                       hover
                       onClick={event => this.handleDrawerOpen(event, n.id)}
                       role="checkbox"
-                      aria-checked={isSelected}
+                      // aria-checked={isSelected}
                       tabIndex={-1}
                       key={n.id}
-                      selected={isSelected}
+                      // selected={isSelected}
                     >
-                      {/* <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isSelected}
-                          // onChange={event => this.handleClick(event, n.id)}
-                        />
-                      </TableCell> */}
                       <TableCell align="left" className={styles.texColor}>
                         {n.lastName}
                       </TableCell>
@@ -294,7 +253,7 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
                 })}
               </TableBody>
             </Table>
-            {this.state.open ? (
+            {/* {this.state.open ? (
               <EmployeeDetailsView
                 data={editData}
                 toggleDrawer={this.handleToggle.bind(this)}
@@ -302,8 +261,8 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
               />
             ) : (
               <div />
-            )}
-            {this.state.onDelete ? (
+            )} */}
+            {/* {this.state.onDelete ? (
               <div>
                 <Dialog
                   open={this.state.onDelete}
@@ -333,10 +292,29 @@ export default class EmployeeViewPage extends React.Component<{}, TState> {
               </div>
             ) : (
               ""
-            )}
+            )} */}
           </div>
         </Paper>
       </div>
     );
   }
 }
+
+function mapStateToProps(state: any) {
+  return {
+    employees: state.employees
+  };
+}
+
+function mapDispatchToProps(dispatch: any) {
+  return {
+    actions: {
+      loadEmployees: bindActionCreators(employeeActions.loadEmployees, dispatch)
+    }
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EmployeeViewPage);

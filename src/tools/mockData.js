@@ -51,7 +51,7 @@ const employees = [
     middleName: "Leader",
     fullName: "Eunbi Kwon",
     archived: false,
-    hireDate: "04-01-2019"
+    hireDate: "03-01-2019"
   }
 ];
 

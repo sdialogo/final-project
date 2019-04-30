@@ -1,5 +1,8 @@
 import * as React from "react";
 import { Redirect } from "react-router";
+import { connect } from "react-redux";
+import { loadDevPlans } from "../../redux/actions/devPlanActions";
+import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import { Status } from "../../enums/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
@@ -21,7 +24,9 @@ type TState = {
 
 type TProps = {
   devPlans: TDevPlan[];
-  actions: any;
+  employees: any;
+  loadDevPlans: any;
+  loadEmployees: any;
 };
 
 class AddDevPlan extends React.Component<TProps, TState> {
@@ -35,6 +40,22 @@ class AddDevPlan extends React.Component<TProps, TState> {
     },
     redirectToViewPage: false
   };
+
+  componentDidMount() {
+    const { devPlans, employees, loadDevPlans, loadEmployees } = this.props;
+
+    if (devPlans.length === 0) {
+      loadDevPlans().catch((error: any) => {
+        alert("Loading dev plans failed: " + error);
+      });
+    }
+
+    if (employees.length === 0) {
+      loadEmployees().catch((error: any) => {
+        alert("Loading employees failed: " + error);
+      });
+    }
+  }
 
   handleChange = (name: string) => (event: any) => {
     let input = event.target.value;
@@ -59,7 +80,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
 
     this.setState({ redirectToViewPage: true });
     //update app state
-    this.props.actions.addDevPlan(this.state.devPlan);
+    //this.props.actions.addDevPlan(this.state.devPlan);
   };
 
   handleCancel = () => {
@@ -183,8 +204,19 @@ class AddDevPlan extends React.Component<TProps, TState> {
   }
 }
 
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(AddDevPlan);
-export default AddDevPlan;
+function mapStateToProps(state: any) {
+  return {
+    devPlans: state.devPlans,
+    employees: state.employees
+  };
+}
+
+const mapDispatchToProps = {
+  loadDevPlans,
+  loadEmployees
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddDevPlan);

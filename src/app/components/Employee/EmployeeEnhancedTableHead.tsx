@@ -8,11 +8,11 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Tooltip from "@material-ui/core/Tooltip";
 
 type TProps = {
-  onSelectAllClick: any;
+  onSelectAllClick?: any;
   order: any;
   orderBy: any;
   numSelected: number;
-  rowCount: number;
+  rowCount?: number;
   onRequestSort: any;
 };
 
