@@ -1,8 +1,5 @@
 import * as React from "react";
 import { Redirect } from "react-router";
-import { connect } from "react-redux";
-import * as devPlanActions from "../../redux/actions/devPlanActions";
-import { bindActionCreators } from "redux";
 
 import { Status } from "../../enums/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
@@ -181,32 +178,13 @@ class AddDevPlan extends React.Component<TProps, TState> {
             </Grid>
           </Grid>
         </CardActions>
-        {this.props.devPlans.map(devPlan => (
-          <div>
-            <div key={devPlan.title}>Title: {devPlan.title}</div>
-            <div>Desc: {devPlan.description}</div>
-            <div>Asignee: {devPlan.asignee}</div>
-            <br />
-          </div>
-        ))}
       </div>
     );
   }
 }
 
-function mapStateToProps(state: any) {
-  return {
-    devPlans: state.devPlans
-  };
-}
-
-function mapDispatchToProps(dispatch: any) {
-  return {
-    actions: bindActionCreators(devPlanActions, dispatch)
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddDevPlan);
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(AddDevPlan);
+export default AddDevPlan;

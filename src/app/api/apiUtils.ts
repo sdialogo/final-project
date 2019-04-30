@@ -1,4 +1,4 @@
-export async function handleResponse(response) {
+export async function handleResponse(response: any) {
   if (response.ok) return response.json();
   if (response.status === 400) {
     // So, a server-side validation error occurred.
@@ -10,7 +10,7 @@ export async function handleResponse(response) {
 }
 
 // In a real app, would likely call an error logging service.
-export function handleError(error) {
+export function handleError(error: any) {
   // eslint-disable-next-line no-console
   console.error("API call failed. " + error);
   throw error;

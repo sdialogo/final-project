@@ -3,7 +3,7 @@ const devPlans = [
     id: 1,
     title: "Securing React Apps with Auth0",
     description: "react-auth0-authentication-security",
-    statusCode: 1,
+    statusCode: "Completed",
     employeeId: 1,
     dueDate: "05-30-2019"
   },
@@ -11,15 +11,15 @@ const devPlans = [
     id: 2,
     title: "React: The Big Picture",
     description: "react-big-picture",
-    statusCode: 2,
+    statusCode: "In Progress",
     employeeId: 2,
     dueDate: "05-30-2019"
   },
   {
     id: 3,
     title: "Creating Reusable React Components",
-    slug: "react-creating-reusable-components",
-    statusCode: 1,
+    description: "react-creating-reusable-components",
+    statusCode: "Not Started",
     employeeId: 3,
     dueDate: "05-30-2019"
   }
@@ -31,6 +31,7 @@ const employees = [
     lastName: "Jo",
     firstName: "Yuri",
     middleName: "Jogoori",
+    fullName: "Yuri Jo",
     archived: false,
     hireDate: "04-01-2019"
   },
@@ -39,6 +40,7 @@ const employees = [
     lastName: "Choi",
     firstName: "Yena",
     middleName: "Duck",
+    fullName: "Yena Choi",
     archived: false,
     hireDate: "04-01-2019"
   },
@@ -47,6 +49,7 @@ const employees = [
     lastName: "Kwon",
     firstName: "Eunbi",
     middleName: "Leader",
+    fullName: "Eunbi Kwon",
     archived: false,
     hireDate: "04-01-2019"
   }

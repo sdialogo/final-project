@@ -1,34 +1,40 @@
 import * as React from "react";
 import { Redirect } from "react-router";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Checkbox from "@material-ui/core/Checkbox";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+  Grid,
+  IconButton
+} from "@material-ui/core";
 
-import IconButton from "@material-ui/core/IconButton";
 import MoreVertical from "@material-ui/icons/MoreVert";
 import AddIcon from "@material-ui/icons/Add";
 
 import { Status } from "../../enums/StatusEnum";
 import DetailsView from "./DevPlanDetailsView";
 import EnhancedTableHead from "./DevPlanEnhancedTableHead";
+import * as devPlanActions from "../../redux/actions/devPlanActions";
+import * as employeeActions from "../../redux/actions/employeeActions";
 
 type TData = {
   id: number;
   title: string;
   description: string;
-  asignee: string;
-  status: Status;
+  statusCode: string;
+  employeeId: number;
+  employeeName: string;
   dueDate: string;
 };
 
@@ -36,7 +42,7 @@ type TState = {
   order: string;
   orderBy: string;
   selected: number[];
-  data: TData[];
+  // data: TData[];
   page: number;
   rowsPerPage: number;
   open: boolean;
@@ -46,17 +52,11 @@ type TState = {
   redirectToAddPage: boolean;
 };
 
-let counter = 0;
-function createData(
-  title: string,
-  description: string,
-  status: Status,
-  asignee: string,
-  dueDate: string
-) {
-  counter += 1;
-  return { id: counter, title, description, status, asignee, dueDate };
-}
+type TProps = {
+  devPlans: TData[];
+  actions: any;
+  employees: any;
+};
 
 function findDataById(id: number, arr: TData[]): TData {
   for (var i = 0; i < arr.length; i++) {
@@ -69,47 +69,18 @@ function findDataById(id: number, arr: TData[]): TData {
     id: 0,
     title: "",
     description: "",
-    status: Status.Blank,
-    asignee: "",
+    statusCode: "",
+    employeeId: 0,
+    employeeName: "",
     dueDate: ""
   };
 }
 
-export default class ViewPage extends React.Component<{}, TState> {
+class DevPlanviewPage extends React.Component<TProps, TState> {
   state: TState = {
     order: "asc",
     orderBy: "title",
     selected: [],
-    data: [
-      createData(
-        "Sample 1",
-        "Description",
-        Status.Completed,
-        "Asignee 1",
-        "04-18-2019"
-      ),
-      createData(
-        "Sample 2",
-        "Description",
-        Status.InProgress,
-        "Asignee 2",
-        "04-19-2019"
-      ),
-      createData(
-        "Sample 3",
-        "Description",
-        Status.NotStarted,
-        "Asignee 3",
-        "04-20-2019"
-      ),
-      createData(
-        "Sample 4",
-        "Description",
-        Status.Completed,
-        "Asignee 4",
-        "04-20-2019"
-      )
-    ],
     page: 0,
     rowsPerPage: 10,
     open: null,
@@ -117,14 +88,31 @@ export default class ViewPage extends React.Component<{}, TState> {
       id: 0,
       title: "",
       description: "",
-      asignee: "",
-      status: Status.Completed,
+      employeeId: 0,
+      employeeName: "",
+      statusCode: "",
       dueDate: ""
     },
     onDelete: false,
     toDelete: 0,
     redirectToAddPage: false
   };
+
+  componentDidMount() {
+    const { devPlans, employees, actions } = this.props;
+
+    if (devPlans.length === 0) {
+      actions.loadDevPlans().catch((error: any) => {
+        alert("Loading dev plans failed: " + error);
+      });
+    }
+
+    if (employees.length === 0) {
+      actions.loadEmployees().catch((error: any) => {
+        alert("Loading employees failed: " + error);
+      });
+    }
+  }
 
   handleRequestSort = (event: any, property: any) => {
     const orderBy = property;
@@ -137,46 +125,13 @@ export default class ViewPage extends React.Component<{}, TState> {
     this.setState({ order, orderBy });
   };
 
-  handleSelectAllClick = (event: any) => {
-    if (event.target.checked) {
-      this.setState(state => ({ selected: state.data.map(n => n.id) }));
-      return;
-    }
-    this.setState({ selected: [] });
-  };
-
-  handleClick = (event: any, id: number) => {
-    console.log("Row " + id + " checkbox");
-    event.stopPropagation();
-    const { selected } = this.state;
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: any[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    this.setState({ selected: newSelected });
-  };
-
-  isSelected = (id: number) => this.state.selected.indexOf(id) !== -1;
-
   handleToggle = () => this.setState({ open: !this.state.open });
 
   handleDrawerOpen = (event: any, id: number) => {
     event.stopPropagation();
     console.log("Drawer opened");
-    const { data } = this.state;
-    let currData = findDataById(id, data);
+    // const { data } = this.state;
+    let currData = findDataById(id, this.props.devPlans);
 
     this.setState({ editData: currData, open: true });
   };
@@ -199,16 +154,16 @@ export default class ViewPage extends React.Component<{}, TState> {
     this.setState({ onDelete: true, toDelete: id });
   };
 
-  handleDelete = () => {
-    const { data, toDelete } = this.state;
-    let deleteData: TData = findDataById(toDelete, data);
+  // handleDelete = () => {
+  //   const { data, toDelete } = this.state;
+  //   let deleteData: TData = findDataById(toDelete, data);
 
-    this.setState({
-      onDelete: false,
-      data: data.filter(d => d !== deleteData)
-    });
-    console.log("Deleted");
-  };
+  //   this.setState({
+  //     onDelete: false,
+  //     data: data.filter(d => d !== deleteData)
+  //   });
+  //   console.log("Deleted");
+  // };
 
   updateDataFromEditPage = (id: number, newData: TData) => {
     //delete current data with same id
@@ -219,9 +174,14 @@ export default class ViewPage extends React.Component<{}, TState> {
     this.setState({ redirectToAddPage: true });
   };
 
+  getEmployeeName = (id: number) => {
+    const employee = this.props.employees.find((a: any) => a.id === id);
+    console.log(employee);
+  };
+
   render() {
     const {
-      data,
+      // data,
       order,
       orderBy,
       selected,
@@ -277,32 +237,26 @@ export default class ViewPage extends React.Component<{}, TState> {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onSelectAllClick={this.handleSelectAllClick}
+                // onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
+                // rowCount={data.length}
               />
               <TableBody>
-                {data.map(n => {
-                  const isSelected = this.isSelected(n.id);
+                {this.props.devPlans.map(n => {
+                  // const isSelected = this.isSelected(n.id);
                   return (
                     <TableRow
                       hover
                       onClick={event => this.handleDrawerOpen(event, n.id)}
                       role="checkbox"
-                      aria-checked={isSelected}
+                      // aria-checked={isSelected}
                       tabIndex={-1}
                       key={n.id}
-                      selected={isSelected}
+                      // selected={isSelected}
                     >
-                      {/* <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isSelected}
-                          // onChange={event => this.handleClick(event, n.id)}
-                        />
-                      </TableCell> */}
                       <TableCell align="left">{n.title}</TableCell>
-                      <TableCell align="left">{n.asignee}</TableCell>
-                      <TableCell align="left">{n.status}</TableCell>
+                      <TableCell align="left">{n.employeeName}</TableCell>
+                      <TableCell align="left">{n.statusCode}</TableCell>
                       <TableCell align="left">{n.dueDate}</TableCell>
                       <TableCell align="left">
                         <IconButton
@@ -316,7 +270,7 @@ export default class ViewPage extends React.Component<{}, TState> {
                 })}
               </TableBody>
             </Table>
-            {this.state.open ? (
+            {/* {this.state.open ? (
               <DetailsView
                 data={editData}
                 toggleDrawer={this.handleToggle.bind(this)}
@@ -324,8 +278,8 @@ export default class ViewPage extends React.Component<{}, TState> {
               />
             ) : (
               <div />
-            )}
-            {this.state.onDelete ? (
+            )} */}
+            {/* {this.state.onDelete ? (
               <div>
                 <Dialog
                   open={this.state.onDelete}
@@ -355,10 +309,41 @@ export default class ViewPage extends React.Component<{}, TState> {
               </div>
             ) : (
               ""
-            )}
+            )} */}
           </div>
         </Paper>
       </div>
     );
   }
 }
+
+function mapStateToProps(state: any) {
+  return {
+    devPlans:
+      state.employees.length === 0
+        ? []
+        : state.devPlans.map((devPlan: any) => {
+            return {
+              ...devPlan,
+              employeeName: state.employees.find(
+                (a: any) => a.id === devPlan.employeeId
+              ).fullName
+            };
+          }),
+    employees: state.employees
+  };
+}
+
+function mapDispatchToProps(dispatch: any) {
+  return {
+    actions: {
+      loadDevPlans: bindActionCreators(devPlanActions.loadDevPlans, dispatch),
+      loadEmployees: bindActionCreators(employeeActions.loadEmployees, dispatch)
+    }
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DevPlanviewPage);
