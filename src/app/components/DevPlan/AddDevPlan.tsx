@@ -2,25 +2,29 @@ import * as React from "react";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import * as devPlanActions from "../../redux/actions/devPlanActions";
+import { bindActionCreators } from "redux";
 
 import { Status } from "../../enums/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
 
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
 
+type TDevPlan = {
+  title: string;
+  description: string;
+  status: Status;
+  asignee: string;
+  dueDate: string;
+};
+
 type TState = {
-  devPlan: {
-    title: string;
-    description: string;
-    status: Status;
-    asignee: string;
-    dueDate: string;
-  };
+  devPlan: TDevPlan;
   redirectToViewPage: any;
 };
 
 type TProps = {
-  dispatch: any;
+  devPlans: TDevPlan[];
+  actions: any;
 };
 
 class AddDevPlan extends React.Component<TProps, TState> {
@@ -42,16 +46,12 @@ class AddDevPlan extends React.Component<TProps, TState> {
 
     if (name === "title") {
       devPlan = { ...this.state.devPlan, title: input };
-      //this.setState({ title: input });
     } else if (name === "description") {
       devPlan = { ...this.state.devPlan, description: input };
-      //this.setState({ description: input });
     } else if (name === "asignee") {
       devPlan = { ...this.state.devPlan, asignee: input };
-      //this.setState({ asignee: input });
     } else if (name === "dueDate") {
       devPlan = { ...this.state.devPlan, dueDate: input };
-      //this.setState({ dueDate: input });
     }
 
     this.setState({ devPlan: devPlan });
@@ -62,13 +62,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
 
     this.setState({ redirectToViewPage: true });
     //update app state
-    this.props.dispatch(devPlanActions.addDevPlan(this.state.devPlan));
-
-    // alert(
-    //   this.state.devPlan.title
-    //     .concat(this.state.devPlan.description)
-    //     .concat(this.state.devPlan.asignee)
-    // );
+    this.props.actions.addDevPlan(this.state.devPlan);
   };
 
   handleCancel = () => {
@@ -187,18 +181,32 @@ class AddDevPlan extends React.Component<TProps, TState> {
             </Grid>
           </Grid>
         </CardActions>
+        {this.props.devPlans.map(devPlan => (
+          <div>
+            <div key={devPlan.title}>Title: {devPlan.title}</div>
+            <div>Desc: {devPlan.description}</div>
+            <div>Asignee: {devPlan.asignee}</div>
+            <br />
+          </div>
+        ))}
       </div>
     );
   }
 }
 
-function mapStateToProps(state: any, ownProps: any) {
+function mapStateToProps(state: any) {
   return {
     devPlans: state.devPlans
   };
 }
 
+function mapDispatchToProps(dispatch: any) {
+  return {
+    actions: bindActionCreators(devPlanActions, dispatch)
+  };
+}
+
 export default connect(
-  mapStateToProps
-  // mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(AddDevPlan);

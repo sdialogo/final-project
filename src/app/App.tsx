@@ -10,7 +10,7 @@ import AddEmployee from "./components/Employee/AddEmployee";
 import configureStore from "./redux/configureStore";
 import { Provider } from "react-redux";
 
-const store = configureStore([]);
+const store = configureStore({});
 
 ReactDOM.render(
   <Provider store={store}>
@@ -31,15 +31,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
-
-// const Main = <div>
-//     <NavBar header="Development Plans" />
-//     <ViewPage />
-//   </div>;
-
-// ReactDOM.render(
-//   <Provider>
-//     {Main}
-//   </Provider>,
-//   document.getElementById("root")
-// );
