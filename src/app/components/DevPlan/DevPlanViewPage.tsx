@@ -156,17 +156,14 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   };
 
   handleDelete = () => {
-    // const { data, toDelete } = this.state;
-    // let deleteData: TData = findDataById(toDelete, data);
+    this.setState({ onDelete: false });
 
-    this.setState({
-      onDelete: false
-      // data: data.filter(d => d !== deleteData)
-    });
+    //update app state
+    this.props.actions.deleteDevPlan(this.state.toDelete);
     console.log("Deleted");
   };
 
-  updateDataFromEditPage = (id: number, newData: TData) => {
+  updateDataFromEditPage = (id: any, newData: TData) => {
     //delete current data with same id
     //push new data from eit page
   };
@@ -339,7 +336,11 @@ function mapDispatchToProps(dispatch: any) {
   return {
     actions: {
       loadDevPlans: bindActionCreators(devPlanActions.loadDevPlans, dispatch),
-      loadEmployees: bindActionCreators(employeeActions.loadEmployees, dispatch)
+      loadEmployees: bindActionCreators(
+        employeeActions.loadEmployees,
+        dispatch
+      ),
+      deleteDevPlan: bindActionCreators(devPlanActions.deleteDevPlan, dispatch)
     }
   };
 }

@@ -120,6 +120,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
               style={{
                 paddingLeft: "20px",
                 paddingRight: "20px",
+                paddingTop: "30px",
                 paddingBottom: "30px"
               }}
             >
@@ -131,6 +132,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
               >
                 <Grid item sm={6}>
                   <TextField
+                    variant="outlined"
                     id="title"
                     label="Title"
                     value={this.state.devPlan.title}
@@ -141,6 +143,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                 </Grid>
                 <Grid item sm={6}>
                   <TextField
+                    variant="outlined"
                     id="description"
                     label="Description"
                     value={this.state.devPlan.description}
@@ -151,6 +154,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
+                    variant="outlined"
                     id="asignee"
                     label="Asignee"
                     value={this.state.devPlan.employeeId}
@@ -161,6 +165,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
+                    variant="outlined"
                     id="dueDate"
                     label="Due Date"
                     type="date"

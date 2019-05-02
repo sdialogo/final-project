@@ -8,6 +8,7 @@ import Divider from "@material-ui/core/Divider";
 
 import { Status } from "../../enums/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
+import AddDevPlan from "./AddDevPlan";
 
 type TData = {
   id: number;
@@ -94,6 +95,21 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 disabled={!isEdit}
                 multiline
                 // rows={4}
+              />
+            </Grid>
+            <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
+              <TextField
+                style={{ width: "90%" }}
+                id="assignee"
+                label="Assignee"
+                value={data.employeeName}
+                onChange={this.handleChange("assignee")}
+                margin="normal"
+                variant="outlined"
+                disabled={!isEdit}
+                InputLabelProps={{
+                  shrink: true
+                }}
               />
             </Grid>
             <Grid item xs={6}>

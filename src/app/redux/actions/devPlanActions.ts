@@ -5,6 +5,10 @@ export function addDevPlan(devPlan: any) {
   return { type: types.ADD_DEVPLAN, devPlan };
 }
 
+export function deleteDevPlan(devPlanId: any) {
+  return { type: types.DELETE_DEVPLAN, devPlanId };
+}
+
 export function loadDevPlansSuccess(devPlans: any) {
   return { type: types.LOAD_DEVPLANS_SUCCESS, devPlans };
 }
