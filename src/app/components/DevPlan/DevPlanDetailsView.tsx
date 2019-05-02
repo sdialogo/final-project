@@ -17,8 +17,9 @@ type TData = {
   id: number;
   title: string;
   description: string;
-  status: Status;
-  asignee: string;
+  statusCode: string;
+  employeeId: number;
+  employeeName: string;
   dueDate: string;
 };
 
@@ -108,7 +109,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
                         color: "grey"
                       }}
                     >
-                      {data.asignee}
+                      {data.employeeName}
                     </Button>
                   </Grid>
                 </Grid>
@@ -128,7 +129,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
                         color: "grey"
                       }}
                     >
-                      {data.status}
+                      {data.statusCode}
                     </Button>
                   </Grid>
                 </Grid>

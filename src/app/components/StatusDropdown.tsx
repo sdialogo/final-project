@@ -11,16 +11,18 @@ type TState = {
   status: Status;
 };
 
-export default class StatusDropdown extends React.Component<{}, TState> {
+type TProps = {
+  onChange: any;
+  value: any;
+};
+
+export default class StatusDropdown extends React.Component<TProps, TState> {
   state: TState = {
     status: Status.Blank
   };
 
-  handleChange = (name: string) => (event: any) => {
-    this.setState({ status: event.target.value });
-  };
-
   render() {
+    const { onChange, value } = this.props;
     return (
       <FormControl variant="outlined">
         <InputLabel ref="age-dropdown" htmlFor="outlined-age-native-simple">
@@ -28,11 +30,11 @@ export default class StatusDropdown extends React.Component<{}, TState> {
         </InputLabel>
         <Select
           native
-          value={this.state.status}
-          onChange={this.handleChange("status")}
+          value={value}
+          onChange={onChange("status")}
           input={
             <OutlinedInput
-              name="age"
+              name="status"
               labelWidth={100}
               id="outlined-age-native-simple"
             />

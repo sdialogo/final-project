@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
-import { loadDevPlans } from "../../redux/actions/devPlanActions";
+import { loadDevPlans, addDevPlan } from "../../redux/actions/devPlanActions";
 import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import { Status } from "../../enums/StatusEnum";
@@ -10,10 +10,12 @@ import StatusDropdown from "../StatusDropdown";
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
 
 type TDevPlan = {
+  id: string;
   title: string;
   description: string;
-  status: Status;
-  asignee: string;
+  statusCode: string;
+  employeeId: number;
+  employeeName: string;
   dueDate: string;
 };
 
@@ -27,15 +29,18 @@ type TProps = {
   employees: any;
   loadDevPlans: any;
   loadEmployees: any;
+  addDevPlan: any;
 };
 
 class AddDevPlan extends React.Component<TProps, TState> {
   state: TState = {
     devPlan: {
+      id: "",
       title: "",
       description: "",
-      status: Status.Blank,
-      asignee: "",
+      statusCode: "",
+      employeeId: null,
+      employeeName: "",
       dueDate: ""
     },
     redirectToViewPage: false
@@ -60,16 +65,17 @@ class AddDevPlan extends React.Component<TProps, TState> {
   handleChange = (name: string) => (event: any) => {
     let input = event.target.value;
     let devPlan;
-    console.log(input);
 
     if (name === "title") {
-      devPlan = { ...this.state.devPlan, title: input };
+      devPlan = { ...this.state.devPlan, title: input, id: input };
     } else if (name === "description") {
       devPlan = { ...this.state.devPlan, description: input };
     } else if (name === "asignee") {
-      devPlan = { ...this.state.devPlan, asignee: input };
+      devPlan = { ...this.state.devPlan, employeeId: Number(input) };
     } else if (name === "dueDate") {
       devPlan = { ...this.state.devPlan, dueDate: input };
+    } else if (name === "status") {
+      devPlan = { ...this.state.devPlan, statusCode: input };
     }
 
     this.setState({ devPlan: devPlan });
@@ -79,8 +85,9 @@ class AddDevPlan extends React.Component<TProps, TState> {
     console.log("Save...");
 
     this.setState({ redirectToViewPage: true });
+
     //update app state
-    //this.props.actions.addDevPlan(this.state.devPlan);
+    this.props.addDevPlan(this.state.devPlan);
   };
 
   handleCancel = () => {
@@ -146,7 +153,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                   <TextField
                     id="asignee"
                     label="Asignee"
-                    value={this.state.devPlan.asignee}
+                    value={this.state.devPlan.employeeId}
                     onChange={this.handleChange("asignee")}
                     margin="normal"
                     fullWidth
@@ -167,7 +174,10 @@ class AddDevPlan extends React.Component<TProps, TState> {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <StatusDropdown />
+                  <StatusDropdown
+                    onChange={this.handleChange}
+                    value={this.state.devPlan.statusCode}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -213,7 +223,8 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = {
   loadDevPlans,
-  loadEmployees
+  loadEmployees,
+  addDevPlan
 };
 
 export default connect(

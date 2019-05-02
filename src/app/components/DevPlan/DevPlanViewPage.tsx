@@ -58,7 +58,7 @@ type TProps = {
   employees: any;
 };
 
-function findDataById(id: number, arr: TData[]): TData {
+function findDataById(id: any, arr: TData[]): TData {
   for (var i = 0; i < arr.length; i++) {
     if (arr[i].id === id) {
       return arr[i];
@@ -70,7 +70,7 @@ function findDataById(id: number, arr: TData[]): TData {
     title: "",
     description: "",
     statusCode: "",
-    employeeId: 0,
+    employeeId: null,
     employeeName: "",
     dueDate: ""
   };
@@ -88,7 +88,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       id: 0,
       title: "",
       description: "",
-      employeeId: 0,
+      employeeId: null,
       employeeName: "",
       statusCode: "",
       dueDate: ""
@@ -130,6 +130,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   handleDrawerOpen = (event: any, id: number) => {
     event.stopPropagation();
     console.log("Drawer opened");
+    console.log("Clicked devPlan id: ", id);
     // const { data } = this.state;
     let currData = findDataById(id, this.props.devPlans);
 
@@ -154,16 +155,16 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ onDelete: true, toDelete: id });
   };
 
-  // handleDelete = () => {
-  //   const { data, toDelete } = this.state;
-  //   let deleteData: TData = findDataById(toDelete, data);
+  handleDelete = () => {
+    // const { data, toDelete } = this.state;
+    // let deleteData: TData = findDataById(toDelete, data);
 
-  //   this.setState({
-  //     onDelete: false,
-  //     data: data.filter(d => d !== deleteData)
-  //   });
-  //   console.log("Deleted");
-  // };
+    this.setState({
+      onDelete: false
+      // data: data.filter(d => d !== deleteData)
+    });
+    console.log("Deleted");
+  };
 
   updateDataFromEditPage = (id: number, newData: TData) => {
     //delete current data with same id
@@ -270,7 +271,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                 })}
               </TableBody>
             </Table>
-            {/* {this.state.open ? (
+            {this.state.open ? (
               <DetailsView
                 data={editData}
                 toggleDrawer={this.handleToggle.bind(this)}
@@ -278,8 +279,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
               />
             ) : (
               <div />
-            )} */}
-            {/* {this.state.onDelete ? (
+            )}
+            {this.state.onDelete ? (
               <div>
                 <Dialog
                   open={this.state.onDelete}
@@ -309,7 +310,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
               </div>
             ) : (
               ""
-            )} */}
+            )}
           </div>
         </Paper>
       </div>

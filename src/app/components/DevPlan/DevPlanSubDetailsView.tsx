@@ -13,8 +13,9 @@ type TData = {
   id: number;
   title: string;
   description: string;
-  status: Status;
-  asignee: string;
+  statusCode: string;
+  employeeId: number;
+  employeeName: string;
   dueDate: string;
 };
 
@@ -128,11 +129,11 @@ export default class SubViewPage extends React.Component<TProps, TState> {
               />
             </Grid>
             <Grid item xs={6} hidden={tabValue === 0 ? false : true}>
-              {data.status === Status.NotStarted ? (
+              {data.statusCode === Status.NotStarted ? (
                 <Button disabled style={{ background: "red", color: "white" }}>
-                  {data.status}
+                  {data.statusCode}
                 </Button>
-              ) : data.status === Status.Completed ? (
+              ) : data.statusCode === Status.Completed ? (
                 <Button
                   disabled
                   style={{
@@ -140,7 +141,7 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                     color: "white"
                   }}
                 >
-                  {data.status}
+                  {data.statusCode}
                 </Button>
               ) : (
                 <Button
@@ -150,12 +151,15 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                     color: "white"
                   }}
                 >
-                  {data.status}
+                  {data.statusCode}
                 </Button>
               )}
             </Grid>
             <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
-              <StatusDropdown />
+              <StatusDropdown
+                onChange={this.handleChange}
+                value={data.statusCode}
+              />
             </Grid>
           </Grid>
         </form>

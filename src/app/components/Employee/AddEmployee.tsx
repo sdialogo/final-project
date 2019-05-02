@@ -132,9 +132,9 @@ export default class AddEmployee extends React.Component<{}, TState> {
                     }}
                   />
                 </Grid>
-                <Grid item xs={6}>
-                  <StatusDropdown />
-                </Grid>
+                {/* <Grid item xs={6}>
+                  <StatusDropdown onChange={this.handleChange} value={this.state.sta} />
+                </Grid> */}
               </Grid>
             </Grid>
           </form>
