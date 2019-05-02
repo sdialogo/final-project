@@ -1,14 +1,18 @@
 import * as React from "react";
-
-import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Divider from "@material-ui/core/Divider";
+import { Redirect } from "react-router";
+import { connect } from "react-redux";
+import { addDevPlan, deleteDevPlan } from "../../redux/actions/devPlanActions";
 
 import { Status } from "../../enums/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
-import AddDevPlan from "./AddDevPlan";
+
+import {
+  CardActions,
+  Button,
+  Grid,
+  TextField,
+  Divider
+} from "@material-ui/core";
 
 type TData = {
   id: number;
@@ -25,13 +29,15 @@ type TProps = {
   isEdit: boolean;
   closeDrawer: any;
   tabValue: number;
+  addDevPlan: any;
+  deleteDevPlan: any;
 };
 
 type TState = {
   data: TData;
 };
 
-export default class SubViewPage extends React.Component<TProps, TState> {
+class DevPlanSubViewPage extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
     this.state = {
@@ -39,8 +45,20 @@ export default class SubViewPage extends React.Component<TProps, TState> {
     };
   }
 
-  handleSave = () => {
-    //update app state
+  handleSave = (event: any) => {
+    console.log("Edit...");
+    //update app state; delete then add
+    this.props.deleteDevPlan(this.state.data.id);
+    this.props.addDevPlan(this.state.data);
+
+    this.props.closeDrawer(event);
+    // switch (action) {
+    //   case "proceed":
+    //     this.props.deleteDevPlan(this.state.data.id);
+    //     this.props.addDevPlan(this.state.data);
+    //   default:
+    //     this.props.closeDrawer;
+    //     break;
   };
 
   handleChange = (name: string) => (event: any) => {
@@ -53,12 +71,19 @@ export default class SubViewPage extends React.Component<TProps, TState> {
       newData.description = input;
     } else if (name === "dueDate") {
       newData.dueDate = input;
+    } else if (name === "assignee") {
+      newData.employeeId = Number(input);
+    } else if (name === "status") {
+      newData.statusCode = input;
     }
+
     this.setState({ data: newData });
   };
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
     const { data } = this.state;
+    const date = new Date(data.dueDate);
+    console.log("Date: ", date);
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -102,7 +127,7 @@ export default class SubViewPage extends React.Component<TProps, TState> {
                 style={{ width: "90%" }}
                 id="assignee"
                 label="Assignee"
-                value={data.employeeName}
+                value={data.employeeId}
                 onChange={this.handleChange("assignee")}
                 margin="normal"
                 variant="outlined"
@@ -226,3 +251,20 @@ export default class SubViewPage extends React.Component<TProps, TState> {
     );
   }
 }
+
+function mapStateToProps(state: any) {
+  return {
+    devPlans: state.devPlans,
+    employees: state.employees
+  };
+}
+
+const mapDispatchToProps = {
+  addDevPlan,
+  deleteDevPlan
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DevPlanSubViewPage);

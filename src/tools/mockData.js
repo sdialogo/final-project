@@ -5,7 +5,7 @@ const devPlans = [
     description: "react-auth0-authentication-security",
     statusCode: "Completed",
     employeeId: 1,
-    dueDate: "05-30-2019"
+    dueDate: "2019-05-01"
   },
   {
     id: 2,
@@ -13,7 +13,7 @@ const devPlans = [
     description: "react-big-picture",
     statusCode: "In Progress",
     employeeId: 2,
-    dueDate: "05-30-2019"
+    dueDate: "2019-05-01"
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ const devPlans = [
     description: "react-creating-reusable-components",
     statusCode: "Not Started",
     employeeId: 3,
-    dueDate: "05-30-2019"
+    dueDate: "2019-05-01"
   }
 ];
 
@@ -33,7 +33,7 @@ const employees = [
     middleName: "Jogoori",
     fullName: "Yuri Jo",
     archived: false,
-    hireDate: "04-01-2019"
+    hireDate: "2019-05-01"
   },
   {
     id: 2,
@@ -42,7 +42,7 @@ const employees = [
     middleName: "Duck",
     fullName: "Yena Choi",
     archived: false,
-    hireDate: "04-01-2019"
+    hireDate: "2019-05-01"
   },
   {
     id: 3,
@@ -51,7 +51,7 @@ const employees = [
     middleName: "Leader",
     fullName: "Eunbi Kwon",
     archived: false,
-    hireDate: "03-01-2019"
+    hireDate: "2019-05-01"
   }
 ];
 

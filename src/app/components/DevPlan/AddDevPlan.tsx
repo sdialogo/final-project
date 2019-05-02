@@ -73,6 +73,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
     } else if (name === "asignee") {
       devPlan = { ...this.state.devPlan, employeeId: Number(input) };
     } else if (name === "dueDate") {
+      console.log("Add date: ", input);
       devPlan = { ...this.state.devPlan, dueDate: input };
     } else if (name === "status") {
       devPlan = { ...this.state.devPlan, statusCode: input };
