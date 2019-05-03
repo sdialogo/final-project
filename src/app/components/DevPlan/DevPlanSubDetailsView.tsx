@@ -52,13 +52,6 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     this.props.addDevPlan(this.state.data);
 
     this.props.closeDrawer(event);
-    // switch (action) {
-    //   case "proceed":
-    //     this.props.deleteDevPlan(this.state.data.id);
-    //     this.props.addDevPlan(this.state.data);
-    //   default:
-    //     this.props.closeDrawer;
-    //     break;
   };
 
   handleChange = (name: string) => (event: any) => {

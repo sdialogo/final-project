@@ -1,4 +1,9 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import {
+  addEmployee,
+  deleteEmployee
+} from "../../redux/actions/employeeActions";
 
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
@@ -10,10 +15,11 @@ import { Status } from "../../enums/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
 
 type TEmployee = {
-  id: number;
+  id: any;
   firstName: string;
   lastName: string;
   middleName: string;
+  fullName: string;
   archived: boolean;
   hireDate: string;
 };
@@ -23,13 +29,25 @@ type TProps = {
   isEdit: boolean;
   closeDrawer: any;
   tabValue: number;
+  addEmployee: any;
+  deleteEmployee: any;
 };
 
 type TState = {
   data: TEmployee;
 };
 
-export default class SubViewPage extends React.Component<TProps, TState> {
+function getFullName(data: TEmployee) {
+  let fullName = data.firstName
+    .concat(" ")
+    .concat(data.middleName)
+    .concat(" ")
+    .concat(data.lastName);
+
+  return fullName;
+}
+
+class EmployeeSubViewPage extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
     this.state = {
@@ -38,7 +56,12 @@ export default class SubViewPage extends React.Component<TProps, TState> {
   }
 
   handleSave = () => {
-    //update app state
+    console.log("Edit...");
+    //update app state; delete then add
+    this.props.deleteEmployee(this.state.data.id);
+    this.props.addEmployee(this.state.data);
+
+    this.props.closeDrawer(event);
   };
 
   handleChange = (name: string) => (event: any) => {
@@ -51,7 +74,15 @@ export default class SubViewPage extends React.Component<TProps, TState> {
       newData.lastName = input;
     } else if (name === "middlename") {
       newData.middleName = input;
+    } else if (name === "hireDate") {
+      newData.hireDate = input;
+    } else if (name === "archived") {
+      newData.archived = input;
     }
+
+    let fullName = getFullName(newData);
+    newData.fullName = fullName;
+
     this.setState({ data: newData });
   };
   render() {
@@ -110,11 +141,23 @@ export default class SubViewPage extends React.Component<TProps, TState> {
             <Grid item xs={6}>
               <TextField
                 style={{ width: "90%" }}
-                id="hiredate"
+                id="hireDate"
                 label="Hire Date"
                 type="date"
                 value={data.hireDate}
-                onChange={this.handleChange("hiredate")}
+                onChange={this.handleChange("hireDate")}
+                margin="normal"
+                variant="outlined"
+                disabled={!isEdit}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                style={{ width: "90%" }}
+                id="archived"
+                label="Archived"
+                value={data.archived}
+                onChange={this.handleChange("archived")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -169,3 +212,19 @@ export default class SubViewPage extends React.Component<TProps, TState> {
     );
   }
 }
+
+function mapStateToProps(state: any) {
+  return {
+    employees: state.employees
+  };
+}
+
+const mapDispatchToProps = {
+  addEmployee,
+  deleteEmployee
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EmployeeSubViewPage);

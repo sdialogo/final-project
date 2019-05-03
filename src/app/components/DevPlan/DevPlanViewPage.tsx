@@ -131,7 +131,6 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     event.stopPropagation();
     console.log("Drawer opened");
     console.log("Clicked devPlan id: ", id);
-    // const { data } = this.state;
     let currData = findDataById(id, this.props.devPlans);
 
     this.setState({ editData: currData, open: true });

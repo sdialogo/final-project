@@ -1,5 +1,11 @@
 import * as React from "react";
 import { Redirect } from "react-router";
+import { connect } from "react-redux";
+import {
+  loadEmployees,
+  addEmployee
+} from "../../redux/actions/employeeActions";
+
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
@@ -9,44 +15,79 @@ import Button from "@material-ui/core/Button";
 import { Status } from "../../enums/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
 
-type TState = {
+type TEmployee = {
+  id: string;
   firstName: string;
   lastName: string;
   middleName: string;
+  fullName: string;
   archived: boolean;
   hireDate: string;
+};
+
+type TState = {
+  employee: TEmployee;
   redirectToViewPage: boolean;
 };
 
-export default class AddEmployee extends React.Component<{}, TState> {
+type TProps = {
+  loadEmployees: any;
+  addEmployee: any;
+};
+
+function getFullName(data: TEmployee) {
+  let fullName = data.firstName
+    .concat(" ")
+    .concat(data.middleName)
+    .concat(" ")
+    .concat(data.lastName);
+
+  return fullName;
+}
+
+class AddEmployee extends React.Component<TProps, TState> {
   state: TState = {
-    firstName: "",
-    lastName: "",
-    middleName: "",
-    archived: false,
-    hireDate: "",
+    employee: {
+      id: "",
+      firstName: "",
+      lastName: "",
+      middleName: "",
+      fullName: "",
+      archived: false,
+      hireDate: ""
+    },
     redirectToViewPage: false
   };
 
   handleChange = (name: string) => (event: any) => {
+    let newData: TEmployee = { ...this.state.employee };
     let input = event.target.value;
-    console.log(input);
 
     if (name === "firstname") {
-      this.setState({ firstName: input });
+      newData.firstName = input;
     } else if (name === "lastname") {
-      this.setState({ lastName: input });
+      newData.lastName = input;
     } else if (name === "middlename") {
-      this.setState({ middleName: input });
+      newData.middleName = input;
     } else if (name === "hiredate") {
-      this.setState({ hireDate: input });
+      newData.hireDate = input;
+    } else if (name === "archived") {
+      newData.archived = input;
     }
+
+    let fullName = getFullName(newData);
+    newData.fullName = fullName;
+    newData.id = fullName;
+
+    this.setState({ employee: newData });
   };
 
   handleSave = () => {
     console.log("Save...");
-    //update app state
+
     this.setState({ redirectToViewPage: true });
+    //update app state
+    this.props.addEmployee(this.state.employee);
   };
 
   handleCancel = () => {
@@ -55,7 +96,7 @@ export default class AddEmployee extends React.Component<{}, TState> {
   };
 
   render() {
-    const { redirectToViewPage } = this.state;
+    const { redirectToViewPage, employee } = this.state;
 
     return (
       <div>
@@ -92,7 +133,7 @@ export default class AddEmployee extends React.Component<{}, TState> {
                   <TextField
                     id="firstname"
                     label="First Name"
-                    value={this.state.firstName}
+                    value={employee.firstName}
                     onChange={this.handleChange("firstname")}
                     margin="normal"
                     fullWidth
@@ -102,7 +143,7 @@ export default class AddEmployee extends React.Component<{}, TState> {
                   <TextField
                     id="lastname"
                     label="Last Name"
-                    value={this.state.lastName}
+                    value={employee.lastName}
                     onChange={this.handleChange("lastname")}
                     margin="normal"
                     fullWidth
@@ -112,7 +153,7 @@ export default class AddEmployee extends React.Component<{}, TState> {
                   <TextField
                     id="middlename"
                     label="Middle Name"
-                    value={this.state.middleName}
+                    value={employee.middleName}
                     onChange={this.handleChange("middlename")}
                     margin="normal"
                     fullWidth
@@ -123,7 +164,7 @@ export default class AddEmployee extends React.Component<{}, TState> {
                     id="hiredate"
                     label="Hire Date"
                     type="date"
-                    value={this.state.hireDate}
+                    value={employee.hireDate}
                     onChange={this.handleChange("hiredate")}
                     margin="normal"
                     fullWidth
@@ -132,9 +173,16 @@ export default class AddEmployee extends React.Component<{}, TState> {
                     }}
                   />
                 </Grid>
-                {/* <Grid item xs={6}>
-                  <StatusDropdown onChange={this.handleChange} value={this.state.sta} />
-                </Grid> */}
+                <Grid item xs={6}>
+                  <TextField
+                    id="archived"
+                    label="Archived"
+                    value={employee.archived}
+                    onChange={this.handleChange("archived")}
+                    margin="normal"
+                    fullWidth
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </form>
@@ -169,3 +217,19 @@ export default class AddEmployee extends React.Component<{}, TState> {
     );
   }
 }
+
+function mapStateToProps(state: any) {
+  return {
+    employees: state.employees
+  };
+}
+
+const mapDispatchToProps = {
+  loadEmployees,
+  addEmployee
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddEmployee);

@@ -8,6 +8,11 @@ export default function employeeReducer(
   switch (action.type) {
     case types.LOAD_EMPLOYEES_SUCCESS:
       return action.employees;
+    case types.ADD_EMPLOYEE:
+      return [...state, { ...action.employee }];
+    case types.DELETE_EMPLOYEE:
+      const id = action.employeeId;
+      return state.filter(employee => employee.id !== id);
     default:
       return state;
   }

@@ -27,10 +27,11 @@ import EmployeeDetailsView from "./EmployeeDetailsView";
 import EmployeeEnhancedTableHead from "../Employee/EmployeeEnhancedTableHead";
 
 type TEmployee = {
-  id: number;
+  id: any;
   firstName: string;
   lastName: string;
   middleName: string;
+  fullName: string;
   archived: boolean;
   hireDate: string;
 };
@@ -72,6 +73,7 @@ function findDataById(id: number, arr: TEmployee[]): TEmployee {
     firstName: "",
     lastName: "",
     middleName: "",
+    fullName: "",
     archived: false,
     hireDate: ""
   };
@@ -90,6 +92,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
       firstName: "",
       lastName: "",
       middleName: "",
+      fullName: "",
       archived: false,
       hireDate: ""
     },
@@ -147,16 +150,13 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     this.setState({ onDelete: true, toDelete: id });
   };
 
-  // handleDelete = () => {
-  //   const { data, toDelete } = this.state;
-  //   let deleteData: TEmployee = findDataById(toDelete, data);
+  handleDelete = () => {
+    this.setState({ onDelete: false });
 
-  //   this.setState({
-  //     onDelete: false,
-  //     data: data.filter(d => d !== deleteData)
-  //   });
-  //   console.log("Deleted");
-  // };
+    //update app state
+    this.props.actions.deleteEmployee(this.state.toDelete);
+    console.log("Deleted");
+  };
 
   handleRedirectToAddPage = () => {
     this.setState({ redirectToAddPage: true });
@@ -253,7 +253,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                 })}
               </TableBody>
             </Table>
-            {/* {this.state.open ? (
+            {this.state.open ? (
               <EmployeeDetailsView
                 data={editData}
                 toggleDrawer={this.handleToggle.bind(this)}
@@ -261,8 +261,8 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
               />
             ) : (
               <div />
-            )} */}
-            {/* {this.state.onDelete ? (
+            )}
+            {this.state.onDelete ? (
               <div>
                 <Dialog
                   open={this.state.onDelete}
@@ -292,7 +292,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
               </div>
             ) : (
               ""
-            )} */}
+            )}
           </div>
         </Paper>
       </div>
@@ -309,7 +309,14 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
   return {
     actions: {
-      loadEmployees: bindActionCreators(employeeActions.loadEmployees, dispatch)
+      loadEmployees: bindActionCreators(
+        employeeActions.loadEmployees,
+        dispatch
+      ),
+      deleteEmployee: bindActionCreators(
+        employeeActions.deleteEmployee,
+        dispatch
+      )
     }
   };
 }

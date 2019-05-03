@@ -14,10 +14,11 @@ import { Status } from "../../enums/StatusEnum";
 import EmployeeSubDetailsView from "./EmployeeSubDetailsView";
 
 type TEmployee = {
-  id: number;
+  id: any;
   firstName: string;
   lastName: string;
   middleName: string;
+  fullName: string;
   archived: boolean;
   hireDate: string;
 };
@@ -43,7 +44,7 @@ function TabContainer(props: any) {
   );
 }
 
-export default class DetailsView extends React.Component<TProps, TState> {
+class EmployeeDetailsView extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
     this.state = {
@@ -65,11 +66,8 @@ export default class DetailsView extends React.Component<TProps, TState> {
   render() {
     const { toggleDrawer, closeDrawer } = this.props;
     const { data, tabValue } = this.state;
-    const fullname = data.firstName
-      .concat(" ")
-      .concat(data.middleName)
-      .concat(" ")
-      .concat(data.lastName);
+    const fullName = data.fullName;
+    const displayName = fullName.toUpperCase();
 
     return (
       <Drawer
@@ -87,7 +85,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
           <CardContent>
             <div>
               <Typography variant="headline" style={{ color: "white" }}>
-                {fullname}
+                {displayName}
               </Typography>
             </div>
           </CardContent>
@@ -132,3 +130,5 @@ export default class DetailsView extends React.Component<TProps, TState> {
     );
   }
 }
+
+export default EmployeeDetailsView;

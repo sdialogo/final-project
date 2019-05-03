@@ -17,3 +17,11 @@ export function loadEmployees() {
       });
   };
 }
+
+export function addEmployee(employee: any) {
+  return { type: types.ADD_EMPLOYEE, employee };
+}
+
+export function deleteEmployee(employeeId: any) {
+  return { type: types.DELETE_EMPLOYEE, employeeId };
+}
