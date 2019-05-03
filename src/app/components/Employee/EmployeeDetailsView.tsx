@@ -10,7 +10,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
-import { Status } from "../../enums/StatusEnum";
+import { Status } from "../../common/StatusEnum";
 import EmployeeSubDetailsView from "./EmployeeSubDetailsView";
 
 type TEmployee = {

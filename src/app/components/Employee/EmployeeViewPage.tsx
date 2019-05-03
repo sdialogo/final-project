@@ -134,7 +134,6 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
 
   handleClose = (event: any) => {
     event.stopPropagation();
-    console.log("Closing drawer...");
     this.setState({ open: false });
   };
 

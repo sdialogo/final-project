@@ -10,28 +10,19 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
-import { Status } from "../../enums/StatusEnum";
+import { Status } from "../../common/StatusEnum";
 import SubDetailsView from "./DevPlanSubDetailsView";
-
-type TData = {
-  id: number;
-  title: string;
-  description: string;
-  statusCode: string;
-  employeeId: number;
-  employeeName: string;
-  dueDate: string;
-};
+import { TDevPlan } from "../../common/types";
 
 type TState = {
   open: boolean;
-  data: TData;
+  data: TDevPlan;
   enableEdit: boolean;
   tabValue: number;
 };
 
 type TProps = {
-  data: TData;
+  data: TDevPlan;
   toggleDrawer: any;
   closeDrawer: any;
 };
@@ -55,7 +46,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
     };
   }
 
-  handleEdit = (event: any, tempData: TData) => {
+  handleEdit = (event: any, tempData: TDevPlan) => {
     this.setState({ data: tempData });
   };
 

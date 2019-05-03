@@ -5,7 +5,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-import { Status } from "../enums/StatusEnum";
+import { Status } from "../common/StatusEnum";
 
 type TState = {
   status: Status;
@@ -30,8 +30,9 @@ export default class StatusDropdown extends React.Component<TProps, TState> {
         </InputLabel>
         <Select
           native
+          id="statusCode"
           value={value}
-          onChange={onChange("status")}
+          onChange={onChange("statusCode")}
           input={
             <OutlinedInput
               name="status"

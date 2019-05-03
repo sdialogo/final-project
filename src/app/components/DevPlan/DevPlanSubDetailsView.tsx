@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { addDevPlan, deleteDevPlan } from "../../redux/actions/devPlanActions";
 
-import { Status } from "../../enums/StatusEnum";
+import { Status } from "../../common/StatusEnum";
+import { TDevPlan } from "../../common/types";
 import StatusDropdown from "../StatusDropdown";
 
 import {
@@ -14,18 +14,8 @@ import {
   Divider
 } from "@material-ui/core";
 
-type TData = {
-  id: number;
-  title: string;
-  description: string;
-  statusCode: string;
-  employeeId: number;
-  employeeName: string;
-  dueDate: string;
-};
-
 type TProps = {
-  data: TData;
+  data: TDevPlan;
   isEdit: boolean;
   closeDrawer: any;
   tabValue: number;
@@ -34,7 +24,7 @@ type TProps = {
 };
 
 type TState = {
-  data: TData;
+  data: TDevPlan;
 };
 
 class DevPlanSubViewPage extends React.Component<TProps, TState> {
@@ -55,28 +45,13 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
   };
 
   handleChange = (name: string) => (event: any) => {
-    let newData: TData = { ...this.state.data };
-    let input = event.target.value;
+    let devPlan = { ...this.state.data, [name]: event.target.value };
 
-    if (name === "title") {
-      newData.title = input;
-    } else if (name === "description") {
-      newData.description = input;
-    } else if (name === "dueDate") {
-      newData.dueDate = input;
-    } else if (name === "assignee") {
-      newData.employeeId = Number(input);
-    } else if (name === "status") {
-      newData.statusCode = input;
-    }
-
-    this.setState({ data: newData });
+    this.setState({ data: devPlan });
   };
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
     const { data } = this.state;
-    const date = new Date(data.dueDate);
-    console.log("Date: ", date);
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -112,16 +87,15 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 variant="outlined"
                 disabled={!isEdit}
                 multiline
-                // rows={4}
               />
             </Grid>
             <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
               <TextField
                 style={{ width: "90%" }}
-                id="assignee"
+                id="employeeId"
                 label="Assignee"
                 value={data.employeeId}
-                onChange={this.handleChange("assignee")}
+                onChange={this.handleChange("employeeId")}
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}

@@ -11,7 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 
-import { Status } from "../../enums/StatusEnum";
+import { Status } from "../../common/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
 
 type TEmployee = {
