@@ -1,8 +1,10 @@
 import * as React from "react";
-import * as employeeActions from "../../redux/actions/employeeActions";
+import {
+  loadEmployees,
+  deleteEmployee
+} from "../../redux/actions/employeeActions";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 
 import {
   Table,
@@ -24,23 +26,15 @@ import MoreVertical from "@material-ui/icons/MoreVert";
 import AddIcon from "@material-ui/icons/Add";
 
 import EmployeeDetailsView from "./EmployeeDetailsView";
-import EmployeeEnhancedTableHead from "../Employee/EmployeeEnhancedTableHead";
-
-type TEmployee = {
-  id: any;
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  fullName: string;
-  archived: boolean;
-  hireDate: string;
-};
+import EnhancedTableHead from "../../common/EnhancedTableHead";
+import { employeeRows } from "../../common/constants";
+import { TEmployee } from "../../common/types";
+import { findEmployeeById } from "../../common/functions";
 
 type TState = {
   order: string;
   orderBy: string;
   selected: number[];
-  // data: TEmployee[];
   page: number;
   rowsPerPage: number;
   open: boolean;
@@ -52,7 +46,8 @@ type TState = {
 
 type TProps = {
   employees: TEmployee[];
-  actions: any;
+  loadEmployees: any;
+  deleteEmployee: any;
 };
 
 type TStyles = {
@@ -60,24 +55,6 @@ type TStyles = {
 };
 
 const styles: TStyles = require("./EmployeeStyles.less");
-
-function findDataById(id: number, arr: TEmployee[]): TEmployee {
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i].id === id) {
-      return arr[i];
-    }
-  }
-
-  return {
-    id: 0,
-    firstName: "",
-    lastName: "",
-    middleName: "",
-    fullName: "",
-    archived: false,
-    hireDate: ""
-  };
-}
 
 class EmployeeViewPage extends React.Component<TProps, TState> {
   state: TState = {
@@ -88,7 +65,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     rowsPerPage: 10,
     open: null,
     editData: {
-      id: 0,
+      id: "",
       firstName: "",
       lastName: "",
       middleName: "",
@@ -102,10 +79,10 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
   };
 
   componentDidMount() {
-    const { employees, actions } = this.props;
+    const { employees, loadEmployees } = this.props;
 
     if (employees.length === 0) {
-      actions.loadEmployees().catch((error: any) => {
+      loadEmployees().catch((error: any) => {
         alert("Loading employees failed: " + error);
       });
     }
@@ -127,14 +104,13 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     event.stopPropagation();
     console.log("Drawer opened");
     // const { data } = this.state;
-    let currData = findDataById(id, this.props.employees);
+    let currData = findEmployeeById(id, this.props.employees);
 
     this.setState({ editData: currData, open: true });
   };
 
   handleClose = (event: any) => {
     event.stopPropagation();
-    console.log("Closing drawer...");
     this.setState({ open: false });
   };
 
@@ -154,7 +130,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     this.setState({ onDelete: false });
 
     //update app state
-    this.props.actions.deleteEmployee(this.state.toDelete);
+    this.props.deleteEmployee(this.state.toDelete);
     console.log("Deleted");
   };
 
@@ -215,13 +191,14 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
         <Paper>
           <div>
             <Table aria-labelledby="tableTitle">
-              <EmployeeEnhancedTableHead
+              <EnhancedTableHead
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
                 // onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
                 // rowCount={data.length}
+                rows={employeeRows}
               />
               <TableBody>
                 {this.props.employees.map((n: any) => {
@@ -306,20 +283,10 @@ function mapStateToProps(state: any) {
   };
 }
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    actions: {
-      loadEmployees: bindActionCreators(
-        employeeActions.loadEmployees,
-        dispatch
-      ),
-      deleteEmployee: bindActionCreators(
-        employeeActions.deleteEmployee,
-        dispatch
-      )
-    }
-  };
-}
+const mapDispatchToProps = {
+  loadEmployees,
+  deleteEmployee
+};
 
 export default connect(
   mapStateToProps,

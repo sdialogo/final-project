@@ -6,24 +6,10 @@ import {
   addEmployee
 } from "../../redux/actions/employeeActions";
 
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
+import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
 
-import { Status } from "../../enums/StatusEnum";
-import StatusDropdown from "../StatusDropdown";
-
-type TEmployee = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  fullName: string;
-  archived: boolean;
-  hireDate: string;
-};
+import { TEmployee } from "../../common/types";
+import { getFullName } from "../../common/functions";
 
 type TState = {
   employee: TEmployee;
@@ -34,16 +20,6 @@ type TProps = {
   loadEmployees: any;
   addEmployee: any;
 };
-
-function getFullName(data: TEmployee) {
-  let fullName = data.firstName
-    .concat(" ")
-    .concat(data.middleName)
-    .concat(" ")
-    .concat(data.lastName);
-
-  return fullName;
-}
 
 class AddEmployee extends React.Component<TProps, TState> {
   state: TState = {
@@ -59,34 +35,20 @@ class AddEmployee extends React.Component<TProps, TState> {
     redirectToViewPage: false
   };
 
-  handleChange = (name: string) => (event: any) => {
-    let newData: TEmployee = { ...this.state.employee };
-    let input = event.target.value;
+  handleChange = (name: any) => (event: any) => {
+    let employee = { ...this.state.employee, [name]: event.target.value };
 
-    if (name === "firstname") {
-      newData.firstName = input;
-    } else if (name === "lastname") {
-      newData.lastName = input;
-    } else if (name === "middlename") {
-      newData.middleName = input;
-    } else if (name === "hiredate") {
-      newData.hireDate = input;
-    } else if (name === "archived") {
-      newData.archived = input;
-    }
+    let fullName = getFullName(employee);
+    employee.fullName = fullName;
+    employee.id = fullName;
 
-    let fullName = getFullName(newData);
-    newData.fullName = fullName;
-    newData.id = fullName;
-
-    this.setState({ employee: newData });
+    this.setState({ employee: employee });
   };
 
   handleSave = () => {
     console.log("Save...");
 
     this.setState({ redirectToViewPage: true });
-    //update app state
     this.props.addEmployee(this.state.employee);
   };
 
@@ -131,41 +93,41 @@ class AddEmployee extends React.Component<TProps, TState> {
               >
                 <Grid item sm={6}>
                   <TextField
-                    id="firstname"
+                    id="firstName"
                     label="First Name"
                     value={employee.firstName}
-                    onChange={this.handleChange("firstname")}
+                    onChange={this.handleChange("firstName")}
                     margin="normal"
                     fullWidth
                   />
                 </Grid>
                 <Grid item sm={6}>
                   <TextField
-                    id="lastname"
+                    id="lastName"
                     label="Last Name"
                     value={employee.lastName}
-                    onChange={this.handleChange("lastname")}
+                    onChange={this.handleChange("lastName")}
                     margin="normal"
                     fullWidth
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
-                    id="middlename"
+                    id="middleName"
                     label="Middle Name"
                     value={employee.middleName}
-                    onChange={this.handleChange("middlename")}
+                    onChange={this.handleChange("middleName")}
                     margin="normal"
                     fullWidth
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
-                    id="hiredate"
+                    id="hireDate"
                     label="Hire Date"
                     type="date"
                     value={employee.hireDate}
-                    onChange={this.handleChange("hiredate")}
+                    onChange={this.handleChange("hireDate")}
                     margin="normal"
                     fullWidth
                     InputLabelProps={{

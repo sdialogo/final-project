@@ -1,22 +1,21 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
-
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Drawer from "@material-ui/core/Drawer";
-import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
-import MenuList from "@material-ui/core/MenuList";
-import MenuItem from "@material-ui/core/MenuItem";
-import Paper from "@material-ui/core/Paper";
-
 import { styled, withStyles } from "@material-ui/styles";
 
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListIcon from "@material-ui/icons/List";
-import PersonIcon from "@material-ui/icons/Person";
+import {
+  AppBar,
+  Toolbar,
+  Drawer,
+  ListItemText,
+  Divider,
+  MenuList,
+  MenuItem,
+  Paper,
+  IconButton,
+  ListItemIcon
+} from "@material-ui/core";
+
+import { Menu, List, Person } from "@material-ui/icons";
 
 type TProps = {
   header: string;
@@ -68,7 +67,7 @@ class NavBar extends React.Component<TProps, {}> {
               aria-label="Open drawer"
               onClick={this.handleToggle}
             >
-              <MenuIcon />
+              <Menu />
             </IconButton>
             {header}
           </ToolBar>
@@ -82,7 +81,7 @@ class NavBar extends React.Component<TProps, {}> {
                   onClick={this.handleClick}
                 >
                   <ListItemIcon className={classes.icon}>
-                    <ListIcon />
+                    <List />
                   </ListItemIcon>
                   <ListItemText
                     classes={{ primary: classes.primary }}
@@ -99,7 +98,7 @@ class NavBar extends React.Component<TProps, {}> {
                   onClick={this.handleClick}
                 >
                   <ListItemIcon className={classes.icon}>
-                    <PersonIcon />
+                    <Person />
                   </ListItemIcon>
                   <ListItemText
                     classes={{ primary: classes.primary }}

@@ -1,37 +1,29 @@
 import * as React from "react";
 
-import Drawer from "@material-ui/core/Drawer";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-
-import { Status } from "../../enums/StatusEnum";
 import SubDetailsView from "./DevPlanSubDetailsView";
+import { TDevPlan } from "../../common/types";
 
-type TData = {
-  id: number;
-  title: string;
-  description: string;
-  statusCode: string;
-  employeeId: number;
-  employeeName: string;
-  dueDate: string;
-};
+import {
+  Drawer,
+  Card,
+  CardContent,
+  Button,
+  Typography,
+  Grid,
+  AppBar,
+  Tabs,
+  Tab
+} from "@material-ui/core";
 
 type TState = {
   open: boolean;
-  data: TData;
+  data: TDevPlan;
   enableEdit: boolean;
   tabValue: number;
 };
 
 type TProps = {
-  data: TData;
+  data: TDevPlan;
   toggleDrawer: any;
   closeDrawer: any;
 };
@@ -55,7 +47,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
     };
   }
 
-  handleEdit = (event: any, tempData: TData) => {
+  handleEdit = (event: any, tempData: TDevPlan) => {
     this.setState({ data: tempData });
   };
 

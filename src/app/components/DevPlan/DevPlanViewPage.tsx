@@ -2,8 +2,19 @@ import * as React from "react";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as devPlanActions from "../../redux/actions/devPlanActions";
-import * as employeeActions from "../../redux/actions/employeeActions";
+
+import {
+  loadDevPlans,
+  deleteDevPlan
+} from "../../redux/actions/devPlanActions";
+import { loadEmployees } from "../../redux/actions/employeeActions";
+
+import { TDevPlan } from "../../common/types";
+import { findDataById } from "../../common/functions";
+
+import DetailsView from "./DevPlanDetailsView";
+import EnhancedTableHead from "../../common/EnhancedTableHead";
+import { devPlanRows } from "../../common/constants";
 
 import {
   Table,
@@ -21,60 +32,28 @@ import {
   IconButton
 } from "@material-ui/core";
 
-import MoreVertical from "@material-ui/icons/MoreVert";
-import AddIcon from "@material-ui/icons/Add";
-
-import { Status } from "../../enums/StatusEnum";
-import DetailsView from "./DevPlanDetailsView";
-import EnhancedTableHead from "./DevPlanEnhancedTableHead";
-
-type TData = {
-  id: number;
-  title: string;
-  description: string;
-  statusCode: string;
-  employeeId: number;
-  employeeName: string;
-  dueDate: string;
-};
+import { MoreVert, Add } from "@material-ui/icons";
 
 type TState = {
   order: string;
   orderBy: string;
   selected: number[];
-  // data: TData[];
   page: number;
   rowsPerPage: number;
   open: boolean;
-  editData: TData;
+  ediTDevPlan: TDevPlan;
   onDelete: boolean;
-  toDelete: number;
+  toDelete: string;
   redirectToAddPage: boolean;
 };
 
 type TProps = {
-  devPlans: TData[];
-  actions: any;
+  devPlans: TDevPlan[];
   employees: any;
+  loadDevPlans: any;
+  loadEmployees: any;
+  deleteDevPlan: any;
 };
-
-function findDataById(id: any, arr: TData[]): TData {
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i].id === id) {
-      return arr[i];
-    }
-  }
-
-  return {
-    id: 0,
-    title: "",
-    description: "",
-    statusCode: "",
-    employeeId: null,
-    employeeName: "",
-    dueDate: ""
-  };
-}
 
 class DevPlanviewPage extends React.Component<TProps, TState> {
   state: TState = {
@@ -84,8 +63,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     page: 0,
     rowsPerPage: 10,
     open: null,
-    editData: {
-      id: 0,
+    ediTDevPlan: {
+      id: "",
       title: "",
       description: "",
       employeeId: null,
@@ -94,21 +73,21 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       dueDate: ""
     },
     onDelete: false,
-    toDelete: 0,
+    toDelete: "",
     redirectToAddPage: false
   };
 
   componentDidMount() {
-    const { devPlans, employees, actions } = this.props;
+    const { devPlans, employees, loadDevPlans, loadEmployees } = this.props;
 
     if (devPlans.length === 0) {
-      actions.loadDevPlans().catch((error: any) => {
+      loadDevPlans().catch((error: any) => {
         alert("Loading dev plans failed: " + error);
       });
     }
 
     if (employees.length === 0) {
-      actions.loadEmployees().catch((error: any) => {
+      loadEmployees().catch((error: any) => {
         alert("Loading employees failed: " + error);
       });
     }
@@ -127,18 +106,15 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
 
   handleToggle = () => this.setState({ open: !this.state.open });
 
-  handleDrawerOpen = (event: any, id: number) => {
+  handleDrawerOpen = (event: any, id: string) => {
     event.stopPropagation();
-    console.log("Drawer opened");
-    console.log("Clicked devPlan id: ", id);
     let currData = findDataById(id, this.props.devPlans);
 
-    this.setState({ editData: currData, open: true });
+    this.setState({ ediTDevPlan: currData, open: true });
   };
 
   handleClose = (event: any) => {
     event.stopPropagation();
-    console.log("Closing drawer...");
     this.setState({ open: false });
   };
 
@@ -147,7 +123,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ onDelete: false });
   };
 
-  handleClickDelete = (event: any, id: number) => {
+  handleClickDelete = (event: any, id: string) => {
     console.log("Deleting data...");
     event.stopPropagation();
 
@@ -158,11 +134,11 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ onDelete: false });
 
     //update app state
-    this.props.actions.deleteDevPlan(this.state.toDelete);
+    this.props.deleteDevPlan(this.state.toDelete);
     console.log("Deleted");
   };
 
-  updateDataFromEditPage = (id: any, newData: TData) => {
+  updateDataFromEditPage = (id: any, newData: TDevPlan) => {
     //delete current data with same id
     //push new data from eit page
   };
@@ -184,7 +160,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       selected,
       rowsPerPage,
       page,
-      editData
+      ediTDevPlan
     } = this.state;
     return (
       <div>
@@ -219,7 +195,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                     onClick={this.handleRedirectToAddPage}
                   >
                     Add
-                    <AddIcon />
+                    <Add />
                   </Button>
                 </Grid>
               </Grid>
@@ -237,6 +213,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                 // onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
                 // rowCount={data.length}
+                rows={devPlanRows}
               />
               <TableBody>
                 {this.props.devPlans.map(n => {
@@ -259,7 +236,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                         <IconButton
                           onClick={event => this.handleClickDelete(event, n.id)}
                         >
-                          <MoreVertical />
+                          <MoreVert />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -269,7 +246,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
             </Table>
             {this.state.open ? (
               <DetailsView
-                data={editData}
+                data={ediTDevPlan}
                 toggleDrawer={this.handleToggle.bind(this)}
                 closeDrawer={this.handleClose.bind(this)}
               />
@@ -323,7 +300,7 @@ function mapStateToProps(state: any) {
             return {
               ...devPlan,
               employeeName: state.employees.find(
-                (a: any) => a.id === devPlan.employeeId
+                (a: any) => a.id === Number(devPlan.employeeId)
               ).fullName
             };
           }),
@@ -331,18 +308,11 @@ function mapStateToProps(state: any) {
   };
 }
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    actions: {
-      loadDevPlans: bindActionCreators(devPlanActions.loadDevPlans, dispatch),
-      loadEmployees: bindActionCreators(
-        employeeActions.loadEmployees,
-        dispatch
-      ),
-      deleteDevPlan: bindActionCreators(devPlanActions.deleteDevPlan, dispatch)
-    }
-  };
-}
+const mapDispatchToProps = {
+  loadDevPlans,
+  loadEmployees,
+  deleteDevPlan
+};
 
 export default connect(
   mapStateToProps,
