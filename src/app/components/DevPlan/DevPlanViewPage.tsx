@@ -3,14 +3,18 @@ import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import * as devPlanActions from "../../redux/actions/devPlanActions";
-import * as employeeActions from "../../redux/actions/employeeActions";
+import {
+  loadDevPlans,
+  deleteDevPlan
+} from "../../redux/actions/devPlanActions";
+import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import { TDevPlan } from "../../common/types";
 import { findDataById } from "../../common/functions";
 
 import DetailsView from "./DevPlanDetailsView";
-import EnhancedTableHead from "./DevPlanEnhancedTableHead";
+import EnhancedTableHead from "../../common/EnhancedTableHead";
+import { devPlanRows } from "../../common/constants";
 
 import {
   Table,
@@ -45,8 +49,10 @@ type TState = {
 
 type TProps = {
   devPlans: TDevPlan[];
-  actions: any;
   employees: any;
+  loadDevPlans: any;
+  loadEmployees: any;
+  deleteDevPlan: any;
 };
 
 class DevPlanviewPage extends React.Component<TProps, TState> {
@@ -72,16 +78,16 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   };
 
   componentDidMount() {
-    const { devPlans, employees, actions } = this.props;
+    const { devPlans, employees, loadDevPlans, loadEmployees } = this.props;
 
     if (devPlans.length === 0) {
-      actions.loadDevPlans().catch((error: any) => {
+      loadDevPlans().catch((error: any) => {
         alert("Loading dev plans failed: " + error);
       });
     }
 
     if (employees.length === 0) {
-      actions.loadEmployees().catch((error: any) => {
+      loadEmployees().catch((error: any) => {
         alert("Loading employees failed: " + error);
       });
     }
@@ -128,7 +134,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ onDelete: false });
 
     //update app state
-    this.props.actions.deleteDevPlan(this.state.toDelete);
+    this.props.deleteDevPlan(this.state.toDelete);
     console.log("Deleted");
   };
 
@@ -207,6 +213,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                 // onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
                 // rowCount={data.length}
+                rows={devPlanRows}
               />
               <TableBody>
                 {this.props.devPlans.map(n => {
@@ -301,18 +308,11 @@ function mapStateToProps(state: any) {
   };
 }
 
-function mapDispatchToProps(dispatch: any) {
-  return {
-    actions: {
-      loadDevPlans: bindActionCreators(devPlanActions.loadDevPlans, dispatch),
-      loadEmployees: bindActionCreators(
-        employeeActions.loadEmployees,
-        dispatch
-      ),
-      deleteDevPlan: bindActionCreators(devPlanActions.deleteDevPlan, dispatch)
-    }
-  };
-}
+const mapDispatchToProps = {
+  loadDevPlans,
+  loadEmployees,
+  deleteDevPlan
+};
 
 export default connect(
   mapStateToProps,

@@ -27,3 +27,21 @@ export function findDataById(id: any, arr: TDevPlan[]): TDevPlan {
     dueDate: ""
   };
 }
+
+export function findEmployeeById(id: any, arr: TEmployee[]): TEmployee {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].id === id) {
+      return arr[i];
+    }
+  }
+
+  return {
+    id: "",
+    firstName: "",
+    lastName: "",
+    middleName: "",
+    fullName: "",
+    archived: false,
+    hireDate: ""
+  };
+}
