@@ -31,7 +31,7 @@ const employees = [
     lastName: "Jo",
     firstName: "Yuri",
     middleName: "Jogoori",
-    fullName: "Yuri Jo",
+    fullName: "Yuri Jogoori Jo",
     archived: false,
     hireDate: "2019-05-01"
   },
@@ -40,7 +40,7 @@ const employees = [
     lastName: "Choi",
     firstName: "Yena",
     middleName: "Duck",
-    fullName: "Yena Choi",
+    fullName: "Yena Duck Choi",
     archived: false,
     hireDate: "2019-05-01"
   },
@@ -49,7 +49,7 @@ const employees = [
     lastName: "Kwon",
     firstName: "Eunbi",
     middleName: "Leader",
-    fullName: "Eunbi Kwon",
+    fullName: "Eunbi Leader Kwon",
     archived: false,
     hireDate: "2019-05-01"
   }

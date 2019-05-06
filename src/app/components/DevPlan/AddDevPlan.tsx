@@ -4,20 +4,10 @@ import { connect } from "react-redux";
 import { loadDevPlans, addDevPlan } from "../../redux/actions/devPlanActions";
 import { loadEmployees } from "../../redux/actions/employeeActions";
 
-import { Status } from "../../enums/StatusEnum";
 import StatusDropdown from "../StatusDropdown";
+import { TDevPlan } from "../../common/types";
 
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
-
-type TDevPlan = {
-  id: string;
-  title: string;
-  description: string;
-  statusCode: string;
-  employeeId: number;
-  employeeName: string;
-  dueDate: string;
-};
 
 type TState = {
   devPlan: TDevPlan;
@@ -62,22 +52,8 @@ class AddDevPlan extends React.Component<TProps, TState> {
     }
   }
 
-  handleChange = (name: string) => (event: any) => {
-    let input = event.target.value;
-    let devPlan;
-
-    if (name === "title") {
-      devPlan = { ...this.state.devPlan, title: input, id: input };
-    } else if (name === "description") {
-      devPlan = { ...this.state.devPlan, description: input };
-    } else if (name === "asignee") {
-      devPlan = { ...this.state.devPlan, employeeId: Number(input) };
-    } else if (name === "dueDate") {
-      console.log("Add date: ", input);
-      devPlan = { ...this.state.devPlan, dueDate: input };
-    } else if (name === "status") {
-      devPlan = { ...this.state.devPlan, statusCode: input };
-    }
+  handleChange = (name: any) => (event: any) => {
+    let devPlan = { ...this.state.devPlan, [name]: event.target.value };
 
     this.setState({ devPlan: devPlan });
   };
@@ -86,8 +62,6 @@ class AddDevPlan extends React.Component<TProps, TState> {
     console.log("Save...");
 
     this.setState({ redirectToViewPage: true });
-
-    //update app state
     this.props.addDevPlan(this.state.devPlan);
   };
 
@@ -97,7 +71,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
   };
 
   render() {
-    const { redirectToViewPage } = this.state;
+    const { redirectToViewPage, devPlan } = this.state;
 
     return (
       <div>
@@ -136,7 +110,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     variant="outlined"
                     id="title"
                     label="Title"
-                    value={this.state.devPlan.title}
+                    value={devPlan.title}
                     onChange={this.handleChange("title")}
                     margin="normal"
                     fullWidth
@@ -147,7 +121,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     variant="outlined"
                     id="description"
                     label="Description"
-                    value={this.state.devPlan.description}
+                    value={devPlan.description}
                     onChange={this.handleChange("description")}
                     margin="normal"
                     fullWidth
@@ -156,10 +130,10 @@ class AddDevPlan extends React.Component<TProps, TState> {
                 <Grid item xs={6}>
                   <TextField
                     variant="outlined"
-                    id="asignee"
+                    id="employeeId"
                     label="Asignee"
-                    value={this.state.devPlan.employeeId}
-                    onChange={this.handleChange("asignee")}
+                    value={devPlan.employeeId}
+                    onChange={this.handleChange("employeeId")}
                     margin="normal"
                     fullWidth
                   />
@@ -170,7 +144,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     id="dueDate"
                     label="Due Date"
                     type="date"
-                    value={this.state.devPlan.dueDate}
+                    value={devPlan.dueDate}
                     onChange={this.handleChange("dueDate")}
                     margin="normal"
                     fullWidth
@@ -182,7 +156,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                 <Grid item xs={6}>
                   <StatusDropdown
                     onChange={this.handleChange}
-                    value={this.state.devPlan.statusCode}
+                    value={devPlan.statusCode}
                   />
                 </Grid>
               </Grid>

@@ -1,11 +1,12 @@
 import * as React from "react";
 
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Tooltip from "@material-ui/core/Tooltip";
+import {
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Tooltip
+} from "@material-ui/core";
 
 type TProps = {
   onSelectAllClick?: any;
@@ -14,17 +15,8 @@ type TProps = {
   numSelected: number;
   rowCount?: number;
   onRequestSort: any;
+  rows: any;
 };
-
-const rows = [
-  // { id: "id", disablePadding: true, label: "ID" },
-  { id: "title", disablePadding: false, label: "Title" },
-  // { id: "description", disablePadding: false, label: "Description" },
-  { id: "assignee", disablePadding: false, label: "Assignee" },
-  { id: "status", disablePadding: false, label: "Status" },
-  { id: "dueDate", disablePadding: false, label: "Due Date" },
-  { id: "action", disablePadding: false, label: "Actions" }
-];
 
 export default class EnhancedTableHead extends React.Component<TProps, {}> {
   createSortHandler = (property: any) => (event: any) => {
@@ -36,7 +28,8 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
       order,
       orderBy,
       numSelected,
-      rowCount
+      rowCount,
+      rows
     } = this.props;
 
     return (
@@ -50,7 +43,7 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
             />
           </TableCell> */}
           {rows.map(
-            row => (
+            (row: any) => (
               <TableCell
                 key={row.id}
                 padding={row.disablePadding ? "none" : "default"}
