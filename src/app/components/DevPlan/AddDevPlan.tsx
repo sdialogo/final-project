@@ -5,6 +5,7 @@ import { loadDevPlans, addDevPlan } from "../../redux/actions/devPlanActions";
 import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import StatusDropdown from "../../common/StatusDropdown";
+import EmployeeDropdown from "../../common/EmployeeDropdown";
 import { TDevPlan } from "../../common/types";
 
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
@@ -128,14 +129,10 @@ class AddDevPlan extends React.Component<TProps, TState> {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField
-                    variant="outlined"
-                    id="employeeId"
-                    label="Asignee"
+                  <EmployeeDropdown
+                    employees={this.props.employees}
+                    onChange={this.handleChange}
                     value={devPlan.employeeId}
-                    onChange={this.handleChange("employeeId")}
-                    margin="normal"
-                    fullWidth
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -164,7 +161,12 @@ class AddDevPlan extends React.Component<TProps, TState> {
           </form>
         </Paper>
         <CardActions>
-          <Grid spacing={8} justify="flex-end" container>
+          <Grid
+            spacing={8}
+            justify="flex-end"
+            container
+            style={{ paddingTop: "10px" }}
+          >
             <Grid item>
               <Button
                 style={{

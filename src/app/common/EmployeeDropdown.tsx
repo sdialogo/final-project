@@ -1,34 +1,36 @@
 import * as React from "react";
-import { Status } from "./StatusEnum";
+import { TEmployee } from "./types";
 
 import { TextField } from "@material-ui/core";
 
 type TProps = {
+  employees: TEmployee[];
   onChange: any;
   value: any;
 };
 
 export default class StatusDropdown extends React.Component<TProps, {}> {
   render() {
-    const { onChange, value } = this.props;
+    const { onChange, value, employees } = this.props;
     return (
       <TextField
         fullWidth
         select
-        id="statusCode"
+        id="employeeId"
         variant="outlined"
-        label="Status"
+        label="Assignee"
         value={value}
-        onChange={onChange("statusCode")}
+        onChange={onChange("employeeId")}
         SelectProps={{
           native: true
         }}
         margin="normal"
       >
-        <option value="" />
-        <option value={Status.Completed}>{Status.Completed}</option>
-        <option value={Status.InProgress}>{Status.InProgress}</option>
-        <option value={Status.NotStarted}>{Status.NotStarted}</option>
+        <option key="blank" value="" />
+        {employees.map(employee => (
+          <option key={employee.id} value={employee.fullName}>
+            {employee.fullName}
+          </option>
         ))}
       </TextField>
     );

@@ -4,7 +4,7 @@ const devPlans = [
     title: "Securing React Apps with Auth0",
     description: "react-auth0-authentication-security",
     statusCode: "Completed",
-    employeeId: 1,
+    employeeId: "Yuri Jogoori Jo",
     dueDate: "2019-05-01"
   },
   {
@@ -12,7 +12,7 @@ const devPlans = [
     title: "React: The Big Picture",
     description: "react-big-picture",
     statusCode: "In Progress",
-    employeeId: 2,
+    employeeId: "Yena Duck Choi",
     dueDate: "2019-05-01"
   },
   {
@@ -20,14 +20,14 @@ const devPlans = [
     title: "Creating Reusable React Components",
     description: "react-creating-reusable-components",
     statusCode: "Not Started",
-    employeeId: 3,
+    employeeId: "Eunbi Leader Kwon",
     dueDate: "2019-05-01"
   }
 ];
 
 const employees = [
   {
-    id: 1,
+    id: "Yuri Jogoori Jo",
     lastName: "Jo",
     firstName: "Yuri",
     middleName: "Jogoori",
@@ -36,7 +36,7 @@ const employees = [
     hireDate: "2019-05-01"
   },
   {
-    id: 2,
+    id: "Yena Duck Choi",
     lastName: "Choi",
     firstName: "Yena",
     middleName: "Duck",
@@ -45,7 +45,7 @@ const employees = [
     hireDate: "2019-05-01"
   },
   {
-    id: 3,
+    id: "Eunbi Leader Kwon",
     lastName: "Kwon",
     firstName: "Eunbi",
     middleName: "Leader",

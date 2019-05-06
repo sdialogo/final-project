@@ -147,11 +147,6 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ redirectToAddPage: true });
   };
 
-  getEmployeeName = (id: number) => {
-    const employee = this.props.employees.find((a: any) => a.id === id);
-    console.log(employee);
-  };
-
   render() {
     const {
       // data,
@@ -300,7 +295,7 @@ function mapStateToProps(state: any) {
             return {
               ...devPlan,
               employeeName: state.employees.find(
-                (a: any) => a.id === Number(devPlan.employeeId)
+                (a: any) => a.id === devPlan.employeeId
               ).fullName
             };
           }),

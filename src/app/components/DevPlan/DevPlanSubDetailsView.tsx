@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import { addDevPlan, deleteDevPlan } from "../../redux/actions/devPlanActions";
 
 import { Status } from "../../common/StatusEnum";
-import { TDevPlan } from "../../common/types";
+import { TDevPlan, TEmployee } from "../../common/types";
 import StatusDropdown from "../../common/StatusDropdown";
+import EmployeeDropdown from "../../common/EmployeeDropdown";
 
 import {
   CardActions,
@@ -21,6 +22,7 @@ type TProps = {
   tabValue: number;
   addDevPlan: any;
   deleteDevPlan: any;
+  employees: TEmployee[];
 };
 
 type TState = {
@@ -66,7 +68,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
           >
             <Grid item xs={6}>
               <TextField
-                style={{ width: "90%" }}
+                fullWidth
                 id="title"
                 label="Title"
                 value={data.title}
@@ -78,7 +80,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                style={{ width: "90%" }}
+                fullWidth
                 id="description"
                 label="Description"
                 value={data.description}
@@ -89,24 +91,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 multiline
               />
             </Grid>
-            <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
-              <TextField
-                style={{ width: "90%" }}
-                id="employeeId"
-                label="Assignee"
-                value={data.employeeId}
-                onChange={this.handleChange("employeeId")}
-                margin="normal"
-                variant="outlined"
-                disabled={!isEdit}
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-            </Grid>
             <Grid item xs={6}>
               <TextField
-                style={{ width: "90%" }}
+                fullWidth
                 id="dueDate"
                 label="Due Date"
                 type="date"
@@ -122,7 +109,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                style={{ width: "90%" }}
+                fullWidth
                 id="dateCompleted"
                 label="Date Completed"
                 type="date"
@@ -134,6 +121,13 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 InputLabelProps={{
                   shrink: true
                 }}
+              />
+            </Grid>
+            <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
+              <EmployeeDropdown
+                employees={this.props.employees}
+                onChange={this.handleChange}
+                value={data.employeeId}
               />
             </Grid>
             <Grid item xs={6} hidden={tabValue === 0 ? false : true}>
