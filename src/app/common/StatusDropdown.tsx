@@ -6,11 +6,13 @@ import { TextField } from "@material-ui/core";
 type TProps = {
   onChange: any;
   value: any;
+  error?: boolean;
+  helperText?: string;
 };
 
 export default class StatusDropdown extends React.Component<TProps, {}> {
   render() {
-    const { onChange, value } = this.props;
+    const { onChange, value, error, helperText } = this.props;
     return (
       <TextField
         fullWidth
@@ -24,6 +26,8 @@ export default class StatusDropdown extends React.Component<TProps, {}> {
           native: true
         }}
         margin="normal"
+        error={error}
+        helperText={helperText}
       >
         <option value="" />
         <option value={Status.Completed}>{Status.Completed}</option>

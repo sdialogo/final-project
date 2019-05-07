@@ -9,10 +9,22 @@ import EmployeeDropdown from "../../common/EmployeeDropdown";
 import { TDevPlan } from "../../common/types";
 
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
 type TState = {
   devPlan: TDevPlan;
   redirectToViewPage: any;
+  titleError: string;
+  descError: string;
+  duedateError: string;
+  assigneeError: string;
+  statusError: string;
+  isTitleError: boolean;
+  isDescError: boolean;
+  isDueDateError: boolean;
+  isAssigneeError: boolean;
+  isStatusError: boolean;
+  fieldRequiredError: string;
 };
 
 type TProps = {
@@ -21,6 +33,32 @@ type TProps = {
   loadDevPlans: any;
   loadEmployees: any;
   addDevPlan: any;
+};
+
+let schema = {
+  properties: {
+    title: {
+      type: "string",
+      minLength: 1
+    },
+    description: {
+      type: "string",
+      minLength: 1
+    },
+    employeeId: {
+      type: "string",
+      minLength: 1
+    },
+    statusCode: {
+      type: "string",
+      minLength: 1
+    },
+    dueDate: {
+      type: "string",
+      minLength: 1
+    }
+  },
+  required: ["title", "description", "employeeId", "statusCode", "dueDate"]
 };
 
 class AddDevPlan extends React.Component<TProps, TState> {
@@ -34,7 +72,18 @@ class AddDevPlan extends React.Component<TProps, TState> {
       employeeName: "",
       dueDate: ""
     },
-    redirectToViewPage: false
+    redirectToViewPage: false,
+    titleError: "",
+    descError: "",
+    duedateError: "",
+    assigneeError: "",
+    statusError: "",
+    isTitleError: false,
+    isDescError: false,
+    isDueDateError: false,
+    isAssigneeError: false,
+    isStatusError: false,
+    fieldRequiredError: "This field is required"
   };
 
   componentDidMount() {
@@ -56,14 +105,78 @@ class AddDevPlan extends React.Component<TProps, TState> {
   handleChange = (name: any) => (event: any) => {
     let devPlan = { ...this.state.devPlan, [name]: event.target.value };
 
+    if (name === "title") {
+      this.setState({ isTitleError: false });
+    } else if (name === "description") {
+      this.setState({ isDescError: false });
+    } else if (name === "dueDate") {
+      this.setState({ isDueDateError: false });
+    } else if (name === "employeeId") {
+      this.setState({ isAssigneeError: false });
+    } else if (name === "statusCode") {
+      this.setState({ isStatusError: false });
+    }
+
     this.setState({ devPlan: devPlan });
   };
 
-  handleSave = () => {
-    console.log("Save...");
+  validate = (data: TDevPlan) => {
+    var Ajv = require("ajv");
+    var ajv = Ajv({ allErrors: true });
+    var valid = ajv.validate(schema, data);
+    let isValid;
 
-    this.setState({ redirectToViewPage: true });
-    this.props.addDevPlan(this.state.devPlan);
+    if (valid) {
+      isValid = true;
+    } else {
+      isValid = false;
+      ajv.errors.map((error: any) => {
+        if (error.dataPath === ".title") {
+          this.setState({
+            isTitleError: true,
+            titleError: "Title is required"
+          });
+        }
+        if (error.dataPath === ".description") {
+          this.setState({
+            isDescError: true,
+            descError: "Description is required"
+          });
+        }
+        if (error.dataPath === ".employeeId") {
+          this.setState({
+            isAssigneeError: true,
+            assigneeError: "Assignee is required"
+          });
+        }
+        if (error.dataPath === ".statusCode") {
+          this.setState({
+            isStatusError: true,
+            statusError: "Status is required"
+          });
+        }
+        if (error.dataPath === ".dueDate") {
+          this.setState({
+            isDueDateError: true,
+            duedateError: "Due Date is required"
+          });
+        }
+      });
+    }
+
+    return isValid;
+  };
+
+  handleSave = (event: any) => {
+    event.preventDefault();
+    const isValid = this.validate(this.state.devPlan);
+
+    if (isValid) {
+      console.log("Save...");
+
+      this.setState({ redirectToViewPage: true });
+      this.props.addDevPlan(this.state.devPlan);
+    }
   };
 
   handleCancel = () => {
@@ -72,7 +185,21 @@ class AddDevPlan extends React.Component<TProps, TState> {
   };
 
   render() {
-    const { redirectToViewPage, devPlan } = this.state;
+    const {
+      redirectToViewPage,
+      devPlan,
+      fieldRequiredError,
+      isTitleError,
+      isDescError,
+      isAssigneeError,
+      isDueDateError,
+      isStatusError,
+      titleError,
+      descError,
+      assigneeError,
+      duedateError,
+      statusError
+    } = this.state;
 
     return (
       <div>
@@ -89,8 +216,8 @@ class AddDevPlan extends React.Component<TProps, TState> {
             </h2>
           </Grid>
         </Grid>
-        <Paper>
-          <form noValidate autoComplete="off">
+        <form autoComplete="off" onSubmit={this.handleSave}>
+          <Paper>
             <Grid
               container
               style={{
@@ -115,6 +242,9 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     onChange={this.handleChange("title")}
                     margin="normal"
                     fullWidth
+                    error={isTitleError}
+                    // helperText={isTitleError ? fieldRequiredError : ""}
+                    helperText={isTitleError ? titleError : ""}
                   />
                 </Grid>
                 <Grid item sm={6}>
@@ -126,6 +256,8 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     onChange={this.handleChange("description")}
                     margin="normal"
                     fullWidth
+                    error={isDescError}
+                    helperText={isDescError ? descError : ""}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -133,6 +265,8 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     employees={this.props.employees}
                     onChange={this.handleChange}
                     value={devPlan.employeeId}
+                    error={isAssigneeError}
+                    helperText={isAssigneeError ? assigneeError : ""}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -148,49 +282,54 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     InputLabelProps={{
                       shrink: true
                     }}
+                    error={isDueDateError}
+                    helperText={isDueDateError ? duedateError : ""}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <StatusDropdown
                     onChange={this.handleChange}
                     value={devPlan.statusCode}
+                    error={isStatusError}
+                    helperText={isStatusError ? statusError : ""}
                   />
                 </Grid>
               </Grid>
             </Grid>
-          </form>
-        </Paper>
-        <CardActions>
-          <Grid
-            spacing={8}
-            justify="flex-end"
-            container
-            style={{ paddingTop: "10px" }}
-          >
-            <Grid item>
-              <Button
-                style={{
-                  background: "rgba(73,155,234,1)",
-                  color: "white"
-                }}
-                onClick={this.handleSave}
-              >
-                Save
-              </Button>
+          </Paper>
+          <CardActions>
+            <Grid
+              spacing={8}
+              justify="flex-end"
+              container
+              style={{ paddingTop: "10px" }}
+            >
+              <Grid item>
+                <Button
+                  style={{
+                    background: "rgba(73,155,234,1)",
+                    color: "white"
+                  }}
+                  //onClick={this.handleSave}
+                  type="submit"
+                >
+                  Save
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  style={{
+                    background: "rgba(73,155,234,1)",
+                    color: "white"
+                  }}
+                  onClick={this.handleCancel}
+                >
+                  Cancel
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Button
-                style={{
-                  background: "rgba(73,155,234,1)",
-                  color: "white"
-                }}
-                onClick={this.handleCancel}
-              >
-                Cancel
-              </Button>
-            </Grid>
-          </Grid>
-        </CardActions>
+          </CardActions>
+        </form>
       </div>
     );
   }

@@ -14,11 +14,46 @@ import { getFullName } from "../../common/functions";
 type TState = {
   employee: TEmployee;
   redirectToViewPage: boolean;
+  isFirstNameError: boolean;
+  isMiddleNameError: boolean;
+  isLastNameError: boolean;
+  isHireDateError: boolean;
+  isArchivedError: boolean;
+  firstNameError: string;
+  middleNameError: string;
+  lastNameError: string;
+  hireDateError: string;
+  archivedError: string;
 };
 
 type TProps = {
   loadEmployees: any;
   addEmployee: any;
+};
+
+let schema = {
+  properties: {
+    firstName: {
+      type: "string",
+      minLength: 1
+    },
+    middleName: {
+      type: "string",
+      minLength: 1
+    },
+    lastName: {
+      type: "string",
+      minLength: 1
+    },
+    hireDate: {
+      type: "string",
+      minLength: 1
+    },
+    archived: {
+      type: "boolean"
+    }
+  },
+  required: ["firstName", "middleName", "lastName", "hireDate", "archived"]
 };
 
 class AddEmployee extends React.Component<TProps, TState> {
@@ -32,7 +67,17 @@ class AddEmployee extends React.Component<TProps, TState> {
       archived: false,
       hireDate: ""
     },
-    redirectToViewPage: false
+    redirectToViewPage: false,
+    isFirstNameError: false,
+    isMiddleNameError: false,
+    isLastNameError: false,
+    isHireDateError: false,
+    isArchivedError: false,
+    firstNameError: "",
+    middleNameError: "",
+    lastNameError: "",
+    hireDateError: "",
+    archivedError: ""
   };
 
   handleChange = (name: any) => (event: any) => {
@@ -42,14 +87,79 @@ class AddEmployee extends React.Component<TProps, TState> {
     employee.fullName = fullName;
     employee.id = fullName;
 
+    if (name === "firstName") {
+      this.setState({ isFirstNameError: false });
+    } else if (name === "middleName") {
+      this.setState({ isMiddleNameError: false });
+    } else if (name === "lastName") {
+      this.setState({ isLastNameError: false });
+    } else if (name === "hireDate") {
+      this.setState({ isHireDateError: false });
+    } else if (name === "archived") {
+      this.setState({ isArchivedError: false });
+    }
+
     this.setState({ employee: employee });
   };
 
-  handleSave = () => {
-    console.log("Save...");
+  validate = (data: TEmployee) => {
+    var Ajv = require("ajv");
+    var ajv = Ajv({ allErrors: true });
+    var valid = ajv.validate(schema, data);
+    let isValid;
 
-    this.setState({ redirectToViewPage: true });
-    this.props.addEmployee(this.state.employee);
+    if (valid) {
+      isValid = true;
+    } else {
+      isValid = false;
+      console.log(ajv.errors);
+      ajv.errors.map((error: any) => {
+        if (error.dataPath === ".firstName") {
+          this.setState({
+            isFirstNameError: true,
+            firstNameError: "First Name is required"
+          });
+        }
+        if (error.dataPath === ".middleName") {
+          this.setState({
+            isMiddleNameError: true,
+            middleNameError: "Middle Name is required"
+          });
+        }
+        if (error.dataPath === ".lastName") {
+          this.setState({
+            isLastNameError: true,
+            lastNameError: "Last Name is required"
+          });
+        }
+        if (error.dataPath === ".hireDate") {
+          this.setState({
+            isHireDateError: true,
+            hireDateError: "Hire Date is required"
+          });
+        }
+        if (error.dataPath === ".archived") {
+          this.setState({
+            isArchivedError: true,
+            archivedError: "Archived is required"
+          });
+        }
+      });
+    }
+
+    return isValid;
+  };
+
+  handleSave = (event: any) => {
+    event.preventDefault();
+    const isValid = this.validate(this.state.employee);
+
+    if (isValid) {
+      console.log("Save...");
+
+      this.setState({ redirectToViewPage: true });
+      this.props.addEmployee(this.state.employee);
+    }
   };
 
   handleCancel = () => {
@@ -58,7 +168,20 @@ class AddEmployee extends React.Component<TProps, TState> {
   };
 
   render() {
-    const { redirectToViewPage, employee } = this.state;
+    const {
+      redirectToViewPage,
+      employee,
+      isFirstNameError,
+      isMiddleNameError,
+      isLastNameError,
+      isArchivedError,
+      isHireDateError,
+      firstNameError,
+      middleNameError,
+      lastNameError,
+      hireDateError,
+      archivedError
+    } = this.state;
 
     return (
       <div>
@@ -99,6 +222,8 @@ class AddEmployee extends React.Component<TProps, TState> {
                     onChange={this.handleChange("firstName")}
                     margin="normal"
                     fullWidth
+                    error={isFirstNameError}
+                    helperText={isFirstNameError ? firstNameError : ""}
                   />
                 </Grid>
                 <Grid item sm={6}>
@@ -109,6 +234,8 @@ class AddEmployee extends React.Component<TProps, TState> {
                     onChange={this.handleChange("lastName")}
                     margin="normal"
                     fullWidth
+                    error={isLastNameError}
+                    helperText={isLastNameError ? lastNameError : ""}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -119,6 +246,8 @@ class AddEmployee extends React.Component<TProps, TState> {
                     onChange={this.handleChange("middleName")}
                     margin="normal"
                     fullWidth
+                    error={isMiddleNameError}
+                    helperText={isMiddleNameError ? middleNameError : ""}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -133,6 +262,8 @@ class AddEmployee extends React.Component<TProps, TState> {
                     InputLabelProps={{
                       shrink: true
                     }}
+                    error={isHireDateError}
+                    helperText={isHireDateError ? hireDateError : ""}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -143,6 +274,8 @@ class AddEmployee extends React.Component<TProps, TState> {
                     onChange={this.handleChange("archived")}
                     margin="normal"
                     fullWidth
+                    error={isArchivedError}
+                    helperText={isArchivedError ? archivedError : ""}
                   />
                 </Grid>
               </Grid>

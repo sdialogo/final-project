@@ -7,11 +7,13 @@ type TProps = {
   employees: TEmployee[];
   onChange: any;
   value: any;
+  error?: boolean;
+  helperText?: string;
 };
 
 export default class StatusDropdown extends React.Component<TProps, {}> {
   render() {
-    const { onChange, value, employees } = this.props;
+    const { onChange, value, employees, error, helperText } = this.props;
     return (
       <TextField
         fullWidth
@@ -25,6 +27,8 @@ export default class StatusDropdown extends React.Component<TProps, {}> {
           native: true
         }}
         margin="normal"
+        error={error}
+        helperText={helperText}
       >
         <option key="blank" value="" />
         {employees.map(employee => (
