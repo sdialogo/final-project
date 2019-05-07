@@ -68,7 +68,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
       title: "",
       description: "",
       statusCode: "",
-      employeeId: null,
+      employeeId: "",
       employeeName: "",
       dueDate: ""
     },
@@ -106,6 +106,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
     let devPlan = { ...this.state.devPlan, [name]: event.target.value };
 
     if (name === "title") {
+      devPlan.id = event.target.value;
       this.setState({ isTitleError: false });
     } else if (name === "description") {
       this.setState({ isDescError: false });

@@ -62,12 +62,12 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     selected: [],
     page: 0,
     rowsPerPage: 10,
-    open: null,
+    open: false,
     ediTDevPlan: {
       id: "",
       title: "",
       description: "",
-      employeeId: null,
+      employeeId: "",
       employeeName: "",
       statusCode: "",
       dueDate: ""

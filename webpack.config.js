@@ -11,6 +11,9 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "js/[name].bundle.js"
   },
+  devServer: {
+    historyApiFallback: true
+  },
   devtool: "source-map",
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"]

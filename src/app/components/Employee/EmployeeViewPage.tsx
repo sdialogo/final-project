@@ -63,7 +63,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     selected: [],
     page: 0,
     rowsPerPage: 10,
-    open: null,
+    open: false,
     editData: {
       id: "",
       firstName: "",
