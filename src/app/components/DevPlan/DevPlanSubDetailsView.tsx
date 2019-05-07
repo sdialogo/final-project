@@ -27,33 +27,155 @@ type TProps = {
 
 type TState = {
   data: TDevPlan;
+  titleError: string;
+  descError: string;
+  duedateError: string;
+  assigneeError: string;
+  statusError: string;
+  isTitleError: boolean;
+  isDescError: boolean;
+  isDueDateError: boolean;
+  isAssigneeError: boolean;
+  isStatusError: boolean;
+};
+
+let schema = {
+  properties: {
+    title: {
+      type: "string",
+      minLength: 1
+    },
+    description: {
+      type: "string",
+      minLength: 1
+    },
+    employeeId: {
+      type: "string",
+      minLength: 1
+    },
+    statusCode: {
+      type: "string",
+      minLength: 1
+    },
+    dueDate: {
+      type: "string",
+      minLength: 1
+    }
+  },
+  required: ["title", "description", "employeeId", "statusCode", "dueDate"]
 };
 
 class DevPlanSubViewPage extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
     this.state = {
-      data: this.props.data
+      data: this.props.data,
+      titleError: "",
+      descError: "",
+      duedateError: "",
+      assigneeError: "",
+      statusError: "",
+      isTitleError: false,
+      isDescError: false,
+      isDueDateError: false,
+      isAssigneeError: false,
+      isStatusError: false
     };
   }
 
-  handleSave = (event: any) => {
-    console.log("Edit...");
-    //update app state; delete then add
-    this.props.deleteDevPlan(this.state.data.id);
-    this.props.addDevPlan(this.state.data);
+  validate = (data: TDevPlan) => {
+    var Ajv = require("ajv");
+    var ajv = Ajv({ allErrors: true });
+    var valid = ajv.validate(schema, data);
+    let isValid;
 
-    this.props.closeDrawer(event);
+    if (valid) {
+      isValid = true;
+    } else {
+      isValid = false;
+      ajv.errors.map((error: any) => {
+        if (error.dataPath === ".title") {
+          this.setState({
+            isTitleError: true,
+            titleError: "Title is required"
+          });
+        }
+        if (error.dataPath === ".description") {
+          this.setState({
+            isDescError: true,
+            descError: "Description is required"
+          });
+        }
+        if (error.dataPath === ".employeeId") {
+          this.setState({
+            isAssigneeError: true,
+            assigneeError: "Assignee is required"
+          });
+        }
+        if (error.dataPath === ".statusCode") {
+          this.setState({
+            isStatusError: true,
+            statusError: "Status is required"
+          });
+        }
+        if (error.dataPath === ".dueDate") {
+          this.setState({
+            isDueDateError: true,
+            duedateError: "Due Date is required"
+          });
+        }
+      });
+    }
+
+    return isValid;
+  };
+
+  handleSave = (event: any) => {
+    event.preventDefault();
+    const isValid = this.validate(this.state.data);
+
+    if (isValid) {
+      console.log("Edit...");
+      //update app state; delete then add
+      this.props.deleteDevPlan(this.state.data.id);
+      this.props.addDevPlan(this.state.data);
+
+      this.props.closeDrawer(event);
+    }
   };
 
   handleChange = (name: string) => (event: any) => {
     let devPlan = { ...this.state.data, [name]: event.target.value };
 
+    if (name === "title") {
+      this.setState({ isTitleError: false });
+    } else if (name === "description") {
+      this.setState({ isDescError: false });
+    } else if (name === "dueDate") {
+      this.setState({ isDueDateError: false });
+    } else if (name === "employeeId") {
+      this.setState({ isAssigneeError: false });
+    } else if (name === "statusCode") {
+      this.setState({ isStatusError: false });
+    }
+
     this.setState({ data: devPlan });
   };
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
-    const { data } = this.state;
+    const {
+      data,
+      isTitleError,
+      isDescError,
+      isAssigneeError,
+      isDueDateError,
+      isStatusError,
+      titleError,
+      descError,
+      assigneeError,
+      duedateError,
+      statusError
+    } = this.state;
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -76,6 +198,8 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
+                error={isTitleError}
+                helperText={isTitleError ? titleError : ""}
               />
             </Grid>
             <Grid item xs={6}>
@@ -89,6 +213,8 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 variant="outlined"
                 disabled={!isEdit}
                 multiline
+                error={isDescError}
+                helperText={isDescError ? descError : ""}
               />
             </Grid>
             <Grid item xs={6}>
@@ -105,6 +231,8 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 InputLabelProps={{
                   shrink: true
                 }}
+                error={isDueDateError}
+                helperText={isDueDateError ? duedateError : ""}
               />
             </Grid>
             <Grid item xs={6}>
@@ -121,6 +249,8 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 InputLabelProps={{
                   shrink: true
                 }}
+                error={isDueDateError}
+                helperText={isDueDateError ? duedateError : ""}
               />
             </Grid>
             <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
@@ -128,6 +258,8 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 employees={this.props.employees}
                 onChange={this.handleChange}
                 value={data.employeeId}
+                error={isAssigneeError}
+                helperText={isAssigneeError ? assigneeError : ""}
               />
             </Grid>
             <Grid item xs={6} hidden={tabValue === 0 ? false : true}>
@@ -161,6 +293,8 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
               <StatusDropdown
                 onChange={this.handleChange}
                 value={data.statusCode}
+                error={isStatusError}
+                helperText={isStatusError ? statusError : ""}
               />
             </Grid>
           </Grid>
