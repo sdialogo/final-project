@@ -32,7 +32,7 @@ export default class StatusDropdown extends React.Component<TProps, {}> {
       >
         <option key="blank" value="" />
         {employees.map(employee => (
-          <option key={employee.id} value={employee.fullName}>
+          <option key={employee.id} value={employee.id}>
             {employee.fullName}
           </option>
         ))}

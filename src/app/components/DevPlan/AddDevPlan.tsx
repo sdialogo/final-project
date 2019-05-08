@@ -9,8 +9,6 @@ import EmployeeDropdown from "../../common/EmployeeDropdown";
 import { TDevPlan } from "../../common/types";
 
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
-import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { types } from "util";
 
 type TState = {
   devPlan: TDevPlan;

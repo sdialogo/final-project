@@ -42,6 +42,7 @@ type TState = {
   onDelete: boolean;
   toDelete: number;
   redirectToAddPage: boolean;
+  isSearch: boolean;
 };
 
 type TProps = {
@@ -70,7 +71,8 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     },
     onDelete: false,
     toDelete: 0,
-    redirectToAddPage: false
+    redirectToAddPage: false,
+    isSearch: false
   };
 
   componentDidMount() {
@@ -139,23 +141,20 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
         d.lastName.includes(event.target.value)
     );
 
-    this.setState({ data: filteredData });
+    this.setState({ data: filteredData, isSearch: true });
   };
 
   handleClearSearch = () => {
-    this.setState({ data: this.props.employees });
+    this.setState({ data: this.props.employees, isSearch: false });
   };
 
   render() {
-    const {
-      data,
-      order,
-      orderBy,
-      selected,
-      rowsPerPage,
-      page,
-      editData
-    } = this.state;
+    const { data, order, orderBy, selected, editData, isSearch } = this.state;
+
+    let tableContent = data;
+    {
+      isSearch ? (tableContent = data) : (tableContent = this.props.employees);
+    }
     return (
       <div>
         <EnhancedToolbar
@@ -176,7 +175,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                 rows={employeeRows}
               />
               <TableBody>
-                {data.map((n: any) => {
+                {tableContent.map((n: any) => {
                   return (
                     <TableRow
                       hover

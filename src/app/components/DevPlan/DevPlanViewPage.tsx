@@ -30,7 +30,7 @@ import {
   IconButton
 } from "@material-ui/core";
 
-import { MoreVert, Add } from "@material-ui/icons";
+import { MoreVert } from "@material-ui/icons";
 
 type TState = {
   data: TDevPlan[];
@@ -44,6 +44,7 @@ type TState = {
   onDelete: boolean;
   toDelete: string;
   redirectToAddPage: boolean;
+  isSearch: boolean;
 };
 
 type TProps = {
@@ -74,7 +75,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     },
     onDelete: false,
     toDelete: "",
-    redirectToAddPage: false
+    redirectToAddPage: false,
+    isSearch: false
   };
 
   componentDidMount() {
@@ -147,11 +149,11 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       d.title.includes(event.target.value)
     );
 
-    this.setState({ data: filteredData });
+    this.setState({ data: filteredData, isSearch: true });
   };
 
   handleClearSearch = () => {
-    this.setState({ data: this.props.devPlans });
+    this.setState({ data: this.props.devPlans, isSearch: false });
   };
 
   render() {
@@ -160,10 +162,14 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       order,
       orderBy,
       selected,
-      rowsPerPage,
-      page,
-      ediTDevPlan
+      ediTDevPlan,
+      isSearch
     } = this.state;
+
+    let tableContent = data;
+    {
+      isSearch ? (tableContent = data) : (tableContent = this.props.devPlans);
+    }
     return (
       <div>
         <EnhancedToolbar
@@ -184,7 +190,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                 rows={devPlanRows}
               />
               <TableBody>
-                {data.map(n => {
+                {tableContent.map(n => {
                   return (
                     <TableRow
                       hover

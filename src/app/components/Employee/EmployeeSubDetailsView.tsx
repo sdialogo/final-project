@@ -159,7 +159,6 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
       this.props.addEmployee(this.state.data);
 
       this.props.closeDrawer(event);
-      window.location.reload();
     }
   };
 

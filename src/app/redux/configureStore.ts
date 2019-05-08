@@ -25,7 +25,7 @@ function loadFromLocalStorage() {
 
 const persistedState = loadFromLocalStorage();
 
-export default function configureStore(initialState: any) {
+export default function configureStore() {
   const composeEnhancers =
     (<any>window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -34,7 +34,6 @@ export default function configureStore(initialState: any) {
     // initialState,
     persistedState,
     composeEnhancers(applyMiddleware(thunk, reduxImmutableStateInvariant()))
-    // applyMiddleware(thunk, reduxImmutableStateInvariant())
   );
 
   store.subscribe(() => saveToLocalStorage(store.getState()));

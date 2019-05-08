@@ -10,7 +10,7 @@ import AddEmployee from "./components/Employee/AddEmployee";
 import configureStore from "./redux/configureStore";
 import { Provider } from "react-redux";
 
-const store = configureStore({});
+const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
