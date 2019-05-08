@@ -17,10 +17,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Button
+  Button,
+  IconButton
 } from "@material-ui/core";
 
-import IconButton from "@material-ui/core/IconButton";
 import MoreVertical from "@material-ui/icons/MoreVert";
 
 import EmployeeDetailsView from "./EmployeeDetailsView";
@@ -49,12 +49,6 @@ type TProps = {
   loadEmployees: any;
   deleteEmployee: any;
 };
-
-type TStyles = {
-  texColor: string;
-};
-
-const styles: TStyles = require("./EmployeeStyles.less");
 
 class EmployeeViewPage extends React.Component<TProps, TState> {
   state: TState = {
@@ -191,9 +185,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                       tabIndex={-1}
                       key={n.id}
                     >
-                      <TableCell align="left" className={styles.texColor}>
-                        {n.lastName}
-                      </TableCell>
+                      <TableCell align="left">{n.lastName}</TableCell>
                       <TableCell align="left">{n.firstName}</TableCell>
                       <TableCell align="left">{n.middleName}</TableCell>
                       <TableCell align="left">{n.hireDate}</TableCell>

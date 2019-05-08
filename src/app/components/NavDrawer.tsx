@@ -1,6 +1,5 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
-import { styled, withStyles } from "@material-ui/styles";
 
 import {
   AppBar,
@@ -23,27 +22,13 @@ type TProps = {
   classes?: any;
 };
 
-const ToolBar = styled(Toolbar)({
-  background: "rgba(73,155,234,1)",
-  border: 0,
-  color: "white",
-  height: 48,
-  padding: "0 30px",
-  font: "20px solid"
-});
+type TStyles = {
+  menuItems: string;
+  listItems: string;
+  toolbar: string;
+};
 
-const styles = () => ({
-  menuItem: {
-    "&:focus": {
-      background: "red",
-      "& $primary, & $icon": {
-        color: "rgba(73,155,234,1)"
-      }
-    }
-  },
-  primary: {},
-  icon: {}
-});
+const styles: TStyles = require("../common/styles.less");
 
 class NavBar extends React.Component<TProps, {}> {
   state = {
@@ -57,11 +42,11 @@ class NavBar extends React.Component<TProps, {}> {
     this.setState(state => ({ open: !this.state.open }));
   };
   render() {
-    const { header, menuList, classes } = this.props;
+    const { header, menuList } = this.props;
     return (
       <div>
         <AppBar position="static" color="primary">
-          <ToolBar>
+          <Toolbar className={styles.toolbar}>
             <IconButton
               color="inherit"
               aria-label="Open drawer"
@@ -70,41 +55,26 @@ class NavBar extends React.Component<TProps, {}> {
               <Menu />
             </IconButton>
             {header}
-          </ToolBar>
+          </Toolbar>
         </AppBar>
         <Drawer open={this.state.open} onClose={this.handleToggle}>
           <Paper>
             <MenuList>
-              <NavLink to="/devplans" style={{ textDecoration: "none" }}>
-                <MenuItem
-                  className={classes.menuItem}
-                  onClick={this.handleClick}
-                >
-                  <ListItemIcon className={classes.icon}>
+              <NavLink to="/devplans" className={styles.menuItems}>
+                <MenuItem onClick={this.handleClick}>
+                  <ListItemIcon>
                     <List />
                   </ListItemIcon>
-                  <ListItemText
-                    classes={{ primary: classes.primary }}
-                    inset
-                    primary="Development Plan"
-                    style={{ width: 200 }}
-                  />
+                  <ListItemText inset primary="Development Plan" />
                 </MenuItem>
               </NavLink>
               <Divider />
-              <NavLink to="/employees" style={{ textDecoration: "none" }}>
-                <MenuItem
-                  className={classes.menuItem}
-                  onClick={this.handleClick}
-                >
-                  <ListItemIcon className={classes.icon}>
+              <NavLink to="/employees" className={styles.menuItems}>
+                <MenuItem onClick={this.handleClick}>
+                  <ListItemIcon>
                     <Person />
                   </ListItemIcon>
-                  <ListItemText
-                    classes={{ primary: classes.primary }}
-                    inset
-                    primary="Employee"
-                  />
+                  <ListItemText inset primary="Employee" />
                 </MenuItem>
               </NavLink>
             </MenuList>
@@ -116,4 +86,4 @@ class NavBar extends React.Component<TProps, {}> {
   }
 }
 
-export default withStyles(styles)(NavBar);
+export default NavBar;

@@ -10,6 +10,7 @@ import { TDevPlan } from "../../common/types";
 
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import { types } from "util";
 
 type TState = {
   devPlan: TDevPlan;
@@ -60,6 +61,14 @@ let schema = {
   },
   required: ["title", "description", "employeeId", "statusCode", "dueDate"]
 };
+
+type TStyles = {
+  addHeader: string;
+  addForm: string;
+  buttonStyle: string;
+};
+
+const styles: TStyles = require("./DevPlanStyles.less");
 
 class AddDevPlan extends React.Component<TProps, TState> {
   state: TState = {
@@ -205,35 +214,15 @@ class AddDevPlan extends React.Component<TProps, TState> {
     return (
       <div>
         {redirectToViewPage && <Redirect to="/devPlans" />}
-        <Grid container alignItems="center" style={{ flexGrow: 1 }}>
+        <Grid container alignItems="center">
           <Grid item>
-            <h2
-              style={{
-                paddingLeft: "20px",
-                color: "rgba(73,155,234,1)"
-              }}
-            >
-              Add Development Plan
-            </h2>
+            <h2 className={styles.addHeader}>Add Development Plan</h2>
           </Grid>
         </Grid>
         <form autoComplete="off" onSubmit={this.handleSave}>
           <Paper>
-            <Grid
-              container
-              style={{
-                paddingLeft: "20px",
-                paddingRight: "20px",
-                paddingTop: "30px",
-                paddingBottom: "30px"
-              }}
-            >
-              <Grid
-                container
-                alignItems="center"
-                spacing={32}
-                style={{ flexGrow: 1 }}
-              >
+            <Grid container className={styles.addForm}>
+              <Grid container alignItems="center" spacing={32}>
                 <Grid item sm={6}>
                   <TextField
                     variant="outlined"
@@ -244,7 +233,6 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     margin="normal"
                     fullWidth
                     error={isTitleError}
-                    // helperText={isTitleError ? fieldRequiredError : ""}
                     helperText={isTitleError ? titleError : ""}
                   />
                 </Grid>
@@ -299,30 +287,15 @@ class AddDevPlan extends React.Component<TProps, TState> {
             </Grid>
           </Paper>
           <CardActions>
-            <Grid
-              spacing={8}
-              justify="flex-end"
-              container
-              style={{ paddingTop: "10px" }}
-            >
+            <Grid spacing={8} justify="flex-end" container>
               <Grid item>
-                <Button
-                  style={{
-                    background: "rgba(73,155,234,1)",
-                    color: "white"
-                  }}
-                  //onClick={this.handleSave}
-                  type="submit"
-                >
+                <Button className={styles.buttonStyle} type="submit">
                   Save
                 </Button>
               </Grid>
               <Grid item>
                 <Button
-                  style={{
-                    background: "rgba(73,155,234,1)",
-                    color: "white"
-                  }}
+                  className={styles.buttonStyle}
                   onClick={this.handleCancel}
                 >
                   Cancel

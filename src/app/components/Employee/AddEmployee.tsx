@@ -6,7 +6,14 @@ import {
   addEmployee
 } from "../../redux/actions/employeeActions";
 
-import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
+import {
+  Grid,
+  TextField,
+  Paper,
+  CardActions,
+  Button,
+  MenuItem
+} from "@material-ui/core";
 
 import { TEmployee } from "../../common/types";
 import { getFullName } from "../../common/functions";
@@ -50,11 +57,30 @@ let schema = {
       minLength: 1
     },
     archived: {
-      type: "boolean"
+      type: "string"
     }
   },
   required: ["firstName", "middleName", "lastName", "hireDate", "archived"]
 };
+
+const options = [
+  {
+    value: "Yes",
+    label: "Yes"
+  },
+  {
+    value: "No",
+    label: "No"
+  }
+];
+
+type TStyles = {
+  addEmployee: string;
+  addForm: string;
+  buttonStyle: string;
+};
+
+const styles: TStyles = require("./EmployeeStyles.less");
 
 class AddEmployee extends React.Component<TProps, TState> {
   state: TState = {
@@ -186,34 +212,15 @@ class AddEmployee extends React.Component<TProps, TState> {
     return (
       <div>
         {redirectToViewPage && <Redirect to="/employees" />}
-        <Grid container alignItems="center" style={{ flexGrow: 1 }}>
+        <Grid container alignItems="center">
           <Grid item>
-            <h2
-              style={{
-                paddingLeft: "20px",
-                color: "rgba(73,155,234,1)"
-              }}
-            >
-              Add Employee
-            </h2>
+            <h2 className={styles.addEmployee}>Add Employee</h2>
           </Grid>
         </Grid>
         <Paper>
           <form noValidate autoComplete="off">
-            <Grid
-              container
-              style={{
-                paddingLeft: "20px",
-                paddingRight: "20px",
-                paddingBottom: "30px"
-              }}
-            >
-              <Grid
-                container
-                alignItems="center"
-                spacing={32}
-                style={{ flexGrow: 1 }}
-              >
+            <Grid container className={styles.addForm}>
+              <Grid container alignItems="center" spacing={32}>
                 <Grid item sm={6}>
                   <TextField
                     id="firstName"
@@ -269,6 +276,7 @@ class AddEmployee extends React.Component<TProps, TState> {
                 <Grid item xs={6}>
                   <TextField
                     id="archived"
+                    select
                     label="Archived"
                     value={employee.archived}
                     onChange={this.handleChange("archived")}
@@ -276,7 +284,13 @@ class AddEmployee extends React.Component<TProps, TState> {
                     fullWidth
                     error={isArchivedError}
                     helperText={isArchivedError ? archivedError : ""}
-                  />
+                  >
+                    {options.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </Grid>
               </Grid>
             </Grid>
@@ -285,22 +299,13 @@ class AddEmployee extends React.Component<TProps, TState> {
         <CardActions>
           <Grid spacing={8} justify="flex-end" container>
             <Grid item>
-              <Button
-                style={{
-                  background: "rgba(73,155,234,1)",
-                  color: "white"
-                }}
-                onClick={this.handleSave}
-              >
+              <Button className={styles.buttonStyle} onClick={this.handleSave}>
                 Save
               </Button>
             </Grid>
             <Grid item>
               <Button
-                style={{
-                  background: "rgba(73,155,234,1)",
-                  color: "white"
-                }}
+                className={styles.buttonStyle}
                 onClick={this.handleCancel}
               >
                 Cancel

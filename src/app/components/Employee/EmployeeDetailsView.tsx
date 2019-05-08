@@ -34,6 +34,14 @@ function TabContainer(props: any) {
   );
 }
 
+type TStyles = {
+  textColor: string;
+  detailsHeader: string;
+  tabsColor: string;
+};
+
+const styles: TStyles = require("./EmployeeStyles.less");
+
 class EmployeeDetailsView extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
@@ -65,16 +73,10 @@ class EmployeeDetailsView extends React.Component<TProps, TState> {
         open={this.state.open}
         onClose={event => toggleDrawer(event)}
       >
-        <Card
-          style={{
-            background: "rgba(73,155,234,1)",
-            width: "full",
-            color: "white"
-          }}
-        >
+        <Card className={styles.detailsHeader}>
           <CardContent>
             <div>
-              <Typography variant="headline" style={{ color: "white" }}>
+              <Typography variant="headline" className={styles.textColor}>
                 {displayName}
               </Typography>
             </div>
@@ -87,7 +89,7 @@ class EmployeeDetailsView extends React.Component<TProps, TState> {
                 value={tabValue}
                 onChange={this.handleTabChange}
                 variant="fullWidth"
-                style={{ background: "#a8aeb7" }}
+                className={styles.tabsColor}
                 onClick={event => this.handleEdit(event, data)}
               >
                 <Tab label="View Details" />

@@ -12,7 +12,8 @@ import {
   Button,
   Grid,
   TextField,
-  Divider
+  Divider,
+  MenuItem
 } from "@material-ui/core";
 
 type TProps = {
@@ -57,11 +58,30 @@ let schema = {
       minLength: 1
     },
     archived: {
-      type: "boolean"
+      type: "string"
     }
   },
   required: ["firstName", "middleName", "lastName", "hireDate", "archived"]
 };
+
+const options = [
+  {
+    value: "Yes",
+    label: "Yes"
+  },
+  {
+    value: "No",
+    label: "No"
+  }
+];
+
+type TStyles = {
+  gridContainer: string;
+  textField: string;
+  buttonStyle: string;
+};
+
+const styles: TStyles = require("./EmployeeStyles.less");
 
 class EmployeeSubViewPage extends React.Component<TProps, TState> {
   constructor(props: TProps) {
@@ -139,6 +159,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
       this.props.addEmployee(this.state.data);
 
       this.props.closeDrawer(event);
+      window.location.reload();
     }
   };
 
@@ -179,18 +200,10 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     return (
       <div>
         <form noValidate autoComplete="off">
-          <Grid
-            container
-            spacing={16}
-            style={{
-              paddingLeft: "10px",
-              paddingTop: "10px",
-              paddingBottom: "10px"
-            }}
-          >
+          <Grid container spacing={16} className={styles.gridContainer}>
             <Grid item xs={6}>
               <TextField
-                style={{ width: "90%" }}
+                className={styles.textField}
                 id="firstName"
                 label="First Name"
                 value={data.firstName}
@@ -204,7 +217,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                style={{ width: "90%" }}
+                className={styles.textField}
                 id="lastName"
                 label="Last Name"
                 value={data.lastName}
@@ -218,7 +231,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                style={{ width: "90%" }}
+                className={styles.textField}
                 id="middleName"
                 label="Middle Name"
                 value={data.middleName}
@@ -232,7 +245,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                style={{ width: "90%" }}
+                className={styles.textField}
                 id="hireDate"
                 label="Hire Date"
                 type="date"
@@ -247,8 +260,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                style={{ width: "90%" }}
+                className={styles.textField}
                 id="archived"
+                select
                 label="Archived"
                 value={data.archived}
                 onChange={this.handleChange("archived")}
@@ -257,7 +271,13 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 disabled={!isEdit}
                 error={isArchivedError}
                 helperText={isArchivedError ? archivedError : ""}
-              />
+              >
+                {options.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
           </Grid>
         </form>
@@ -267,10 +287,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  style={{
-                    background: "rgba(73,155,234,1)",
-                    color: "white"
-                  }}
+                  className={styles.buttonStyle}
                   onClick={this.handleSave}
                 >
                   Save
@@ -278,10 +295,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
               </Grid>
               <Grid item>
                 <Button
-                  style={{
-                    background: "rgba(73,155,234,1)",
-                    color: "white"
-                  }}
+                  className={styles.buttonStyle}
                   onClick={event => closeDrawer(event)}
                 >
                   Cancel
@@ -292,10 +306,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  style={{
-                    background: "rgba(73,155,234,1)",
-                    color: "white"
-                  }}
+                  className={styles.buttonStyle}
                   onClick={event => closeDrawer(event)}
                 >
                   Close

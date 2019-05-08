@@ -13,6 +13,14 @@ type TState = {
   isSearch: boolean;
 };
 
+type TStyles = {
+  title: string;
+  buttonStyle: string;
+  searchField: string;
+};
+
+const styles: TStyles = require("./styles.less");
+
 class EnhancedToolbar extends React.Component<TProps, TState> {
   state: TState = {
     isSearch: false
@@ -33,11 +41,9 @@ class EnhancedToolbar extends React.Component<TProps, TState> {
     const { isSearch } = this.state;
     return (
       <div>
-        <Grid container alignItems="center" style={{ flexGrow: 1 }}>
+        <Grid container alignItems="center">
           <Grid item xs={6}>
-            <h2 style={{ marginLeft: "25px", color: "rgba(73,155,234,1)" }}>
-              {title}
-            </h2>
+            <h2 className={styles.title}>{title}</h2>
           </Grid>
           <Grid item xs={6}>
             <Grid
@@ -46,12 +52,11 @@ class EnhancedToolbar extends React.Component<TProps, TState> {
               alignItems="center"
               direction="row"
               justify="flex-end"
-              style={{ height: 80 }}
             >
               <Grid item hidden={isSearch ? true : false}>
                 <Button
                   variant="contained"
-                  style={{ background: "rgba(73,155,234,1)", color: "white" }}
+                  className={styles.buttonStyle}
                   onClick={this.handleOnClick}
                 >
                   Search
@@ -60,7 +65,7 @@ class EnhancedToolbar extends React.Component<TProps, TState> {
               <Grid item hidden={!isSearch ? true : false}>
                 <InputBase
                   placeholder="Search"
-                  style={{ background: "#dce2ea", padding: "2px 4px" }}
+                  className={styles.searchField}
                   onChange={dataFilter}
                 />
                 <IconButton aria-label="Search" onClick={this.handleExit}>
@@ -70,7 +75,7 @@ class EnhancedToolbar extends React.Component<TProps, TState> {
               <Grid item>
                 <Button
                   variant="contained"
-                  style={{ background: "rgba(73,155,234,1)", color: "white" }}
+                  className={styles.buttonStyle}
                   onClick={redirectToAddPage}
                 >
                   Add

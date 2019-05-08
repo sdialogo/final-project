@@ -1,0 +1,48 @@
+@title : ~':local(.title)';
+@button-style : ~':local(.buttonStyle)';
+@search-field : ~':local(.searchField)';
+@menu-items : ~':local(.menuItems)';
+@list-items : ~':local(.listItems)';
+@toolbar : ~':local(.toolbar)';
+
+@{title} {
+  margin-left: 25px;
+  color: rgba(73, 155, 234, 1);
+}
+
+@{button-style} {
+  background: rgba(73, 155, 234, 1) !important;
+  color: white !important;
+}
+
+@{search-field} {
+  background: #dce2ea !important;
+  padding: 2px 4px;
+}
+
+@{menu-items} {
+  text-decoration: none;
+  //   &:focus {
+  //     background: red !important;
+  //     color: red !important;
+  //   }
+  //   &:hover {
+  //     &:active {
+  //       background: red !important;
+  //       color: red !important;
+  //     }
+  //   }
+}
+
+@{list-items} {
+  width: 200;
+}
+
+@{toolbar} {
+  background: rgba(73, 155, 234, 1) !important;
+  border: 0;
+  color: white !important;
+  height: 48;
+  padding: 0 30px;
+  font: 20px solid;
+}

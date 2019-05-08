@@ -65,6 +65,16 @@ let schema = {
   required: ["title", "description", "employeeId", "statusCode", "dueDate"]
 };
 
+type TStyles = {
+  gridContainer: string;
+  buttonStyle: string;
+  redButton: string;
+  greenButton: string;
+  yellowButton: string;
+};
+
+const styles: TStyles = require("./DevPlanStyles.less");
+
 class DevPlanSubViewPage extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
@@ -179,15 +189,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     return (
       <div>
         <form noValidate autoComplete="off">
-          <Grid
-            container
-            spacing={16}
-            style={{
-              paddingLeft: "10px",
-              paddingTop: "10px",
-              paddingBottom: "10px"
-            }}
-          >
+          <Grid container spacing={16} className={styles.gridContainer}>
             <Grid item xs={6}>
               <TextField
                 fullWidth
@@ -264,27 +266,15 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6} hidden={tabValue === 0 ? false : true}>
               {data.statusCode === Status.NotStarted ? (
-                <Button disabled style={{ background: "red", color: "white" }}>
+                <Button disabled className={styles.redButton}>
                   {data.statusCode}
                 </Button>
               ) : data.statusCode === Status.Completed ? (
-                <Button
-                  disabled
-                  style={{
-                    background: "green",
-                    color: "white"
-                  }}
-                >
+                <Button disabled className={styles.greenButton}>
                   {data.statusCode}
                 </Button>
               ) : (
-                <Button
-                  disabled
-                  style={{
-                    background: "orange",
-                    color: "white"
-                  }}
-                >
+                <Button disabled className={styles.yellowButton}>
                   {data.statusCode}
                 </Button>
               )}
@@ -305,10 +295,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  style={{
-                    background: "rgba(73,155,234,1)",
-                    color: "white"
-                  }}
+                  className={styles.buttonStyle}
                   onClick={this.handleSave}
                 >
                   Save
@@ -316,10 +303,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
               </Grid>
               <Grid item>
                 <Button
-                  style={{
-                    background: "rgba(73,155,234,1)",
-                    color: "white"
-                  }}
+                  className={styles.buttonStyle}
                   onClick={event => closeDrawer(event)}
                 >
                   Cancel
@@ -330,10 +314,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  style={{
-                    background: "rgba(73,155,234,1)",
-                    color: "white"
-                  }}
+                  className={styles.buttonStyle}
                   onClick={event => closeDrawer(event)}
                 >
                   Close

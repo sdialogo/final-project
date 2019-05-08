@@ -36,6 +36,15 @@ function TabContainer(props: any) {
   );
 }
 
+type TStyles = {
+  textColor: string;
+  detailsHeader: string;
+  tabsColor: string;
+  displayButton: string;
+};
+
+const styles: TStyles = require("./DevPlanStyles.less");
+
 export default class DetailsView extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
@@ -65,16 +74,10 @@ export default class DetailsView extends React.Component<TProps, TState> {
         open={this.state.open}
         onClose={event => toggleDrawer(event)}
       >
-        <Card
-          style={{
-            background: "rgba(73,155,234,1)",
-            width: "full",
-            color: "white"
-          }}
-        >
+        <Card className={styles.detailsHeader}>
           <CardContent>
             <div>
-              <Typography variant="headline" style={{ color: "white" }}>
+              <Typography variant="headline" className={styles.textColor}>
                 {data.title}
               </Typography>
             </div>
@@ -89,18 +92,15 @@ export default class DetailsView extends React.Component<TProps, TState> {
               <Grid item>
                 <Grid container spacing={8}>
                   <Grid item>
-                    <Typography variant="subheading" style={{ color: "white" }}>
+                    <Typography
+                      variant="subheading"
+                      className={styles.textColor}
+                    >
                       Asignee
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Button
-                      disabled
-                      style={{
-                        background: "white",
-                        color: "grey"
-                      }}
-                    >
+                    <Button disabled className={styles.displayButton}>
                       {data.employeeName}
                     </Button>
                   </Grid>
@@ -109,18 +109,15 @@ export default class DetailsView extends React.Component<TProps, TState> {
               <Grid item>
                 <Grid container spacing={8}>
                   <Grid item>
-                    <Typography variant="subheading" style={{ color: "white" }}>
+                    <Typography
+                      variant="subheading"
+                      className={styles.textColor}
+                    >
                       Status
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Button
-                      disabled
-                      style={{
-                        background: "white",
-                        color: "grey"
-                      }}
-                    >
+                    <Button disabled className={styles.displayButton}>
                       {data.statusCode}
                     </Button>
                   </Grid>
@@ -129,18 +126,15 @@ export default class DetailsView extends React.Component<TProps, TState> {
               <Grid item>
                 <Grid container spacing={8}>
                   <Grid item>
-                    <Typography variant="subheading" style={{ color: "white" }}>
+                    <Typography
+                      variant="subheading"
+                      className={styles.textColor}
+                    >
                       Due Date
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Button
-                      disabled
-                      style={{
-                        background: "white",
-                        color: "grey"
-                      }}
-                    >
+                    <Button disabled className={styles.displayButton}>
                       {data.dueDate}
                     </Button>
                   </Grid>
@@ -156,7 +150,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
                 value={tabValue}
                 onChange={this.handleTabChange}
                 variant="fullWidth"
-                style={{ background: "#a8aeb7" }}
+                className={styles.tabsColor}
                 onClick={event => this.handleEdit(event, data)}
               >
                 <Tab label="View Details" />
