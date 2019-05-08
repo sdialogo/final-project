@@ -17,21 +17,21 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Button,
-  Grid
+  Button
 } from "@material-ui/core";
 
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertical from "@material-ui/icons/MoreVert";
-import AddIcon from "@material-ui/icons/Add";
 
 import EmployeeDetailsView from "./EmployeeDetailsView";
 import EnhancedTableHead from "../../common/EnhancedTableHead";
+import EnhancedToolbar from "../../common/EnhancedToolbar";
 import { employeeRows } from "../../common/constants";
 import { TEmployee } from "../../common/types";
 import { findEmployeeById } from "../../common/functions";
 
 type TState = {
+  data: TEmployee[];
   order: string;
   orderBy: string;
   selected: number[];
@@ -58,6 +58,7 @@ const styles: TStyles = require("./EmployeeStyles.less");
 
 class EmployeeViewPage extends React.Component<TProps, TState> {
   state: TState = {
+    data: this.props.employees,
     order: "asc",
     orderBy: "lastName",
     selected: [],
@@ -103,7 +104,6 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
   handleDrawerOpen = (event: any, id: number) => {
     event.stopPropagation();
     console.log("Drawer opened");
-    // const { data } = this.state;
     let currData = findEmployeeById(id, this.props.employees);
 
     this.setState({ editData: currData, open: true });
@@ -129,7 +129,6 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
   handleDelete = () => {
     this.setState({ onDelete: false });
 
-    //update app state
     this.props.deleteEmployee(this.state.toDelete);
     console.log("Deleted");
   };
@@ -137,9 +136,25 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
   handleRedirectToAddPage = () => {
     this.setState({ redirectToAddPage: true });
   };
+
+  handleDataFilter = (event: any) => {
+    const filteredData = this.state.data.filter(
+      d =>
+        d.firstName.includes(event.target.value) ||
+        d.middleName.includes(event.target.value) ||
+        d.lastName.includes(event.target.value)
+    );
+
+    this.setState({ data: filteredData });
+  };
+
+  handleClearSearch = () => {
+    this.setState({ data: this.props.employees });
+  };
+
   render() {
     const {
-      // data,
+      data,
       order,
       orderBy,
       selected,
@@ -149,44 +164,12 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     } = this.state;
     return (
       <div>
-        <div>
-          <Grid container alignItems="center" style={{ flexGrow: 1 }}>
-            <Grid item xs={6}>
-              <h2 style={{ marginLeft: "25px", color: "rgba(73,155,234,1)" }}>
-                Employee
-              </h2>
-            </Grid>
-            <Grid item xs={6}>
-              <Grid
-                container
-                spacing={16}
-                alignItems="center"
-                direction="row"
-                justify="flex-end"
-                style={{ height: 80 }}
-              >
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    style={{ background: "rgba(73,155,234,1)", color: "white" }}
-                  >
-                    Search
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    style={{ background: "rgba(73,155,234,1)", color: "white" }}
-                    onClick={this.handleRedirectToAddPage}
-                  >
-                    Add
-                    <AddIcon />
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </div>
+        <EnhancedToolbar
+          title="Employee"
+          redirectToAddPage={this.handleRedirectToAddPage.bind(this)}
+          dataFilter={this.handleDataFilter.bind(this)}
+          clearSearch={this.handleClearSearch.bind(this)}
+        />
         {this.state.redirectToAddPage && <Redirect to="/addEmployee" />}
         <Paper>
           <div>
@@ -195,22 +178,18 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                // onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
-                // rowCount={data.length}
                 rows={employeeRows}
               />
               <TableBody>
-                {this.props.employees.map((n: any) => {
+                {data.map((n: any) => {
                   return (
                     <TableRow
                       hover
                       onClick={event => this.handleDrawerOpen(event, n.id)}
                       role="checkbox"
-                      // aria-checked={isSelected}
                       tabIndex={-1}
                       key={n.id}
-                      // selected={isSelected}
                     >
                       <TableCell align="left" className={styles.texColor}>
                         {n.lastName}

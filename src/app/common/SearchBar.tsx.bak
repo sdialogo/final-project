@@ -1,0 +1,130 @@
+import * as React from "react";
+import PropTypes, { string } from "prop-types";
+import deburr from "lodash/deburr";
+import Downshift from "downshift";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Popper from "@material-ui/core/Popper";
+import Paper from "@material-ui/core/Paper";
+import MenuItem from "@material-ui/core/MenuItem";
+import Chip from "@material-ui/core/Chip";
+import { type } from "os";
+
+type TProps = {
+  nameSuggestions: [];
+  titleSuggestions: [];
+};
+
+type TState = {
+  inputValue: string;
+  selectedItem: [];
+};
+
+type TRenderSuggestionProps = {
+  suggestion: any;
+  index: number;
+  itemProps: any;
+  highlightedIndex: number;
+  selectedItem: string;
+};
+
+const suggestions = [{ label: "Afghanistan" }, { label: "Aland Islands" }];
+
+function renderInput(inputProps: any) {
+  const { InputProps, classes, ref, ...other } = inputProps;
+
+  return (
+    <TextField
+      InputProps={{
+        inputRef: ref,
+        classes: {
+          root: classes.inputRoot,
+          input: classes.inputInput
+        },
+        ...InputProps
+      }}
+      {...other}
+    />
+  );
+}
+
+function renderSuggestion(
+  suggestion: any,
+  index: number,
+  itemProps: any,
+  highlightedIndex: number,
+  selectedItem: string
+) {
+  const isHighlighted = highlightedIndex === index;
+  const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
+
+  return (
+    <MenuItem
+      {...itemProps}
+      key={suggestion.label}
+      selected={isHighlighted}
+      component="div"
+      style={{
+        fontWeight: isSelected ? 500 : 400
+      }}
+    >
+      {suggestion.label}
+    </MenuItem>
+  );
+}
+
+// renderSuggestion.propTypes = {
+//   highlightedIndex: PropTypes.number,
+//   index: PropTypes.number,
+//   itemProps: PropTypes.object,
+//   selectedItem: PropTypes.string,
+//   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired
+// };
+
+function getSuggestions(value: any) {
+  const inputValue = deburr(value.trim()).toLowerCase();
+  const inputLength = inputValue.length;
+  let count = 0;
+
+  return inputLength === 0
+    ? []
+    : suggestions.filter(suggestion => {
+        const keep =
+          count < 5 &&
+          suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+
+        if (keep) {
+          count += 1;
+        }
+
+        return keep;
+      });
+}
+
+class SearchBar extends React.Component<TProps, TState> {
+  state: TState = {
+    inputValue: "",
+    selectedItem: []
+  };
+  handleKeyDown = (event: any) => {
+    const { inputValue, selectedItem } = this.state;
+    if (
+      selectedItem.length &&
+      !inputValue.length &&
+      event.key === "Backspace"
+    ) {
+      //   this.setState({
+      //     selectedItem: selectedItem.slice(0, selectedItem.length - 1)
+      //   });
+    }
+  };
+  render() {
+    return (
+      <div>
+        <h3>Search Bar</h3>
+      </div>
+    );
+  }
+}
+
+export default SearchBar;

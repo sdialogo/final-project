@@ -1,7 +1,10 @@
 import * as React from "react";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import EnhancedToolbar from "../../common/EnhancedToolbar";
+import DetailsView from "./DevPlanDetailsView";
+import EnhancedTableHead from "../../common/EnhancedTableHead";
+import { devPlanRows } from "../../common/constants";
 
 import {
   loadDevPlans,
@@ -11,10 +14,6 @@ import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import { TDevPlan } from "../../common/types";
 import { findDataById } from "../../common/functions";
-
-import DetailsView from "./DevPlanDetailsView";
-import EnhancedTableHead from "../../common/EnhancedTableHead";
-import { devPlanRows } from "../../common/constants";
 
 import {
   Table,
@@ -28,13 +27,13 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
-  Grid,
   IconButton
 } from "@material-ui/core";
 
 import { MoreVert, Add } from "@material-ui/icons";
 
 type TState = {
+  data: TDevPlan[];
   order: string;
   orderBy: string;
   selected: number[];
@@ -57,17 +56,18 @@ type TProps = {
 
 class DevPlanviewPage extends React.Component<TProps, TState> {
   state: TState = {
+    data: this.props.devPlans,
     order: "asc",
     orderBy: "title",
     selected: [],
     page: 0,
     rowsPerPage: 10,
-    open: false,
+    open: null,
     ediTDevPlan: {
       id: "",
       title: "",
       description: "",
-      employeeId: "",
+      employeeId: null,
       employeeName: "",
       statusCode: "",
       dueDate: ""
@@ -138,18 +138,25 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     console.log("Deleted");
   };
 
-  updateDataFromEditPage = (id: any, newData: TDevPlan) => {
-    //delete current data with same id
-    //push new data from eit page
-  };
-
   handleRedirectToAddPage = () => {
     this.setState({ redirectToAddPage: true });
   };
 
+  handleDataFilter = (event: any) => {
+    const filteredData = this.state.data.filter(d =>
+      d.title.includes(event.target.value)
+    );
+
+    this.setState({ data: filteredData });
+  };
+
+  handleClearSearch = () => {
+    this.setState({ data: this.props.devPlans });
+  };
+
   render() {
     const {
-      // data,
+      data,
       order,
       orderBy,
       selected,
@@ -159,44 +166,12 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     } = this.state;
     return (
       <div>
-        <div>
-          <Grid container alignItems="center" style={{ flexGrow: 1 }}>
-            <Grid item xs={6}>
-              <h2 style={{ marginLeft: "25px", color: "rgba(73,155,234,1)" }}>
-                Development Plan
-              </h2>
-            </Grid>
-            <Grid item xs={6}>
-              <Grid
-                container
-                spacing={16}
-                alignItems="center"
-                direction="row"
-                justify="flex-end"
-                style={{ height: 80 }}
-              >
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    style={{ background: "rgba(73,155,234,1)", color: "white" }}
-                  >
-                    Search
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    style={{ background: "rgba(73,155,234,1)", color: "white" }}
-                    onClick={this.handleRedirectToAddPage}
-                  >
-                    Add
-                    <Add />
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </div>
+        <EnhancedToolbar
+          title="Development Plan"
+          redirectToAddPage={this.handleRedirectToAddPage.bind(this)}
+          dataFilter={this.handleDataFilter.bind(this)}
+          clearSearch={this.handleClearSearch.bind(this)}
+        />
         {this.state.redirectToAddPage && <Redirect to="/addDevPlan" />}
         <Paper>
           <div>
@@ -205,23 +180,18 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                // onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
-                // rowCount={data.length}
                 rows={devPlanRows}
               />
               <TableBody>
-                {this.props.devPlans.map(n => {
-                  // const isSelected = this.isSelected(n.id);
+                {data.map(n => {
                   return (
                     <TableRow
                       hover
                       onClick={event => this.handleDrawerOpen(event, n.id)}
                       role="checkbox"
-                      // aria-checked={isSelected}
                       tabIndex={-1}
                       key={n.id}
-                      // selected={isSelected}
                     >
                       <TableCell align="left">{n.title}</TableCell>
                       <TableCell align="left">{n.employeeName}</TableCell>
