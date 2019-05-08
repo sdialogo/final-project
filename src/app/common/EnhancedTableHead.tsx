@@ -23,14 +23,7 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
     this.props.onRequestSort(event, property);
   };
   render() {
-    const {
-      onSelectAllClick,
-      order,
-      orderBy,
-      numSelected,
-      rowCount,
-      rows
-    } = this.props;
+    const { order, orderBy, rows } = this.props;
 
     return (
       <TableHead>
@@ -49,15 +42,16 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
                 padding={row.disablePadding ? "none" : "default"}
                 sortDirection={orderBy === row.id ? order : false}
               >
-                <Tooltip title="Sort" enterDelay={300}>
-                  <TableSortLabel
-                    active={orderBy === row.id}
-                    direction={order}
-                    onClick={this.createSortHandler(row.id)}
-                  >
-                    {row.label}
-                  </TableSortLabel>
-                </Tooltip>
+                {row.label}
+                {/* <Tooltip title="Sort" enterDelay={300}> }
+                { <TableSortLabel
+                  active={orderBy === row.id}
+                  direction={order}
+                  onClick={this.createSortHandler(row.id)}
+                >
+                  {row.label}
+                </TableSortLabel> }
+                { </Tooltip> */}
               </TableCell>
             ),
             this
