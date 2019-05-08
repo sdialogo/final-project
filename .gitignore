@@ -3,3 +3,4 @@ public/bundles/
 build/
 .env
 .vscode/
+dist/
