@@ -25,3 +25,11 @@ export type TDevPlanError = [
   { isStatusError: boolean; statusError: string },
   { isDueDateError: boolean; dueDateError: string }
 ];
+
+export type TEmployeeError = [
+  { isFirstNameError: boolean; firstNameError: string },
+  { isMiddleNameError: boolean; middleNameError: string },
+  { isLastNameError: boolean; lastNameError: string },
+  { isHireDateError: boolean; hireDateError: string },
+  { isArchivedError: boolean; archivedError: string }
+];
