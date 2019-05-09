@@ -6,24 +6,15 @@ import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import StatusDropdown from "../../common/StatusDropdown";
 import EmployeeDropdown from "../../common/EmployeeDropdown";
-import { TDevPlan } from "../../common/types";
+import { TDevPlan, TDevPlanError } from "../../common/types";
+import { validateDevPlan } from "../../common/functions";
 
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
 
 type TState = {
   devPlan: TDevPlan;
   redirectToViewPage: any;
-  titleError: string;
-  descError: string;
-  duedateError: string;
-  assigneeError: string;
-  statusError: string;
-  isTitleError: boolean;
-  isDescError: boolean;
-  isDueDateError: boolean;
-  isAssigneeError: boolean;
-  isStatusError: boolean;
-  fieldRequiredError: string;
+  errors: TDevPlanError;
 };
 
 type TProps = {
@@ -32,32 +23,6 @@ type TProps = {
   loadDevPlans: any;
   loadEmployees: any;
   addDevPlan: any;
-};
-
-let schema = {
-  properties: {
-    title: {
-      type: "string",
-      minLength: 1
-    },
-    description: {
-      type: "string",
-      minLength: 1
-    },
-    employeeId: {
-      type: "string",
-      minLength: 1
-    },
-    statusCode: {
-      type: "string",
-      minLength: 1
-    },
-    dueDate: {
-      type: "string",
-      minLength: 1
-    }
-  },
-  required: ["title", "description", "employeeId", "statusCode", "dueDate"]
 };
 
 type TStyles = {
@@ -80,17 +45,13 @@ class AddDevPlan extends React.Component<TProps, TState> {
       dueDate: ""
     },
     redirectToViewPage: false,
-    titleError: "",
-    descError: "",
-    duedateError: "",
-    assigneeError: "",
-    statusError: "",
-    isTitleError: false,
-    isDescError: false,
-    isDueDateError: false,
-    isAssigneeError: false,
-    isStatusError: false,
-    fieldRequiredError: "This field is required"
+    errors: [
+      { isTitleError: false, titleError: "" },
+      { isDescError: false, descError: "" },
+      { isAssigneeError: false, assigneeError: "" },
+      { isStatusError: false, statusError: "" },
+      { isDueDateError: false, dueDateError: "" }
+    ]
   };
 
   componentDidMount() {
@@ -111,80 +72,42 @@ class AddDevPlan extends React.Component<TProps, TState> {
 
   handleChange = (name: any) => (event: any) => {
     let devPlan = { ...this.state.devPlan, [name]: event.target.value };
+    let errorsCopy = this.state.errors;
 
     if (name === "title") {
       devPlan.id = event.target.value;
-      this.setState({ isTitleError: false });
+      errorsCopy[0].isTitleError = false;
+      errorsCopy[0].titleError = "";
     } else if (name === "description") {
-      this.setState({ isDescError: false });
-    } else if (name === "dueDate") {
-      this.setState({ isDueDateError: false });
+      errorsCopy[1].isDescError = false;
+      errorsCopy[1].descError = "";
     } else if (name === "employeeId") {
-      this.setState({ isAssigneeError: false });
+      errorsCopy[2].isAssigneeError = false;
+      errorsCopy[2].assigneeError = "";
     } else if (name === "statusCode") {
-      this.setState({ isStatusError: false });
-    }
+      errorsCopy[3].isStatusError = false;
+      errorsCopy[3].statusError = "";
+    } else if (name === "dueDate") {
+      errorsCopy[4].isDueDateError = false;
+      errorsCopy[4].dueDateError = "";
+    }  
 
-    this.setState({ devPlan: devPlan });
-  };
-
-  validate = (data: TDevPlan) => {
-    var Ajv = require("ajv");
-    var ajv = Ajv({ allErrors: true });
-    var valid = ajv.validate(schema, data);
-    let isValid;
-
-    if (valid) {
-      isValid = true;
-    } else {
-      isValid = false;
-      ajv.errors.map((error: any) => {
-        if (error.dataPath === ".title") {
-          this.setState({
-            isTitleError: true,
-            titleError: "Title is required"
-          });
-        }
-        if (error.dataPath === ".description") {
-          this.setState({
-            isDescError: true,
-            descError: "Description is required"
-          });
-        }
-        if (error.dataPath === ".employeeId") {
-          this.setState({
-            isAssigneeError: true,
-            assigneeError: "Assignee is required"
-          });
-        }
-        if (error.dataPath === ".statusCode") {
-          this.setState({
-            isStatusError: true,
-            statusError: "Status is required"
-          });
-        }
-        if (error.dataPath === ".dueDate") {
-          this.setState({
-            isDueDateError: true,
-            duedateError: "Due Date is required"
-          });
-        }
-      });
-    }
-
-    return isValid;
+    this.setState({ devPlan: devPlan, errors: errorsCopy });
   };
 
   handleSave = (event: any) => {
     event.preventDefault();
-    const isValid = this.validate(this.state.devPlan);
+    let returnObj = validateDevPlan(this.state.devPlan);
 
-    if (isValid) {
+    if (returnObj.isValid) {
       console.log("Save...");
 
       this.setState({ redirectToViewPage: true });
       this.props.addDevPlan(this.state.devPlan);
+    } else {
+      this.setState({ errors: returnObj.errorList });
     }
+
   };
 
   handleCancel = () => {
@@ -196,17 +119,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
     const {
       redirectToViewPage,
       devPlan,
-      fieldRequiredError,
-      isTitleError,
-      isDescError,
-      isAssigneeError,
-      isDueDateError,
-      isStatusError,
-      titleError,
-      descError,
-      assigneeError,
-      duedateError,
-      statusError
+      errors
     } = this.state;
 
     return (
@@ -230,8 +143,10 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     onChange={this.handleChange("title")}
                     margin="normal"
                     fullWidth
-                    error={isTitleError}
-                    helperText={isTitleError ? titleError : ""}
+                    error={errors[0].isTitleError}
+                    helperText={
+                      errors[0].isTitleError ? errors[0].titleError : ""
+                    }
                   />
                 </Grid>
                 <Grid item sm={6}>
@@ -243,8 +158,8 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     onChange={this.handleChange("description")}
                     margin="normal"
                     fullWidth
-                    error={isDescError}
-                    helperText={isDescError ? descError : ""}
+                    error={errors[1].isDescError}
+                    helperText={errors[1].isDescError ? errors[1].descError : ""}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -252,8 +167,8 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     employees={this.props.employees}
                     onChange={this.handleChange}
                     value={devPlan.employeeId}
-                    error={isAssigneeError}
-                    helperText={isAssigneeError ? assigneeError : ""}
+                    error={errors[2].isAssigneeError}
+                    helperText={errors[2].isAssigneeError ? errors[2].assigneeError : ""}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -269,16 +184,16 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     InputLabelProps={{
                       shrink: true
                     }}
-                    error={isDueDateError}
-                    helperText={isDueDateError ? duedateError : ""}
+                    error={errors[4].isDueDateError}
+                    helperText={errors[4].isDueDateError ? errors[4].dueDateError : ""}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <StatusDropdown
                     onChange={this.handleChange}
                     value={devPlan.statusCode}
-                    error={isStatusError}
-                    helperText={isStatusError ? statusError : ""}
+                    error={errors[3].isStatusError}
+                    helperText={errors[3].isStatusError ? errors[3].statusError : ""}
                   />
                 </Grid>
               </Grid>
