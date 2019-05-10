@@ -3,9 +3,10 @@ import { connect } from "react-redux";
 import { addDevPlan, deleteDevPlan } from "../../redux/actions/devPlanActions";
 
 import { Status } from "../../common/statusEnum";
-import { TDevPlan, TEmployee } from "../../common/types";
+import { TDevPlan, TEmployee, TDevPlanError } from "../../common/types";
 import StatusDropdown from "../shared/statusDropdown";
 import EmployeeDropdown from "../shared/employeeDropdown";
+import { validateDevPlan } from "../../common/functions";
 
 import {
   CardActions,
@@ -15,6 +16,11 @@ import {
   Divider
 } from "@material-ui/core";
 
+type TState = {
+  data: TDevPlan;
+  errors: TDevPlanError;
+};
+
 type TProps = {
   data: TDevPlan;
   isEdit: boolean;
@@ -23,46 +29,6 @@ type TProps = {
   addDevPlan: Function;
   deleteDevPlan: Function;
   employees: TEmployee[];
-};
-
-type TState = {
-  data: TDevPlan;
-  titleError: string;
-  descError: string;
-  duedateError: string;
-  assigneeError: string;
-  statusError: string;
-  isTitleError: boolean;
-  isDescError: boolean;
-  isDueDateError: boolean;
-  isAssigneeError: boolean;
-  isStatusError: boolean;
-};
-
-let schema = {
-  properties: {
-    title: {
-      type: "string",
-      minLength: 1
-    },
-    description: {
-      type: "string",
-      minLength: 1
-    },
-    employeeId: {
-      type: "string",
-      minLength: 1
-    },
-    statusCode: {
-      type: "string",
-      minLength: 1
-    },
-    dueDate: {
-      type: "string",
-      minLength: 1
-    }
-  },
-  required: ["title", "description", "employeeId", "statusCode", "dueDate"]
 };
 
 type TStyles = {
@@ -80,112 +46,58 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     super(props);
     this.state = {
       data: this.props.data,
-      titleError: "",
-      descError: "",
-      duedateError: "",
-      assigneeError: "",
-      statusError: "",
-      isTitleError: false,
-      isDescError: false,
-      isDueDateError: false,
-      isAssigneeError: false,
-      isStatusError: false
+      errors: [
+        { isTitleError: false, titleError: "" },
+        { isDescError: false, descError: "" },
+        { isAssigneeError: false, assigneeError: "" },
+        { isStatusError: false, statusError: "" },
+        { isDueDateError: false, dueDateError: "" }
+      ]
     };
   }
 
-  validate = (data: TDevPlan) => {
-    var Ajv = require("ajv");
-    var ajv = Ajv({ allErrors: true });
-    var valid = ajv.validate(schema, data);
-    let isValid;
-
-    if (valid) {
-      isValid = true;
-    } else {
-      isValid = false;
-      ajv.errors.map((error: any) => {
-        if (error.dataPath === ".title") {
-          this.setState({
-            isTitleError: true,
-            titleError: "Title is required"
-          });
-        }
-        if (error.dataPath === ".description") {
-          this.setState({
-            isDescError: true,
-            descError: "Description is required"
-          });
-        }
-        if (error.dataPath === ".employeeId") {
-          this.setState({
-            isAssigneeError: true,
-            assigneeError: "Assignee is required"
-          });
-        }
-        if (error.dataPath === ".statusCode") {
-          this.setState({
-            isStatusError: true,
-            statusError: "Status is required"
-          });
-        }
-        if (error.dataPath === ".dueDate") {
-          this.setState({
-            isDueDateError: true,
-            duedateError: "Due Date is required"
-          });
-        }
-      });
-    }
-
-    return isValid;
-  };
-
   handleSave = (event: any) => {
     event.preventDefault();
-    const isValid = this.validate(this.state.data);
+    let returnObj = validateDevPlan(this.state.data);
 
-    if (isValid) {
+    if (returnObj.isValid) {
       console.log("Edit...");
-      //update app state; delete then add
+
       this.props.deleteDevPlan(this.state.data.id);
       this.props.addDevPlan(this.state.data);
 
       this.props.closeDrawer(event);
+    } else {
+      this.setState({ errors: returnObj.errorList });
     }
   };
 
   handleChange = (name: string) => (event: any) => {
     let devPlan = { ...this.state.data, [name]: event.target.value };
+    let errorsCopy = this.state.errors;
 
     if (name === "title") {
-      this.setState({ isTitleError: false });
+      errorsCopy[0].isTitleError = false;
+      errorsCopy[0].titleError = "";
     } else if (name === "description") {
-      this.setState({ isDescError: false });
-    } else if (name === "dueDate") {
-      this.setState({ isDueDateError: false });
+      errorsCopy[1].isDescError = false;
+      errorsCopy[1].descError = "";
     } else if (name === "employeeId") {
-      this.setState({ isAssigneeError: false });
+      errorsCopy[2].isAssigneeError = false;
+      errorsCopy[2].assigneeError = "";
     } else if (name === "statusCode") {
-      this.setState({ isStatusError: false });
+      errorsCopy[3].isStatusError = false;
+      errorsCopy[3].statusError = "";
+    } else if (name === "dueDate") {
+      errorsCopy[4].isDueDateError = false;
+      errorsCopy[4].dueDateError = "";
     }
 
-    this.setState({ data: devPlan });
+    this.setState({ data: devPlan, errors: errorsCopy });
   };
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
-    const {
-      data,
-      isTitleError,
-      isDescError,
-      isAssigneeError,
-      isDueDateError,
-      isStatusError,
-      titleError,
-      descError,
-      assigneeError,
-      duedateError,
-      statusError
-    } = this.state;
+    const { data, errors } = this.state;
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -200,8 +112,8 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
-                error={isTitleError}
-                helperText={isTitleError ? titleError : ""}
+                error={errors[0].isTitleError}
+                helperText={errors[0].isTitleError ? errors[0].titleError : ""}
               />
             </Grid>
             <Grid item xs={6}>
@@ -215,8 +127,8 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 variant="outlined"
                 disabled={!isEdit}
                 multiline
-                error={isDescError}
-                helperText={isDescError ? descError : ""}
+                error={errors[1].isDescError}
+                helperText={errors[1].isDescError ? errors[1].descError : ""}
               />
             </Grid>
             <Grid item xs={6}>
@@ -233,8 +145,10 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 InputLabelProps={{
                   shrink: true
                 }}
-                error={isDueDateError}
-                helperText={isDueDateError ? duedateError : ""}
+                error={errors[4].isDueDateError}
+                helperText={
+                  errors[4].isDueDateError ? errors[4].dueDateError : ""
+                }
               />
             </Grid>
             <Grid item xs={6}>
@@ -251,40 +165,33 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 InputLabelProps={{
                   shrink: true
                 }}
-                error={isDueDateError}
-                helperText={isDueDateError ? duedateError : ""}
+                error={errors[4].isDueDateError}
+                helperText={
+                  errors[4].isDueDateError ? errors[4].dueDateError : ""
+                }
               />
             </Grid>
-            <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
+            <Grid item xs={6}>
               <EmployeeDropdown
                 employees={this.props.employees}
                 onChange={this.handleChange}
                 value={data.employeeId}
-                error={isAssigneeError}
-                helperText={isAssigneeError ? assigneeError : ""}
+                isEdit={!isEdit}
+                error={errors[2].isAssigneeError}
+                helperText={
+                  errors[2].isAssigneeError ? errors[2].assigneeError : ""
+                }
               />
             </Grid>
-            <Grid item xs={6} hidden={tabValue === 0 ? false : true}>
-              {data.statusCode === Status.NotStarted ? (
-                <Button disabled className={styles.redButton}>
-                  {data.statusCode}
-                </Button>
-              ) : data.statusCode === Status.Completed ? (
-                <Button disabled className={styles.greenButton}>
-                  {data.statusCode}
-                </Button>
-              ) : (
-                <Button disabled className={styles.yellowButton}>
-                  {data.statusCode}
-                </Button>
-              )}
-            </Grid>
-            <Grid item xs={6} hidden={tabValue === 1 ? false : true}>
+            <Grid item xs={6}>
               <StatusDropdown
                 onChange={this.handleChange}
                 value={data.statusCode}
-                error={isStatusError}
-                helperText={isStatusError ? statusError : ""}
+                isEdit={!isEdit}
+                error={errors[3].isStatusError}
+                helperText={
+                  errors[3].isStatusError ? errors[3].statusError : ""
+                }
               />
             </Grid>
           </Grid>

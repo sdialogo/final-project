@@ -152,7 +152,7 @@ export function validateDevPlan(data: TDevPlan) {
   let returnObj = {
     isValid: isValid,
     errorList: errorList
-  }
+  };
 
   return returnObj;
 }
@@ -169,6 +169,7 @@ export function validateEmployee(data: TEmployee) {
     isValid = true;
   } else {
     isValid = false;
+    console.log(ajv.errors);
     ajv.errors.map((error: any) => {
       if (error.dataPath === ".firstName") {
         employeeErrorList[0].isFirstNameError = true;
@@ -196,7 +197,7 @@ export function validateEmployee(data: TEmployee) {
   let returnObj = {
     isValid: isValid,
     errorList: employeeErrorList
-  }
+  };
 
   return returnObj;
 }

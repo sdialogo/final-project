@@ -81,66 +81,6 @@ export default class DetailsView extends React.Component<TProps, TState> {
                 {data.title}
               </Typography>
             </div>
-            <br />
-            <Grid
-              container
-              direction="row"
-              justify="flex-start"
-              alignItems="center"
-              spacing={24}
-            >
-              <Grid item>
-                <Grid container spacing={8}>
-                  <Grid item>
-                    <Typography
-                      variant="subheading"
-                      className={styles.textColor}
-                    >
-                      Asignee
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button disabled className={styles.displayButton}>
-                      {data.employeeName}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container spacing={8}>
-                  <Grid item>
-                    <Typography
-                      variant="subheading"
-                      className={styles.textColor}
-                    >
-                      Status
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button disabled className={styles.displayButton}>
-                      {data.statusCode}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container spacing={8}>
-                  <Grid item>
-                    <Typography
-                      variant="subheading"
-                      className={styles.textColor}
-                    >
-                      Due Date
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button disabled className={styles.displayButton}>
-                      {data.dueDate}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
           </CardContent>
         </Card>
         <Card>

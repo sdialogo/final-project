@@ -1,7 +1,8 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { getFullName } from "../../common/functions";
-import { TEmployee } from "../../common/types";
+import { TEmployee, TEmployeeError } from "../../common/types";
+import { validateEmployee } from "../../common/functions";
 import {
   addEmployee,
   deleteEmployee
@@ -16,6 +17,11 @@ import {
   MenuItem
 } from "@material-ui/core";
 
+type TState = {
+  data: TEmployee;
+  errors: TEmployeeError;
+};
+
 type TProps = {
   data: TEmployee;
   isEdit: boolean;
@@ -23,45 +29,6 @@ type TProps = {
   tabValue: number;
   addEmployee: Function;
   deleteEmployee: Function;
-};
-
-type TState = {
-  data: TEmployee;
-  isFirstNameError: boolean;
-  isMiddleNameError: boolean;
-  isLastNameError: boolean;
-  isHireDateError: boolean;
-  isArchivedError: boolean;
-  firstNameError: string;
-  middleNameError: string;
-  lastNameError: string;
-  hireDateError: string;
-  archivedError: string;
-};
-
-let schema = {
-  properties: {
-    firstName: {
-      type: "string",
-      minLength: 1
-    },
-    middleName: {
-      type: "string",
-      minLength: 1
-    },
-    lastName: {
-      type: "string",
-      minLength: 1
-    },
-    hireDate: {
-      type: "string",
-      minLength: 1
-    },
-    archived: {
-      type: "string"
-    }
-  },
-  required: ["firstName", "middleName", "lastName", "hireDate", "archived"]
 };
 
 const options = [
@@ -88,114 +55,61 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     super(props);
     this.state = {
       data: this.props.data,
-      isFirstNameError: false,
-      isMiddleNameError: false,
-      isLastNameError: false,
-      isHireDateError: false,
-      isArchivedError: false,
-      firstNameError: "",
-      middleNameError: "",
-      lastNameError: "",
-      hireDateError: "",
-      archivedError: ""
+      errors: [
+        { isFirstNameError: false, firstNameError: "" },
+        { isMiddleNameError: false, middleNameError: "" },
+        { isLastNameError: false, lastNameError: "" },
+        { isHireDateError: false, hireDateError: "" },
+        { isArchivedError: false, archivedError: "" }
+      ]
     };
   }
 
-  validate = (data: TEmployee) => {
-    var Ajv = require("ajv");
-    var ajv = Ajv({ allErrors: true });
-    var valid = ajv.validate(schema, data);
-    let isValid;
-    if (valid) {
-      isValid = true;
-    } else {
-      isValid = false;
-      console.log(ajv.errors);
-      ajv.errors.map((error: any) => {
-        if (error.dataPath === ".firstName") {
-          this.setState({
-            isFirstNameError: true,
-            firstNameError: "First Name is required"
-          });
-        }
-        if (error.dataPath === ".middleName") {
-          this.setState({
-            isMiddleNameError: true,
-            middleNameError: "Middle Name is required"
-          });
-        }
-        if (error.dataPath === ".lastName") {
-          this.setState({
-            isLastNameError: true,
-            lastNameError: "Last Name is required"
-          });
-        }
-        if (error.dataPath === ".hireDate") {
-          this.setState({
-            isHireDateError: true,
-            hireDateError: "Hire Date is required"
-          });
-        }
-        if (error.dataPath === ".archived") {
-          this.setState({
-            isArchivedError: true,
-            archivedError: "Archived is required"
-          });
-        }
-      });
-    }
-
-    return isValid;
-  };
-
-  handleSave = () => {
-    event.preventDefault();
-    const isValid = this.validate(this.state.data);
-
-    if (isValid) {
-      console.log("Edit...");
-      //update app state; delete then add
-      this.props.deleteEmployee(this.state.data.id);
-      this.props.addEmployee(this.state.data);
-
-      this.props.closeDrawer(event);
-    }
-  };
-
   handleChange = (name: string) => (event: any) => {
     let employee = { ...this.state.data, [name]: event.target.value };
+    let errorsCopy = this.state.errors;
+
     let fullName = getFullName(employee);
     employee.fullName = fullName;
 
     if (name === "firstName") {
-      this.setState({ isFirstNameError: false });
+      errorsCopy[0].isFirstNameError = false;
+      errorsCopy[0].firstNameError = "";
     } else if (name === "middleName") {
-      this.setState({ isMiddleNameError: false });
+      errorsCopy[1].isMiddleNameError = false;
+      errorsCopy[1].middleNameError = "";
     } else if (name === "lastName") {
-      this.setState({ isLastNameError: false });
+      errorsCopy[2].isLastNameError = false;
+      errorsCopy[2].lastNameError = "";
     } else if (name === "hireDate") {
-      this.setState({ isHireDateError: false });
+      errorsCopy[3].isHireDateError = false;
+      errorsCopy[3].hireDateError = "";
     } else if (name === "archived") {
-      this.setState({ isArchivedError: false });
+      errorsCopy[4].isArchivedError = false;
+      errorsCopy[4].archivedError = "";
     }
 
-    this.setState({ data: employee });
+    this.setState({ data: employee, errors: errorsCopy });
+  };
+
+  handleSave = () => {
+    event.preventDefault();
+    let returnObj = validateEmployee(this.state.data);
+
+    if (returnObj.isValid) {
+      console.log("Edit...");
+
+      this.props.deleteEmployee(this.state.data.id);
+      this.props.addEmployee(this.state.data);
+
+      this.props.closeDrawer(event);
+    } else {
+      this.setState({ errors: returnObj.errorList });
+    }
   };
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
-    const {
-      data,
-      isFirstNameError,
-      isLastNameError,
-      isMiddleNameError,
-      isHireDateError,
-      isArchivedError,
-      firstNameError,
-      middleNameError,
-      lastNameError,
-      hireDateError,
-      archivedError
-    } = this.state;
+    const { data, errors } = this.state;
     return (
       <div>
         <form noValidate autoComplete="off">
@@ -210,8 +124,10 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
-                error={isFirstNameError}
-                helperText={isFirstNameError ? firstNameError : ""}
+                error={errors[0].isFirstNameError}
+                helperText={
+                  errors[0].isFirstNameError ? errors[0].firstNameError : ""
+                }
               />
             </Grid>
             <Grid item xs={6}>
@@ -224,8 +140,10 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
-                error={isLastNameError}
-                helperText={isLastNameError ? lastNameError : ""}
+                error={errors[2].isLastNameError}
+                helperText={
+                  errors[2].isLastNameError ? errors[2].lastNameError : ""
+                }
               />
             </Grid>
             <Grid item xs={6}>
@@ -238,8 +156,10 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
-                error={isMiddleNameError}
-                helperText={isMiddleNameError ? middleNameError : ""}
+                error={errors[1].isMiddleNameError}
+                helperText={
+                  errors[1].isMiddleNameError ? errors[1].isMiddleNameError : ""
+                }
               />
             </Grid>
             <Grid item xs={6}>
@@ -253,8 +173,10 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
-                error={isHireDateError}
-                helperText={isHireDateError ? hireDateError : ""}
+                error={errors[3].isHireDateError}
+                helperText={
+                  errors[3].isHireDateError ? errors[3].hireDateError : ""
+                }
               />
             </Grid>
             <Grid item xs={6}>
@@ -268,8 +190,10 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
-                error={isArchivedError}
-                helperText={isArchivedError ? archivedError : ""}
+                error={errors[4].isArchivedError}
+                helperText={
+                  errors[4].isArchivedError ? errors[4].archivedError : ""
+                }
               >
                 {options.map(option => (
                   <MenuItem key={option.value} value={option.value}>

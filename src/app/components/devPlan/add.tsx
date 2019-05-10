@@ -164,6 +164,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     employees={this.props.employees}
                     onChange={this.handleChange}
                     value={devPlan.employeeId}
+                    isEdit={false}
                     error={errors[2].isAssigneeError}
                     helperText={
                       errors[2].isAssigneeError ? errors[2].assigneeError : ""
@@ -193,6 +194,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                   <StatusDropdown
                     onChange={this.handleChange}
                     value={devPlan.statusCode}
+                    isEdit={false}
                     error={errors[3].isStatusError}
                     helperText={
                       errors[3].isStatusError ? errors[3].statusError : ""

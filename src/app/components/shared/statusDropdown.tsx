@@ -8,11 +8,12 @@ type TProps = {
   value: any;
   error?: boolean;
   helperText?: string;
+  isEdit: boolean;
 };
 
 export default class StatusDropdown extends React.Component<TProps, {}> {
   render() {
-    const { onChange, value, error, helperText } = this.props;
+    const { onChange, value, error, helperText, isEdit } = this.props;
     return (
       <TextField
         fullWidth
@@ -21,6 +22,7 @@ export default class StatusDropdown extends React.Component<TProps, {}> {
         variant="outlined"
         label="Status"
         value={value}
+        disabled={isEdit}
         onChange={onChange("statusCode")}
         SelectProps={{
           native: true

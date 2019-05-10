@@ -9,11 +9,19 @@ type TProps = {
   value: string;
   error?: boolean;
   helperText?: string;
+  isEdit: boolean;
 };
 
 export default class EmployeeDropdown extends React.Component<TProps, {}> {
   render() {
-    const { onChange, value, employees, error, helperText } = this.props;
+    const {
+      onChange,
+      value,
+      employees,
+      error,
+      helperText,
+      isEdit
+    } = this.props;
     return (
       <TextField
         fullWidth
@@ -22,6 +30,7 @@ export default class EmployeeDropdown extends React.Component<TProps, {}> {
         variant="outlined"
         label="Assignee"
         value={value}
+        disabled={isEdit}
         onChange={onChange("employeeId")}
         SelectProps={{
           native: true
