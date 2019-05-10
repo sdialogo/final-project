@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
-import EnhancedToolbar from "../../common/EnhancedToolbar";
-import DetailsView from "./DevPlanDetailsView";
-import EnhancedTableHead from "../../common/EnhancedTableHead";
+import EnhancedToolbar from "../shared/enhancedToolbar";
+import DetailsView from "./detailsView";
+import EnhancedTableHead from "../shared/enhancedTableHead";
 import { devPlanRows } from "../../common/constants";
 
 import {

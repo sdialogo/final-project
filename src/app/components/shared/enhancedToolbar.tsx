@@ -19,7 +19,7 @@ type TStyles = {
   searchField: string;
 };
 
-const styles: TStyles = require("./styles.less");
+const styles: TStyles = require("../../styles/styles.less");
 
 class EnhancedToolbar extends React.Component<TProps, TState> {
   state: TState = {

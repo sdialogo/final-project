@@ -28,7 +28,7 @@ type TStyles = {
   toolbar: string;
 };
 
-const styles: TStyles = require("../common/styles.less");
+const styles: TStyles = require("../styles/styles.less");
 
 class NavBar extends React.Component<TProps, {}> {
   state = {

@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import { loadDevPlans, addDevPlan } from "../../redux/actions/devPlanActions";
 import { loadEmployees } from "../../redux/actions/employeeActions";
 
-import StatusDropdown from "../../common/StatusDropdown";
-import EmployeeDropdown from "../../common/EmployeeDropdown";
+import StatusDropdown from "../shared/statusDropdown";
+import EmployeeDropdown from "../shared/employeeDropdown";
 import { TDevPlan, TDevPlanError } from "../../common/types";
 import { validateDevPlan } from "../../common/functions";
 
@@ -31,7 +31,7 @@ type TStyles = {
   buttonStyle: string;
 };
 
-const styles: TStyles = require("./DevPlanStyles.less");
+const styles: TStyles = require("../../styles/devPlanStyles.less");
 
 class AddDevPlan extends React.Component<TProps, TState> {
   state: TState = {
@@ -90,7 +90,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
     } else if (name === "dueDate") {
       errorsCopy[4].isDueDateError = false;
       errorsCopy[4].dueDateError = "";
-    }  
+    }
 
     this.setState({ devPlan: devPlan, errors: errorsCopy });
   };
@@ -107,7 +107,6 @@ class AddDevPlan extends React.Component<TProps, TState> {
     } else {
       this.setState({ errors: returnObj.errorList });
     }
-
   };
 
   handleCancel = () => {
@@ -116,11 +115,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
   };
 
   render() {
-    const {
-      redirectToViewPage,
-      devPlan,
-      errors
-    } = this.state;
+    const { redirectToViewPage, devPlan, errors } = this.state;
 
     return (
       <div>
@@ -159,7 +154,9 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     margin="normal"
                     fullWidth
                     error={errors[1].isDescError}
-                    helperText={errors[1].isDescError ? errors[1].descError : ""}
+                    helperText={
+                      errors[1].isDescError ? errors[1].descError : ""
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -168,7 +165,9 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     onChange={this.handleChange}
                     value={devPlan.employeeId}
                     error={errors[2].isAssigneeError}
-                    helperText={errors[2].isAssigneeError ? errors[2].assigneeError : ""}
+                    helperText={
+                      errors[2].isAssigneeError ? errors[2].assigneeError : ""
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -185,7 +184,9 @@ class AddDevPlan extends React.Component<TProps, TState> {
                       shrink: true
                     }}
                     error={errors[4].isDueDateError}
-                    helperText={errors[4].isDueDateError ? errors[4].dueDateError : ""}
+                    helperText={
+                      errors[4].isDueDateError ? errors[4].dueDateError : ""
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -193,7 +194,9 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     onChange={this.handleChange}
                     value={devPlan.statusCode}
                     error={errors[3].isStatusError}
-                    helperText={errors[3].isStatusError ? errors[3].statusError : ""}
+                    helperText={
+                      errors[3].isStatusError ? errors[3].statusError : ""
+                    }
                   />
                 </Grid>
               </Grid>

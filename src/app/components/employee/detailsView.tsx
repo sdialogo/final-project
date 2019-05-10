@@ -1,15 +1,13 @@
 import * as React from "react";
-
-import SubDetailsView from "./DevPlanSubDetailsView";
-import { TDevPlan } from "../../common/types";
+import EmployeeSubDetailsView from "./subDetailsView";
+import { TEmployee } from "../../common/types";
 
 import {
   Drawer,
-  Card,
-  CardContent,
-  Button,
-  Typography,
   Grid,
+  CardContent,
+  Card,
+  Typography,
   AppBar,
   Tabs,
   Tab
@@ -17,13 +15,13 @@ import {
 
 type TState = {
   open: boolean;
-  data: TDevPlan;
+  data: TEmployee;
   enableEdit: boolean;
   tabValue: number;
 };
 
 type TProps = {
-  data: TDevPlan;
+  data: TEmployee;
   toggleDrawer: any;
   closeDrawer: any;
 };
@@ -40,12 +38,11 @@ type TStyles = {
   textColor: string;
   detailsHeader: string;
   tabsColor: string;
-  displayButton: string;
 };
 
-const styles: TStyles = require("./DevPlanStyles.less");
+const styles: TStyles = require("../../styles/employeeStyles.less");
 
-export default class DetailsView extends React.Component<TProps, TState> {
+class EmployeeDetailsView extends React.Component<TProps, TState> {
   constructor(props: TProps) {
     super(props);
     this.state = {
@@ -56,7 +53,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
     };
   }
 
-  handleEdit = (event: any, tempData: TDevPlan) => {
+  handleEdit = (event: any, tempData: TEmployee) => {
     this.setState({ data: tempData });
   };
 
@@ -67,6 +64,8 @@ export default class DetailsView extends React.Component<TProps, TState> {
   render() {
     const { toggleDrawer, closeDrawer } = this.props;
     const { data, tabValue } = this.state;
+    const fullName = data.fullName;
+    const displayName = fullName.toUpperCase();
 
     return (
       <Drawer
@@ -78,69 +77,9 @@ export default class DetailsView extends React.Component<TProps, TState> {
           <CardContent>
             <div>
               <Typography variant="headline" className={styles.textColor}>
-                {data.title}
+                {displayName}
               </Typography>
             </div>
-            <br />
-            <Grid
-              container
-              direction="row"
-              justify="flex-start"
-              alignItems="center"
-              spacing={24}
-            >
-              <Grid item>
-                <Grid container spacing={8}>
-                  <Grid item>
-                    <Typography
-                      variant="subheading"
-                      className={styles.textColor}
-                    >
-                      Asignee
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button disabled className={styles.displayButton}>
-                      {data.employeeName}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container spacing={8}>
-                  <Grid item>
-                    <Typography
-                      variant="subheading"
-                      className={styles.textColor}
-                    >
-                      Status
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button disabled className={styles.displayButton}>
-                      {data.statusCode}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container spacing={8}>
-                  <Grid item>
-                    <Typography
-                      variant="subheading"
-                      className={styles.textColor}
-                    >
-                      Due Date
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button disabled className={styles.displayButton}>
-                      {data.dueDate}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
           </CardContent>
         </Card>
         <Card>
@@ -159,7 +98,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
             </AppBar>
             {tabValue === 0 && (
               <TabContainer>
-                <SubDetailsView
+                <EmployeeSubDetailsView
                   data={data}
                   isEdit={false}
                   closeDrawer={closeDrawer.bind(this)}
@@ -169,7 +108,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
             )}
             {tabValue === 1 && (
               <TabContainer>
-                <SubDetailsView
+                <EmployeeSubDetailsView
                   data={data}
                   isEdit={true}
                   closeDrawer={closeDrawer.bind(this)}
@@ -183,3 +122,5 @@ export default class DetailsView extends React.Component<TProps, TState> {
     );
   }
 }
+
+export default EmployeeDetailsView;

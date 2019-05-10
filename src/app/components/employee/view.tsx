@@ -23,9 +23,9 @@ import {
 
 import MoreVertical from "@material-ui/icons/MoreVert";
 
-import EmployeeDetailsView from "./EmployeeDetailsView";
-import EnhancedTableHead from "../../common/EnhancedTableHead";
-import EnhancedToolbar from "../../common/EnhancedToolbar";
+import EmployeeDetailsView from "./detailsView";
+import EnhancedTableHead from "../shared/enhancedTableHead";
+import EnhancedToolbar from "../shared/enhancedToolbar";
 import { employeeRows } from "../../common/constants";
 import { TEmployee } from "../../common/types";
 import { findEmployeeById } from "../../common/functions";

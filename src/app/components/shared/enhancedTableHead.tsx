@@ -1,12 +1,6 @@
 import * as React from "react";
 
-import {
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  Tooltip
-} from "@material-ui/core";
+import { TableCell, TableHead, TableRow } from "@material-ui/core";
 
 type TProps = {
   onSelectAllClick?: any;
@@ -28,13 +22,6 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
     return (
       <TableHead>
         <TableRow>
-          {/* <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell> */}
           {rows.map(
             (row: any) => (
               <TableCell

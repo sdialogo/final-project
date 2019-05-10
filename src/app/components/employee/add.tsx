@@ -46,7 +46,7 @@ type TStyles = {
   buttonStyle: string;
 };
 
-const styles: TStyles = require("./EmployeeStyles.less");
+const styles: TStyles = require("../../styles/employeeStyles.less");
 
 class AddEmployee extends React.Component<TProps, TState> {
   state: TState = {
@@ -117,11 +117,7 @@ class AddEmployee extends React.Component<TProps, TState> {
   };
 
   render() {
-    const {
-      redirectToViewPage,
-      employee,
-      errors
-    } = this.state;
+    const { redirectToViewPage, employee, errors } = this.state;
 
     return (
       <div>
@@ -158,7 +154,9 @@ class AddEmployee extends React.Component<TProps, TState> {
                     margin="normal"
                     fullWidth
                     error={errors[2].isLastNameError}
-                    helperText={errors[2].isLastNameError ? errors[2].lastNameError : ""}
+                    helperText={
+                      errors[2].isLastNameError ? errors[2].lastNameError : ""
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -170,7 +168,11 @@ class AddEmployee extends React.Component<TProps, TState> {
                     margin="normal"
                     fullWidth
                     error={errors[1].isMiddleNameError}
-                    helperText={errors[1].isMiddleNameError ? errors[1].isMiddleNameError : ""}
+                    helperText={
+                      errors[1].isMiddleNameError
+                        ? errors[1].isMiddleNameError
+                        : ""
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -186,7 +188,9 @@ class AddEmployee extends React.Component<TProps, TState> {
                       shrink: true
                     }}
                     error={errors[3].isHireDateError}
-                    helperText={errors[3].isHireDateError ? errors[3].hireDateError : ""}
+                    helperText={
+                      errors[3].isHireDateError ? errors[3].hireDateError : ""
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -199,7 +203,9 @@ class AddEmployee extends React.Component<TProps, TState> {
                     margin="normal"
                     fullWidth
                     error={errors[4].isArchivedError}
-                    helperText={errors[4].isArchivedError ? errors[4].archivedError : ""}
+                    helperText={
+                      errors[4].isArchivedError ? errors[4].archivedError : ""
+                    }
                   >
                     {options.map(option => (
                       <MenuItem key={option.value} value={option.value}>

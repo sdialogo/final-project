@@ -2,10 +2,10 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { addDevPlan, deleteDevPlan } from "../../redux/actions/devPlanActions";
 
-import { Status } from "../../common/StatusEnum";
+import { Status } from "../../common/statusEnum";
 import { TDevPlan, TEmployee } from "../../common/types";
-import StatusDropdown from "../../common/StatusDropdown";
-import EmployeeDropdown from "../../common/EmployeeDropdown";
+import StatusDropdown from "../shared/statusDropdown";
+import EmployeeDropdown from "../shared/employeeDropdown";
 
 import {
   CardActions,
@@ -73,7 +73,7 @@ type TStyles = {
   yellowButton: string;
 };
 
-const styles: TStyles = require("./DevPlanStyles.less");
+const styles: TStyles = require("../../styles/devPlanStyles.less");
 
 class DevPlanSubViewPage extends React.Component<TProps, TState> {
   constructor(props: TProps) {

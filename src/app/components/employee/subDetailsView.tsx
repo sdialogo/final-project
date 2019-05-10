@@ -81,7 +81,7 @@ type TStyles = {
   buttonStyle: string;
 };
 
-const styles: TStyles = require("./EmployeeStyles.less");
+const styles: TStyles = require("../../styles/employeeStyles.less");
 
 class EmployeeSubViewPage extends React.Component<TProps, TState> {
   constructor(props: TProps) {
