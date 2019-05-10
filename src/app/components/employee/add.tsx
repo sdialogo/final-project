@@ -25,8 +25,8 @@ type TState = {
 };
 
 type TProps = {
-  loadEmployees: any;
-  addEmployee: any;
+  loadEmployees: Function;
+  addEmployee: Function;
 };
 
 const options = [

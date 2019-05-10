@@ -24,8 +24,8 @@ type TState = {
 
 type TProps = {
   data: TDevPlan;
-  toggleDrawer: any;
-  closeDrawer: any;
+  toggleDrawer: Function;
+  closeDrawer: Function;
 };
 
 function TabContainer(props: any) {

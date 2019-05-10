@@ -5,8 +5,8 @@ import { TextField } from "@material-ui/core";
 
 type TProps = {
   employees: TEmployee[];
-  onChange: any;
-  value: any;
+  onChange: Function;
+  value: string;
   error?: boolean;
   helperText?: string;
 };

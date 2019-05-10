@@ -18,10 +18,10 @@ import {
 type TProps = {
   data: TDevPlan;
   isEdit: boolean;
-  closeDrawer: any;
+  closeDrawer: Function;
   tabValue: number;
-  addDevPlan: any;
-  deleteDevPlan: any;
+  addDevPlan: Function;
+  deleteDevPlan: Function;
   employees: TEmployee[];
 };
 

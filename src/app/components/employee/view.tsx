@@ -47,8 +47,8 @@ type TState = {
 
 type TProps = {
   employees: TEmployee[];
-  loadEmployees: any;
-  deleteEmployee: any;
+  loadEmployees: Function;
+  deleteEmployee: Function;
 };
 
 class EmployeeViewPage extends React.Component<TProps, TState> {

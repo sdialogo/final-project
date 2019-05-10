@@ -6,23 +6,23 @@ import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import StatusDropdown from "../shared/statusDropdown";
 import EmployeeDropdown from "../shared/employeeDropdown";
-import { TDevPlan, TDevPlanError } from "../../common/types";
+import { TDevPlan, TDevPlanError, TEmployee } from "../../common/types";
 import { validateDevPlan } from "../../common/functions";
 
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
 
 type TState = {
   devPlan: TDevPlan;
-  redirectToViewPage: any;
+  redirectToViewPage: boolean;
   errors: TDevPlanError;
 };
 
 type TProps = {
   devPlans: TDevPlan[];
-  employees: any;
-  loadDevPlans: any;
-  loadEmployees: any;
-  addDevPlan: any;
+  employees: TEmployee[];
+  loadDevPlans: Function;
+  loadEmployees: Function;
+  addDevPlan: Function;
 };
 
 type TStyles = {

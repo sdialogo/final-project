@@ -19,10 +19,10 @@ import {
 type TProps = {
   data: TEmployee;
   isEdit: boolean;
-  closeDrawer: any;
+  closeDrawer: Function;
   tabValue: number;
-  addEmployee: any;
-  deleteEmployee: any;
+  addEmployee: Function;
+  deleteEmployee: Function;
 };
 
 type TState = {

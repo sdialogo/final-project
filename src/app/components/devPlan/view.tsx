@@ -12,7 +12,7 @@ import {
 } from "../../redux/actions/devPlanActions";
 import { loadEmployees } from "../../redux/actions/employeeActions";
 
-import { TDevPlan } from "../../common/types";
+import { TDevPlan, TEmployee } from "../../common/types";
 import { findDataById } from "../../common/functions";
 
 import {
@@ -49,10 +49,10 @@ type TState = {
 
 type TProps = {
   devPlans: TDevPlan[];
-  employees: any;
-  loadDevPlans: any;
-  loadEmployees: any;
-  deleteDevPlan: any;
+  employees: TEmployee[];
+  loadDevPlans: Function;
+  loadEmployees: Function;
+  deleteDevPlan: Function;
 };
 
 class DevPlanviewPage extends React.Component<TProps, TState> {
@@ -267,11 +267,11 @@ function mapStateToProps(state: any) {
     devPlans:
       state.employees.length === 0
         ? []
-        : state.devPlans.map((devPlan: any) => {
+        : state.devPlans.map((devPlan: TDevPlan) => {
             return {
               ...devPlan,
               employeeName: state.employees.find(
-                (a: any) => a.id === devPlan.employeeId
+                (a: TEmployee) => a.id === devPlan.employeeId
               ).fullName
             };
           }),
