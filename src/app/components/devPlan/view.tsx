@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import EnhancedToolbar from "../shared/enhancedToolbar";
 import DetailsView from "./detailsView";
 import EnhancedTableHead from "../shared/enhancedTableHead";
-import { devPlanRows } from "../../common/constants";
 
 import {
   loadDevPlans,
@@ -14,6 +13,7 @@ import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import { TDevPlan, TEmployee } from "../../common/types";
 import { findDataById } from "../../common/functions";
+import { devPlanRows } from "../../common/constants";
 
 import {
   Table,

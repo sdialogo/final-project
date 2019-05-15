@@ -2,11 +2,11 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { addDevPlan, deleteDevPlan } from "../../redux/actions/devPlanActions";
 
-import { Status } from "../../common/statusEnum";
 import { TDevPlan, TEmployee, TDevPlanError } from "../../common/types";
 import StatusDropdown from "../shared/statusDropdown";
 import EmployeeDropdown from "../shared/employeeDropdown";
 import { validateDevPlan } from "../../common/functions";
+import CustomizedSnackbars from "../shared/snackbars";
 
 import {
   CardActions,
@@ -19,6 +19,8 @@ import {
 type TState = {
   data: TDevPlan;
   errors: TDevPlanError;
+  isSuccess: boolean;
+  tabState: number;
 };
 
 type TProps = {
@@ -52,7 +54,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
         { isAssigneeError: false, assigneeError: "" },
         { isStatusError: false, statusError: "" },
         { isDueDateError: false, dueDateError: "" }
-      ]
+      ],
+      isSuccess: false,
+      tabState: this.props.tabValue
     };
   }
 
@@ -66,7 +70,8 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
       this.props.deleteDevPlan(this.state.data.id);
       this.props.addDevPlan(this.state.data);
 
-      this.props.closeDrawer(event);
+      // this.props.closeDrawer(event);
+      this.setState({ isSuccess: true });
     } else {
       this.setState({ errors: returnObj.errorList });
     }
@@ -95,11 +100,22 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
 
     this.setState({ data: devPlan, errors: errorsCopy });
   };
+
+  handleClick = () => {
+    console.log("snackbar clicked");
+  };
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
-    const { data, errors } = this.state;
+    const { data, errors, isSuccess, tabState } = this.state;
     return (
       <div>
+        {isSuccess && (
+          <CustomizedSnackbars
+            message="Message"
+            variant="success"
+            onClose={this.handleClick}
+          />
+        )}
         <form noValidate autoComplete="off">
           <Grid container spacing={16} className={styles.gridContainer}>
             <Grid item xs={6}>

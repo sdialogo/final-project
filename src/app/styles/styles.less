@@ -4,6 +4,8 @@
 @menu-items : ~':local(.menuItems)';
 @list-items : ~':local(.listItems)';
 @toolbar : ~':local(.toolbar)';
+@success : ~':local(.success)';
+@error : ~':local(.error)';
 
 @{title} {
   margin-left: 25px;
@@ -35,4 +37,12 @@
   height: 48;
   padding: 0 30px;
   font: 20px solid;
+}
+
+@{success} {
+  background-color: #43a047 !important;
+}
+
+@{error} {
+  background-color: #d32f2f !important;
 }
