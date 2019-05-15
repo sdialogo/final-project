@@ -21,7 +21,7 @@ import {
   IconButton
 } from "@material-ui/core";
 
-import MoreVertical from "@material-ui/icons/MoreVert";
+import DeleteTwoTone from "@material-ui/icons/DeleteTwoTone";
 
 import EmployeeDetailsView from "./detailsView";
 import EnhancedTableHead from "../shared/enhancedTableHead";
@@ -192,7 +192,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                         <IconButton
                           onClick={event => this.handleClickDelete(event, n.id)}
                         >
-                          <MoreVertical />
+                          <DeleteTwoTone />
                         </IconButton>
                       </TableCell>
                     </TableRow>

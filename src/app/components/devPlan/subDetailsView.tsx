@@ -20,7 +20,6 @@ type TState = {
   data: TDevPlan;
   errors: TDevPlanError;
   isSuccess: boolean;
-  tabState: number;
 };
 
 type TProps = {
@@ -55,8 +54,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
         { isStatusError: false, statusError: "" },
         { isDueDateError: false, dueDateError: "" }
       ],
-      isSuccess: false,
-      tabState: this.props.tabValue
+      isSuccess: false
     };
   }
 
@@ -106,7 +104,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
   };
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
-    const { data, errors, isSuccess, tabState } = this.state;
+    const { data, errors, isSuccess } = this.state;
     return (
       <div>
         {isSuccess && (

@@ -30,7 +30,7 @@ import {
   IconButton
 } from "@material-ui/core";
 
-import { MoreVert } from "@material-ui/icons";
+import { DeleteTwoTone } from "@material-ui/icons";
 
 type TState = {
   data: TDevPlan[];
@@ -207,7 +207,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                         <IconButton
                           onClick={event => this.handleClickDelete(event, n.id)}
                         >
-                          <MoreVert />
+                          <DeleteTwoTone />
                         </IconButton>
                       </TableCell>
                     </TableRow>
