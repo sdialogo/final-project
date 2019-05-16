@@ -12,7 +12,7 @@ import {
 import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import { TDevPlan, TEmployee } from "../../common/types";
-import { findDataById } from "../../common/functions";
+import { findDataById, formatDate } from "../../common/functions";
 import { devPlanRows } from "../../common/constants";
 import CustomizedSnackbars from "../shared/snackbars";
 
@@ -186,7 +186,6 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     {
       isSearch ? (tableContent = data) : (tableContent = this.props.devPlans);
     }
-    console.log(isEditSuccess);
     return (
       <div>
         <EnhancedToolbar
@@ -232,7 +231,9 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                       <TableCell align="left">{n.title}</TableCell>
                       <TableCell align="left">{n.employeeName}</TableCell>
                       <TableCell align="left">{n.statusCode}</TableCell>
-                      <TableCell align="left">{n.dueDate}</TableCell>
+                      <TableCell align="left">
+                        {formatDate(n.dueDate)}
+                      </TableCell>
                       <TableCell align="left">
                         <IconButton
                           onClick={event => this.handleClickDelete(event, n.id)}

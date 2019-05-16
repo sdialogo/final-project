@@ -29,7 +29,7 @@ import EnhancedTableHead from "../shared/enhancedTableHead";
 import EnhancedToolbar from "../shared/enhancedToolbar";
 import { employeeRows } from "../../common/constants";
 import { TEmployee } from "../../common/types";
-import { findEmployeeById } from "../../common/functions";
+import { findEmployeeById, formatDate } from "../../common/functions";
 
 type TState = {
   data: TEmployee[];
@@ -104,7 +104,6 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
 
   handleDrawerOpen = (event: any, id: number) => {
     event.stopPropagation();
-    console.log("Drawer opened");
     let currData = findEmployeeById(id, this.props.employees);
 
     this.setState({ editData: currData, open: true });
@@ -223,7 +222,9 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                       <TableCell align="left">{n.lastName}</TableCell>
                       <TableCell align="left">{n.firstName}</TableCell>
                       <TableCell align="left">{n.middleName}</TableCell>
-                      <TableCell align="left">{n.hireDate}</TableCell>
+                      <TableCell align="left">
+                        {formatDate(n.hireDate)}
+                      </TableCell>
                       <TableCell align="left">
                         <IconButton
                           onClick={event => this.handleClickDelete(event, n.id)}

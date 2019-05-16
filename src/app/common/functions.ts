@@ -201,3 +201,19 @@ export function validateEmployee(data: TEmployee) {
 
   return returnObj;
 }
+
+export function formatDate(date: string) {
+  let formattedDate = new Date(date);
+  let day = "" + formattedDate.getDate();
+  let month = "" + (formattedDate.getMonth() + 1);
+  let year = formattedDate.getFullYear();
+
+  if (month.length < 2) {
+    month = "0" + month;
+  }
+  if (day.length < 2) {
+    day = "0" + day;
+  }
+
+  return [month, day, year].join("/");
+}
