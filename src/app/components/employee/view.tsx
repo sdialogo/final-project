@@ -5,6 +5,7 @@ import {
 } from "../../redux/actions/employeeActions";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
+import CustomizedSnackbars from "../shared/snackbars";
 
 import {
   Table,
@@ -43,6 +44,8 @@ type TState = {
   toDelete: number;
   redirectToAddPage: boolean;
   isSearch: boolean;
+  isAddSuccess: boolean;
+  isEditSuccess: boolean;
 };
 
 type TProps = {
@@ -72,7 +75,9 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     onDelete: false,
     toDelete: 0,
     redirectToAddPage: false,
-    isSearch: false
+    isSearch: false,
+    isAddSuccess: false,
+    isEditSuccess: false
   };
 
   componentDidMount() {
@@ -105,9 +110,14 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     this.setState({ editData: currData, open: true });
   };
 
-  handleClose = (event: any) => {
+  handleClose = (event: any, button: string) => {
     event.stopPropagation();
-    this.setState({ open: false });
+
+    if (button === "close") {
+      this.setState({ open: false });
+    } else {
+      this.setState({ open: false, isEditSuccess: true });
+    }
   };
 
   handleCloseDialog = () => {
@@ -148,8 +158,21 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     this.setState({ data: this.props.employees, isSearch: false });
   };
 
+  handleCloseSnackbar = () => {
+    this.setState({ isEditSuccess: false });
+  };
+
   render() {
-    const { data, order, orderBy, selected, editData, isSearch } = this.state;
+    const {
+      data,
+      order,
+      orderBy,
+      selected,
+      editData,
+      isSearch,
+      isAddSuccess,
+      isEditSuccess
+    } = this.state;
 
     let tableContent = data;
     {
@@ -164,6 +187,19 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
           clearSearch={this.handleClearSearch.bind(this)}
         />
         {this.state.redirectToAddPage && <Redirect to="/addEmployee" />}
+        {isAddSuccess && (
+          <CustomizedSnackbars
+            message="Successfully added new employee"
+            variant="success"
+          />
+        )}
+        {isEditSuccess && (
+          <CustomizedSnackbars
+            message="Successfully edited employee"
+            variant="success"
+            onClose={this.handleCloseSnackbar.bind(this)}
+          />
+        )}
         <Paper>
           <div>
             <Table aria-labelledby="tableTitle">

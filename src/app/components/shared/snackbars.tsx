@@ -7,7 +7,7 @@ import SnackbarContent from "@material-ui/core/SnackbarContent";
 type TProps = {
   message: string;
   variant: string;
-  onClose: any;
+  onClose?: any;
 };
 
 type TState = {
@@ -17,6 +17,7 @@ type TState = {
 type TStyles = {
   success: string;
   error: string;
+  snackbar: string;
 };
 
 const styles: TStyles = require("../../styles/styles.less");
@@ -35,18 +36,17 @@ class CustomizedSnackbars extends React.Component<TProps, TState> {
   render() {
     const { open } = this.state;
     const { message, variant } = this.props;
-    console.log("Open snackbar...");
 
     return (
       <div>
         <Snackbar
           anchorOrigin={{
             vertical: "top",
-            horizontal: "right"
+            horizontal: "center"
           }}
           open={open}
-          autoHideDuration={6000}
-          className={styles.success}
+          autoHideDuration={2000}
+          className={styles.snackbar}
         >
           {variant === "success" && (
             <SnackbarContent

@@ -6,6 +6,7 @@
 @toolbar : ~':local(.toolbar)';
 @success : ~':local(.success)';
 @error : ~':local(.error)';
+@snackbar : ~':local(.snackbar)';
 
 @{title} {
   margin-left: 25px;
@@ -41,8 +42,15 @@
 
 @{success} {
   background-color: #43a047 !important;
+  min-width: 95% !important;
+  max-width: 95% !important;
 }
 
 @{error} {
   background-color: #d32f2f !important;
+}
+
+@{snackbar} {
+  width: 100%;
+  margin-top: 8px;
 }

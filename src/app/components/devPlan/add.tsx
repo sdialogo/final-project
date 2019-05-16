@@ -10,13 +10,11 @@ import { TDevPlan, TDevPlanError, TEmployee } from "../../common/types";
 import { validateDevPlan } from "../../common/functions";
 
 import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
-import CustomizedSnackbars from "../shared/snackbars";
 
 type TState = {
   devPlan: TDevPlan;
   redirectToViewPage: boolean;
   errors: TDevPlanError;
-  isSuccess: boolean;
 };
 
 type TProps = {
@@ -53,8 +51,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
       { isAssigneeError: false, assigneeError: "" },
       { isStatusError: false, statusError: "" },
       { isDueDateError: false, dueDateError: "" }
-    ],
-    isSuccess: false
+    ]
   };
 
   componentDidMount() {
@@ -105,7 +102,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
     if (returnObj.isValid) {
       console.log("Save...");
 
-      this.setState({ isSuccess: true });
+      this.setState({ redirectToViewPage: true });
       this.props.addDevPlan(this.state.devPlan);
     } else {
       this.setState({ errors: returnObj.errorList });
@@ -117,12 +114,8 @@ class AddDevPlan extends React.Component<TProps, TState> {
     this.setState({ redirectToViewPage: true });
   };
 
-  handleRedirectToViewPage = () => {
-    this.setState({ redirectToViewPage: true, isSuccess: false });
-  };
-
   render() {
-    const { redirectToViewPage, devPlan, errors, isSuccess } = this.state;
+    const { redirectToViewPage, devPlan, errors } = this.state;
 
     return (
       <div>
@@ -131,13 +124,6 @@ class AddDevPlan extends React.Component<TProps, TState> {
           <Grid item>
             <h2 className={styles.addHeader}>Add Development Plan</h2>
           </Grid>
-          {isSuccess && (
-            <CustomizedSnackbars
-              message="Message"
-              variant="success"
-              onClose={this.handleRedirectToViewPage}
-            />
-          )}
         </Grid>
         <form autoComplete="off" onSubmit={this.handleSave}>
           <Paper>
@@ -167,6 +153,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     onChange={this.handleChange("description")}
                     margin="normal"
                     fullWidth
+                    multiline
                     error={errors[1].isDescError}
                     helperText={
                       errors[1].isDescError ? errors[1].descError : ""

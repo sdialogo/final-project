@@ -14,6 +14,7 @@ import { loadEmployees } from "../../redux/actions/employeeActions";
 import { TDevPlan, TEmployee } from "../../common/types";
 import { findDataById } from "../../common/functions";
 import { devPlanRows } from "../../common/constants";
+import CustomizedSnackbars from "../shared/snackbars";
 
 import {
   Table,
@@ -45,6 +46,8 @@ type TState = {
   toDelete: string;
   redirectToAddPage: boolean;
   isSearch: boolean;
+  isAddSuccess: boolean;
+  isEditSuccess: boolean;
 };
 
 type TProps = {
@@ -76,7 +79,9 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     onDelete: false,
     toDelete: "",
     redirectToAddPage: false,
-    isSearch: false
+    isSearch: false,
+    isAddSuccess: false,
+    isEditSuccess: false
   };
 
   componentDidMount() {
@@ -115,9 +120,14 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ ediTDevPlan: currData, open: true });
   };
 
-  handleClose = (event: any) => {
+  handleClose = (event: any, button: string) => {
     event.stopPropagation();
-    this.setState({ open: false });
+
+    if (button === "close") {
+      this.setState({ open: false });
+    } else {
+      this.setState({ open: false, isEditSuccess: true });
+    }
   };
 
   handleCloseDialog = () => {
@@ -156,6 +166,10 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ data: this.props.devPlans, isSearch: false });
   };
 
+  handleCloseSnackbar = () => {
+    this.setState({ isEditSuccess: false });
+  };
+
   render() {
     const {
       data,
@@ -163,13 +177,16 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       orderBy,
       selected,
       ediTDevPlan,
-      isSearch
+      isSearch,
+      isAddSuccess,
+      isEditSuccess
     } = this.state;
 
     let tableContent = data;
     {
       isSearch ? (tableContent = data) : (tableContent = this.props.devPlans);
     }
+    console.log(isEditSuccess);
     return (
       <div>
         <EnhancedToolbar
@@ -179,6 +196,19 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
           clearSearch={this.handleClearSearch.bind(this)}
         />
         {this.state.redirectToAddPage && <Redirect to="/addDevPlan" />}
+        {isAddSuccess && (
+          <CustomizedSnackbars
+            message="Successfully added new development plan"
+            variant="success"
+          />
+        )}
+        {isEditSuccess && (
+          <CustomizedSnackbars
+            message="Successfully edited development plan"
+            variant="success"
+            onClose={this.handleCloseSnackbar.bind(this)}
+          />
+        )}
         <Paper>
           <div>
             <Table aria-labelledby="tableTitle">

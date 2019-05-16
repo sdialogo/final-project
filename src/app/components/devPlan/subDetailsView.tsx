@@ -6,7 +6,6 @@ import { TDevPlan, TEmployee, TDevPlanError } from "../../common/types";
 import StatusDropdown from "../shared/statusDropdown";
 import EmployeeDropdown from "../shared/employeeDropdown";
 import { validateDevPlan } from "../../common/functions";
-import CustomizedSnackbars from "../shared/snackbars";
 
 import {
   CardActions,
@@ -19,7 +18,6 @@ import {
 type TState = {
   data: TDevPlan;
   errors: TDevPlanError;
-  isSuccess: boolean;
 };
 
 type TProps = {
@@ -53,8 +51,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
         { isAssigneeError: false, assigneeError: "" },
         { isStatusError: false, statusError: "" },
         { isDueDateError: false, dueDateError: "" }
-      ],
-      isSuccess: false
+      ]
     };
   }
 
@@ -68,8 +65,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
       this.props.deleteDevPlan(this.state.data.id);
       this.props.addDevPlan(this.state.data);
 
-      // this.props.closeDrawer(event);
-      this.setState({ isSuccess: true });
+      this.props.closeDrawer(event);
     } else {
       this.setState({ errors: returnObj.errorList });
     }
@@ -98,22 +94,11 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
 
     this.setState({ data: devPlan, errors: errorsCopy });
   };
-
-  handleClick = () => {
-    console.log("snackbar clicked");
-  };
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
-    const { data, errors, isSuccess } = this.state;
+    const { data, errors } = this.state;
     return (
       <div>
-        {isSuccess && (
-          <CustomizedSnackbars
-            message="Message"
-            variant="success"
-            onClose={this.handleClick}
-          />
-        )}
         <form noValidate autoComplete="off">
           <Grid container spacing={16} className={styles.gridContainer}>
             <Grid item xs={6}>
@@ -225,7 +210,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
               <Grid item>
                 <Button
                   className={styles.buttonStyle}
-                  onClick={event => closeDrawer(event)}
+                  onClick={event => closeDrawer(event, "close")}
                 >
                   Cancel
                 </Button>
@@ -236,7 +221,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
               <Grid item>
                 <Button
                   className={styles.buttonStyle}
-                  onClick={event => closeDrawer(event)}
+                  onClick={event => closeDrawer(event, "close")}
                 >
                   Close
                 </Button>

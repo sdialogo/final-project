@@ -219,7 +219,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
               <Grid item>
                 <Button
                   className={styles.buttonStyle}
-                  onClick={event => closeDrawer(event)}
+                  onClick={event => closeDrawer(event, "close")}
                 >
                   Cancel
                 </Button>
@@ -230,7 +230,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
               <Grid item>
                 <Button
                   className={styles.buttonStyle}
-                  onClick={event => closeDrawer(event)}
+                  onClick={event => closeDrawer(event, "close")}
                 >
                   Close
                 </Button>
