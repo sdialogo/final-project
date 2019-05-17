@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { getFullName } from "../../common/functions";
-import { TEmployee, TEmployeeError } from "../../common/types";
+import { TEmployee, TEmployeeError, TAppState } from "../../common/types";
 import { validateEmployee } from "../../common/functions";
 import {
   addEmployee,
@@ -58,7 +58,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     };
   }
 
-  handleChange = (name: string) => (event: any) => {
+  handleChange = (name: string) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     let employee = { ...this.state.data, [name]: event.target.value };
     let errorsCopy = this.state.errors;
 
@@ -236,7 +238,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: TAppState) {
   return {
     employees: state.employees
   };

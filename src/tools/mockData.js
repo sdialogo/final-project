@@ -4,7 +4,7 @@ const devPlans = [
     title: "Securing React Apps with Auth0",
     description: "react-auth0-authentication-security",
     statusCode: "Completed",
-    employeeId: "Yuri Yul Jo",
+    employeeId: 1,
     dueDate: "2019-05-01"
   },
   {
@@ -12,7 +12,7 @@ const devPlans = [
     title: "React: The Big Picture",
     description: "react-big-picture",
     statusCode: "In Progress",
-    employeeId: "Yena Duck Choi",
+    employeeId: 2,
     dueDate: "2019-05-01"
   },
   {
@@ -20,7 +20,7 @@ const devPlans = [
     title: "React: The Big Picture Part Two",
     description: "react-big-picture",
     statusCode: "In Progress",
-    employeeId: "Yena Duck Choi",
+    employeeId: 3,
     dueDate: "2019-05-21"
   },
   {
@@ -28,7 +28,7 @@ const devPlans = [
     title: "Creating Reusable React Components",
     description: "react-creating-reusable-components",
     statusCode: "Not Started",
-    employeeId: "Eunbi Leader Kwon",
+    employeeId: 4,
     dueDate: "2019-05-01"
   },
   {
@@ -36,7 +36,7 @@ const devPlans = [
     title: "Creating Reusable React Components Part Two",
     description: "react-creating-reusable-components",
     statusCode: "Not Started",
-    employeeId: "Eunbi Leader Kwon",
+    employeeId: 5,
     dueDate: "2019-05-12"
   },
   {
@@ -44,14 +44,14 @@ const devPlans = [
     title: "Creating Reusable React Components Part Three",
     description: "react-creating-reusable-components",
     statusCode: "Not Started",
-    employeeId: "Eunbi Leader Kwon",
+    employeeId: 6,
     dueDate: "2019-05-24"
   }
 ];
 
 const employees = [
   {
-    id: "Yuri Yul Jo",
+    id: 1,
     lastName: "Jo",
     firstName: "Yuri",
     middleName: "Yul",
@@ -60,7 +60,7 @@ const employees = [
     hireDate: "2019-05-01"
   },
   {
-    id: "Yena Duck Choi",
+    id: 2,
     lastName: "Choi",
     firstName: "Yena",
     middleName: "Duck",
@@ -69,7 +69,7 @@ const employees = [
     hireDate: "2019-05-01"
   },
   {
-    id: "Eunbi Leader Kwon",
+    id: 3,
     lastName: "Kwon",
     firstName: "Eunbi",
     middleName: "Leader",
@@ -78,7 +78,7 @@ const employees = [
     hireDate: "2019-05-01"
   },
   {
-    id: "Hitomi Ppang Honda",
+    id: 4,
     lastName: "Honda",
     firstName: "Hitomi",
     middleName: "Ppang",
@@ -87,7 +87,7 @@ const employees = [
     hireDate: "2019-05-012"
   },
   {
-    id: "Chaewon Ssam Kim",
+    id: 5,
     lastName: "Kim",
     firstName: "Chaewon",
     middleName: "Ssam",
@@ -96,7 +96,7 @@ const employees = [
     hireDate: "2019-05-012"
   },
   {
-    id: "Yujin Puppy Ahn",
+    id: 6,
     lastName: "Ahn",
     firstName: "Yujin",
     middleName: "Puppy",

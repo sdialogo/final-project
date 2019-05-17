@@ -6,9 +6,9 @@ import { TextField } from "@material-ui/core";
 type TProps = {
   employees: TEmployee[];
   onChange: Function;
-  value: string;
-  error?: boolean;
-  helperText?: string;
+  value: number;
+  error: boolean;
+  helperText: string;
   isEdit: boolean;
 };
 
@@ -32,12 +32,12 @@ export default class EmployeeDropdown extends React.Component<TProps, {}> {
         value={value}
         disabled={isEdit}
         onChange={onChange("employeeId")}
-        SelectProps={{
-          native: true
-        }}
         margin="normal"
         error={error}
         helperText={helperText}
+        SelectProps={{
+          native: true
+        }}
       >
         <option key="blank" value="" />
         {employees.map(employee => (

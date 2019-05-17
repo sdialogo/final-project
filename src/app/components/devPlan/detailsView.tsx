@@ -56,11 +56,17 @@ export default class DetailsView extends React.Component<TProps, TState> {
     };
   }
 
-  handleEdit = (event: any, tempData: TDevPlan) => {
+  handleEdit = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    tempData: TDevPlan
+  ) => {
     this.setState({ data: tempData });
   };
 
-  handleTabChange = (event: any, tabValue: number) => {
+  handleTabChange = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    tabValue: number
+  ) => {
     this.setState({ tabValue });
   };
 

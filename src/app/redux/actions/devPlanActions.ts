@@ -6,7 +6,7 @@ export function addDevPlan(devPlan: TDevPlan) {
   return { type: types.ADD_DEVPLAN, devPlan };
 }
 
-export function deleteDevPlan(devPlanId: string) {
+export function deleteDevPlan(devPlanId: number) {
   return { type: types.DELETE_DEVPLAN, devPlanId };
 }
 

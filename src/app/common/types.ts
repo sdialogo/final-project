@@ -1,15 +1,20 @@
+export type TAppState = {
+  devPlans: TDevPlan[];
+  employees: TEmployee[];
+};
+
 export type TDevPlan = {
-  id: string;
+  id: number;
   title: string;
   description: string;
   statusCode: string;
-  employeeId: string;
+  employeeId: number;
   employeeName: string;
   dueDate: string;
 };
 
 export type TEmployee = {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   middleName: string;
@@ -33,3 +38,9 @@ export type TEmployeeError = [
   { isHireDateError: boolean; hireDateError: string },
   { isArchivedError: boolean; archivedError: string }
 ];
+
+export type TRow = {
+  id: string;
+  disablePadding: boolean;
+  label: string;
+};

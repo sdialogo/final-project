@@ -27,7 +27,7 @@ let devPlanSchema = {
       minLength: 1
     },
     employeeId: {
-      type: "string",
+      type: "number",
       minLength: 1
     },
     statusCode: {
@@ -77,7 +77,7 @@ export function getFullName(data: TEmployee) {
   return fullName;
 }
 
-export function findDataById(id: any, arr: TDevPlan[]): TDevPlan {
+export function findDataById(id: number, arr: TDevPlan[]): TDevPlan {
   for (var i = 0; i < arr.length; i++) {
     if (arr[i].id === id) {
       return arr[i];
@@ -85,17 +85,17 @@ export function findDataById(id: any, arr: TDevPlan[]): TDevPlan {
   }
 
   return {
-    id: "",
+    id: null,
     title: "",
     description: "",
     statusCode: "",
-    employeeId: "",
+    employeeId: null,
     employeeName: "",
     dueDate: ""
   };
 }
 
-export function findEmployeeById(id: any, arr: TEmployee[]): TEmployee {
+export function findEmployeeById(id: number, arr: TEmployee[]): TEmployee {
   for (var i = 0; i < arr.length; i++) {
     if (arr[i].id === id) {
       return arr[i];
@@ -103,7 +103,7 @@ export function findEmployeeById(id: any, arr: TEmployee[]): TEmployee {
   }
 
   return {
-    id: "",
+    id: null,
     firstName: "",
     lastName: "",
     middleName: "",
@@ -216,4 +216,24 @@ export function formatDate(date: string) {
   }
 
   return [month, day, year].join("/");
+}
+
+export function generateDevPlanId(data: TDevPlan[]) {
+  let ids: number[] = [];
+
+  data.forEach(devPlan => {
+    ids.push(devPlan.id);
+  });
+
+  return Math.max(...ids);
+}
+
+export function generateEmployeeId(data: TEmployee[]) {
+  let ids: number[] = [];
+
+  data.forEach(employee => {
+    ids.push(employee.id);
+  });
+
+  return Math.max(...ids);
 }

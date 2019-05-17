@@ -1,4 +1,5 @@
 import * as React from "react";
+import { TRow } from "../../common/types";
 
 import {
   TableCell,
@@ -9,17 +10,19 @@ import {
 } from "@material-ui/core";
 
 type TProps = {
-  onSelectAllClick?: any;
+  onSelectAllClick?: Function;
   order: any;
-  orderBy: any;
+  orderBy: string;
   numSelected: number;
   rowCount?: number;
-  onRequestSort: any;
-  rows: any;
+  onRequestSort: Function;
+  rows: TRow[];
 };
 
 export default class EnhancedTableHead extends React.Component<TProps, {}> {
-  createSortHandler = (property: any) => (event: any) => {
+  createSortHandler = (property: string) => (
+    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>
+  ) => {
     this.props.onRequestSort(event, property);
   };
   render() {
@@ -29,7 +32,7 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
       <TableHead>
         <TableRow>
           {rows.map(
-            (row: any) => (
+            (row: TRow) => (
               <TableCell
                 key={row.id}
                 padding={row.disablePadding ? "none" : "default"}

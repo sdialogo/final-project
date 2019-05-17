@@ -2,7 +2,12 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { addDevPlan, deleteDevPlan } from "../../redux/actions/devPlanActions";
 
-import { TDevPlan, TEmployee, TDevPlanError } from "../../common/types";
+import {
+  TDevPlan,
+  TEmployee,
+  TDevPlanError,
+  TAppState
+} from "../../common/types";
 import StatusDropdown from "../shared/statusDropdown";
 import EmployeeDropdown from "../shared/employeeDropdown";
 import { validateDevPlan } from "../../common/functions";
@@ -55,7 +60,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     };
   }
 
-  handleSave = (event: any) => {
+  handleSave = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.preventDefault();
     let returnObj = validateDevPlan(this.state.data);
 
@@ -71,7 +76,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     }
   };
 
-  handleChange = (name: string) => (event: any) => {
+  handleChange = (name: string) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     let devPlan = { ...this.state.data, [name]: event.target.value };
     let errorsCopy = this.state.errors;
 
@@ -234,7 +241,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: TAppState) {
   return {
     devPlans: state.devPlans,
     employees: state.employees

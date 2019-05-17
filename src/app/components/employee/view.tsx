@@ -7,6 +7,14 @@ import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import CustomizedSnackbars from "../shared/snackbars";
 
+import EmployeeDetailsView from "./detailsView";
+import EnhancedTableHead from "../shared/enhancedTableHead";
+import EnhancedToolbar from "../shared/enhancedToolbar";
+import { employeeRows } from "../../common/constants";
+import { TEmployee, TAppState } from "../../common/types";
+import { findEmployeeById, formatDate } from "../../common/functions";
+
+import DeleteTwoTone from "@material-ui/icons/DeleteTwoTone";
 import {
   Table,
   TableBody,
@@ -22,15 +30,6 @@ import {
   IconButton,
   TablePagination
 } from "@material-ui/core";
-
-import DeleteTwoTone from "@material-ui/icons/DeleteTwoTone";
-
-import EmployeeDetailsView from "./detailsView";
-import EnhancedTableHead from "../shared/enhancedTableHead";
-import EnhancedToolbar from "../shared/enhancedToolbar";
-import { employeeRows } from "../../common/constants";
-import { TEmployee } from "../../common/types";
-import { findEmployeeById, formatDate } from "../../common/functions";
 
 type TState = {
   data: TEmployee[];
@@ -65,7 +64,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     rowsPerPage: 5,
     open: false,
     editData: {
-      id: "",
+      id: null,
       firstName: "",
       lastName: "",
       middleName: "",
@@ -85,12 +84,15 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     const { employees, loadEmployees } = this.props;
 
     if (employees.length === 0) {
-      loadEmployees().catch((error: any) => {
+      loadEmployees().catch((error: string) => {
         alert("Loading employees failed: " + error);
       });
     }
   }
-  handleRequestSort = (event: any, property: any) => {
+  handleRequestSort = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    property: string
+  ) => {
     const orderBy = property;
     let order = "desc";
 
@@ -103,14 +105,20 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
 
   handleToggle = () => this.setState({ open: !this.state.open });
 
-  handleDrawerOpen = (event: any, id: number) => {
+  handleDrawerOpen = (
+    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    id: number
+  ) => {
     event.stopPropagation();
     let currData = findEmployeeById(id, this.props.employees);
 
     this.setState({ editData: currData, open: true });
   };
 
-  handleClose = (event: any, button: string) => {
+  handleClose = (
+    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    button: string
+  ) => {
     event.stopPropagation();
 
     if (button === "close") {
@@ -125,7 +133,10 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     this.setState({ onDelete: false });
   };
 
-  handleClickDelete = (event: any, id: number) => {
+  handleClickDelete = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    id: number
+  ) => {
     console.log("Deleting data...");
     event.stopPropagation();
 
@@ -143,7 +154,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     this.setState({ redirectToAddPage: true });
   };
 
-  handleDataFilter = (event: any) => {
+  handleDataFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
     const filteredData = this.state.data.filter(
       d =>
         d.firstName.includes(event.target.value) ||
@@ -169,8 +180,8 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     this.setState({ page: newPage });
   }
 
-  handleChangeRowsPerPage(event: any) {
-    this.setState({ rowsPerPage: event.target.value });
+  handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ rowsPerPage: Number(event.target.value) });
   }
 
   render() {
@@ -226,7 +237,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
               <TableBody>
                 {tableContent
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((n: any) => {
+                  .map((n: TEmployee) => {
                     return (
                       <TableRow
                         hover
@@ -317,7 +328,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: TAppState) {
   return {
     employees: state.employees
   };

@@ -11,7 +11,7 @@ import {
 } from "../../redux/actions/devPlanActions";
 import { loadEmployees } from "../../redux/actions/employeeActions";
 
-import { TDevPlan, TEmployee } from "../../common/types";
+import { TDevPlan, TEmployee, TAppState } from "../../common/types";
 import { findDataById, formatDate } from "../../common/functions";
 import { devPlanRows } from "../../common/constants";
 import CustomizedSnackbars from "../shared/snackbars";
@@ -44,7 +44,7 @@ type TState = {
   open: boolean;
   ediTDevPlan: TDevPlan;
   onDelete: boolean;
-  toDelete: string;
+  toDelete: number;
   redirectToAddPage: boolean;
   isSearch: boolean;
   isAddSuccess: boolean;
@@ -59,9 +59,6 @@ type TProps = {
   deleteDevPlan: Function;
 };
 
-// const [page, setPage] = React.useState(0);
-// const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
 class DevPlanviewPage extends React.Component<TProps, TState> {
   state: TState = {
     data: this.props.devPlans,
@@ -72,7 +69,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     rowsPerPage: 5,
     open: null,
     ediTDevPlan: {
-      id: "",
+      id: null,
       title: "",
       description: "",
       employeeId: null,
@@ -81,7 +78,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       dueDate: ""
     },
     onDelete: false,
-    toDelete: "",
+    toDelete: null,
     redirectToAddPage: false,
     isSearch: false,
     isAddSuccess: false,
@@ -92,19 +89,22 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     const { devPlans, employees, loadDevPlans, loadEmployees } = this.props;
 
     if (devPlans.length === 0) {
-      loadDevPlans().catch((error: any) => {
+      loadDevPlans().catch((error: string) => {
         alert("Loading dev plans failed: " + error);
       });
     }
 
     if (employees.length === 0) {
-      loadEmployees().catch((error: any) => {
+      loadEmployees().catch((error: string) => {
         alert("Loading employees failed: " + error);
       });
     }
   }
 
-  handleRequestSort = (event: any, property: any) => {
+  handleRequestSort = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    property: string
+  ) => {
     const orderBy = property;
     let order = "desc";
 
@@ -117,14 +117,20 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
 
   handleToggle = () => this.setState({ open: !this.state.open });
 
-  handleDrawerOpen = (event: any, id: string) => {
+  handleDrawerOpen = (
+    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    id: number
+  ) => {
     event.stopPropagation();
     let currData = findDataById(id, this.props.devPlans);
 
     this.setState({ ediTDevPlan: currData, open: true });
   };
 
-  handleClose = (event: any, button: string) => {
+  handleClose = (
+    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    button: string
+  ) => {
     event.stopPropagation();
 
     if (button === "close") {
@@ -139,7 +145,10 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ onDelete: false });
   };
 
-  handleClickDelete = (event: any, id: string) => {
+  handleClickDelete = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    id: number
+  ) => {
     console.log("Deleting data...");
     event.stopPropagation();
 
@@ -158,7 +167,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ redirectToAddPage: true });
   };
 
-  handleDataFilter = (event: any) => {
+  handleDataFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
     const filteredData = this.state.data.filter(d =>
       d.title.includes(event.target.value)
     );
@@ -181,8 +191,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ page: newPage });
   }
 
-  handleChangeRowsPerPage(event: any) {
-    this.setState({ rowsPerPage: event.target.value });
+  handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ rowsPerPage: Number(event.target.value) });
   }
 
   render() {
@@ -207,9 +217,9 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       <div>
         <EnhancedToolbar
           title="Development Plan"
-          redirectToAddPage={this.handleRedirectToAddPage.bind(this)}
-          dataFilter={this.handleDataFilter.bind(this)}
-          clearSearch={this.handleClearSearch.bind(this)}
+          redirectToAddPage={this.handleRedirectToAddPage}
+          dataFilter={this.handleDataFilter}
+          clearSearch={this.handleClearSearch}
         />
         {this.state.redirectToAddPage && <Redirect to="/addDevPlan" />}
         {isAddSuccess && (
@@ -329,7 +339,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: TAppState) {
   return {
     devPlans:
       state.employees.length === 0

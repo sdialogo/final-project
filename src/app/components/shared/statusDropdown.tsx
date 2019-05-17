@@ -6,8 +6,8 @@ import { TextField } from "@material-ui/core";
 type TProps = {
   onChange: any;
   value: any;
-  error?: boolean;
-  helperText?: string;
+  error: boolean;
+  helperText: string;
   isEdit: boolean;
 };
 

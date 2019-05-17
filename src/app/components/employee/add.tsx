@@ -18,8 +18,12 @@ import {
   Radio
 } from "@material-ui/core";
 
-import { TEmployee, TEmployeeError } from "../../common/types";
-import { getFullName, validateEmployee } from "../../common/functions";
+import { TEmployee, TEmployeeError, TAppState } from "../../common/types";
+import {
+  getFullName,
+  validateEmployee,
+  generateEmployeeId
+} from "../../common/functions";
 
 type TState = {
   employee: TEmployee;
@@ -28,6 +32,7 @@ type TState = {
 };
 
 type TProps = {
+  employees: TEmployee[];
   loadEmployees: Function;
   addEmployee: Function;
 };
@@ -44,7 +49,7 @@ const styles: TStyles = require("../../styles/employeeStyles.less");
 class AddEmployee extends React.Component<TProps, TState> {
   state: TState = {
     employee: {
-      id: "",
+      id: null,
       firstName: "",
       lastName: "",
       middleName: "",
@@ -62,13 +67,17 @@ class AddEmployee extends React.Component<TProps, TState> {
     ]
   };
 
-  handleChange = (name: any) => (event: any) => {
+  handleChange = (name: string) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     let employee = { ...this.state.employee, [name]: event.target.value };
     let errorsCopy = this.state.errors;
 
+    let currId = generateEmployeeId(this.props.employees);
+    employee.id = currId + 1;
+
     let fullName = getFullName(employee);
     employee.fullName = fullName;
-    employee.id = fullName;
 
     if (name === "firstName") {
       errorsCopy[0].isFirstNameError = false;
@@ -90,7 +99,7 @@ class AddEmployee extends React.Component<TProps, TState> {
     this.setState({ employee: employee, errors: errorsCopy });
   };
 
-  handleSave = (event: any) => {
+  handleSave = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.preventDefault();
     let returnObj = validateEmployee(this.state.employee);
 
@@ -233,7 +242,7 @@ class AddEmployee extends React.Component<TProps, TState> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: TAppState) {
   return {
     employees: state.employees
   };

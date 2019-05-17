@@ -53,11 +53,17 @@ class EmployeeDetailsView extends React.Component<TProps, TState> {
     };
   }
 
-  handleEdit = (event: any, tempData: TEmployee) => {
+  handleEdit = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    tempData: TEmployee
+  ) => {
     this.setState({ data: tempData });
   };
 
-  handleTabChange = (event: any, tabValue: number) => {
+  handleTabChange = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    tabValue: number
+  ) => {
     this.setState({ tabValue });
   };
 

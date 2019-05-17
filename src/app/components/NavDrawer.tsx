@@ -19,7 +19,6 @@ import { Menu, List, Person } from "@material-ui/icons";
 type TProps = {
   header: string;
   menuList: any;
-  classes?: any;
 };
 
 type TStyles = {
