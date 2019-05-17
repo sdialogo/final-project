@@ -28,7 +28,8 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
-  IconButton
+  IconButton,
+  TablePagination
 } from "@material-ui/core";
 
 import { DeleteTwoTone } from "@material-ui/icons";
@@ -58,6 +59,9 @@ type TProps = {
   deleteDevPlan: Function;
 };
 
+// const [page, setPage] = React.useState(0);
+// const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
 class DevPlanviewPage extends React.Component<TProps, TState> {
   state: TState = {
     data: this.props.devPlans,
@@ -65,7 +69,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     orderBy: "title",
     selected: [],
     page: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 5,
     open: null,
     ediTDevPlan: {
       id: "",
@@ -170,6 +174,17 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ isEditSuccess: false });
   };
 
+  handleChangePage(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    newPage: number
+  ) {
+    this.setState({ page: newPage });
+  }
+
+  handleChangeRowsPerPage(event: any) {
+    this.setState({ rowsPerPage: event.target.value });
+  }
+
   render() {
     const {
       data,
@@ -179,7 +194,9 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       ediTDevPlan,
       isSearch,
       isAddSuccess,
-      isEditSuccess
+      isEditSuccess,
+      rowsPerPage,
+      page
     } = this.state;
 
     let tableContent = data;
@@ -219,31 +236,35 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                 rows={devPlanRows}
               />
               <TableBody>
-                {tableContent.map(n => {
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => this.handleDrawerOpen(event, n.id)}
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={n.id}
-                    >
-                      <TableCell align="left">{n.title}</TableCell>
-                      <TableCell align="left">{n.employeeName}</TableCell>
-                      <TableCell align="left">{n.statusCode}</TableCell>
-                      <TableCell align="left">
-                        {formatDate(n.dueDate)}
-                      </TableCell>
-                      <TableCell align="left">
-                        <IconButton
-                          onClick={event => this.handleClickDelete(event, n.id)}
-                        >
-                          <DeleteTwoTone />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {tableContent
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(n => {
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => this.handleDrawerOpen(event, n.id)}
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={n.id}
+                      >
+                        <TableCell align="left">{n.title}</TableCell>
+                        <TableCell align="left">{n.employeeName}</TableCell>
+                        <TableCell align="left">{n.statusCode}</TableCell>
+                        <TableCell align="left">
+                          {formatDate(n.dueDate)}
+                        </TableCell>
+                        <TableCell align="left">
+                          <IconButton
+                            onClick={event =>
+                              this.handleClickDelete(event, n.id)
+                            }
+                          >
+                            <DeleteTwoTone />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
             {this.state.open ? (
@@ -287,6 +308,21 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
               ""
             )}
           </div>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={tableContent.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            backIconButtonProps={{
+              "aria-label": "Previous Page"
+            }}
+            nextIconButtonProps={{
+              "aria-label": "Next Page"
+            }}
+            onChangePage={this.handleChangePage.bind(this)}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage.bind(this)}
+          />
         </Paper>
       </div>
     );

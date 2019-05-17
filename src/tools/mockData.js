@@ -4,7 +4,7 @@ const devPlans = [
     title: "Securing React Apps with Auth0",
     description: "react-auth0-authentication-security",
     statusCode: "Completed",
-    employeeId: "Yuri Jogoori Jo",
+    employeeId: "Yuri Yul Jo",
     dueDate: "2019-05-01"
   },
   {
@@ -17,21 +17,45 @@ const devPlans = [
   },
   {
     id: 3,
+    title: "React: The Big Picture Part Two",
+    description: "react-big-picture",
+    statusCode: "In Progress",
+    employeeId: "Yena Duck Choi",
+    dueDate: "2019-05-21"
+  },
+  {
+    id: 4,
     title: "Creating Reusable React Components",
     description: "react-creating-reusable-components",
     statusCode: "Not Started",
     employeeId: "Eunbi Leader Kwon",
     dueDate: "2019-05-01"
+  },
+  {
+    id: 5,
+    title: "Creating Reusable React Components Part Two",
+    description: "react-creating-reusable-components",
+    statusCode: "Not Started",
+    employeeId: "Eunbi Leader Kwon",
+    dueDate: "2019-05-12"
+  },
+  {
+    id: 6,
+    title: "Creating Reusable React Components Part Three",
+    description: "react-creating-reusable-components",
+    statusCode: "Not Started",
+    employeeId: "Eunbi Leader Kwon",
+    dueDate: "2019-05-24"
   }
 ];
 
 const employees = [
   {
-    id: "Yuri Jogoori Jo",
+    id: "Yuri Yul Jo",
     lastName: "Jo",
     firstName: "Yuri",
-    middleName: "Jogoori",
-    fullName: "Yuri Jogoori Jo",
+    middleName: "Yul",
+    fullName: "Yuri Yul Jo",
     archived: "No",
     hireDate: "2019-05-01"
   },
@@ -52,6 +76,33 @@ const employees = [
     fullName: "Eunbi Leader Kwon",
     archived: "No",
     hireDate: "2019-05-01"
+  },
+  {
+    id: "Hitomi Ppang Honda",
+    lastName: "Honda",
+    firstName: "Hitomi",
+    middleName: "Ppang",
+    fullName: "Hitomi Ppang Honda",
+    archived: "No",
+    hireDate: "2019-05-012"
+  },
+  {
+    id: "Chaewon Ssam Kim",
+    lastName: "Kim",
+    firstName: "Chaewon",
+    middleName: "Ssam",
+    fullName: "Chaewon Ssam Kim",
+    archived: "No",
+    hireDate: "2019-05-012"
+  },
+  {
+    id: "Yujin Puppy Ahn",
+    lastName: "Ahn",
+    firstName: "Yujin",
+    middleName: "Puppy",
+    fullName: "Yujin Puppy Ahn",
+    archived: "No",
+    hireDate: "2019-05-012"
   }
 ];
 

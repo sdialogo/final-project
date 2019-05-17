@@ -1,6 +1,12 @@
 import * as React from "react";
 
-import { TableCell, TableHead, TableRow } from "@material-ui/core";
+import {
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+  TableSortLabel
+} from "@material-ui/core";
 
 type TProps = {
   onSelectAllClick?: any;
@@ -29,16 +35,15 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
                 padding={row.disablePadding ? "none" : "default"}
                 sortDirection={orderBy === row.id ? order : false}
               >
-                {row.label}
-                {/* <Tooltip title="Sort" enterDelay={300}> }
-                { <TableSortLabel
-                  active={orderBy === row.id}
-                  direction={order}
-                  onClick={this.createSortHandler(row.id)}
-                >
-                  {row.label}
-                </TableSortLabel> }
-                { </Tooltip> */}
+                <Tooltip title="Sort" enterDelay={300}>
+                  <TableSortLabel
+                    active={orderBy === row.id}
+                    direction={order}
+                    onClick={this.createSortHandler(row.id)}
+                  >
+                    {row.label}
+                  </TableSortLabel>
+                </Tooltip>
               </TableCell>
             ),
             this

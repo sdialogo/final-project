@@ -19,7 +19,8 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
-  IconButton
+  IconButton,
+  TablePagination
 } from "@material-ui/core";
 
 import DeleteTwoTone from "@material-ui/icons/DeleteTwoTone";
@@ -61,7 +62,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     orderBy: "lastName",
     selected: [],
     page: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 5,
     open: false,
     editData: {
       id: "",
@@ -161,6 +162,17 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     this.setState({ isEditSuccess: false });
   };
 
+  handleChangePage(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    newPage: number
+  ) {
+    this.setState({ page: newPage });
+  }
+
+  handleChangeRowsPerPage(event: any) {
+    this.setState({ rowsPerPage: event.target.value });
+  }
+
   render() {
     const {
       data,
@@ -170,7 +182,9 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
       editData,
       isSearch,
       isAddSuccess,
-      isEditSuccess
+      isEditSuccess,
+      page,
+      rowsPerPage
     } = this.state;
 
     let tableContent = data;
@@ -210,31 +224,35 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                 rows={employeeRows}
               />
               <TableBody>
-                {tableContent.map((n: any) => {
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => this.handleDrawerOpen(event, n.id)}
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={n.id}
-                    >
-                      <TableCell align="left">{n.lastName}</TableCell>
-                      <TableCell align="left">{n.firstName}</TableCell>
-                      <TableCell align="left">{n.middleName}</TableCell>
-                      <TableCell align="left">
-                        {formatDate(n.hireDate)}
-                      </TableCell>
-                      <TableCell align="left">
-                        <IconButton
-                          onClick={event => this.handleClickDelete(event, n.id)}
-                        >
-                          <DeleteTwoTone />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {tableContent
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((n: any) => {
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => this.handleDrawerOpen(event, n.id)}
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={n.id}
+                      >
+                        <TableCell align="left">{n.lastName}</TableCell>
+                        <TableCell align="left">{n.firstName}</TableCell>
+                        <TableCell align="left">{n.middleName}</TableCell>
+                        <TableCell align="left">
+                          {formatDate(n.hireDate)}
+                        </TableCell>
+                        <TableCell align="left">
+                          <IconButton
+                            onClick={event =>
+                              this.handleClickDelete(event, n.id)
+                            }
+                          >
+                            <DeleteTwoTone />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
             {this.state.open ? (
@@ -278,6 +296,21 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
               ""
             )}
           </div>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={tableContent.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            backIconButtonProps={{
+              "aria-label": "Previous Page"
+            }}
+            nextIconButtonProps={{
+              "aria-label": "Next Page"
+            }}
+            onChangePage={this.handleChangePage.bind(this)}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage.bind(this)}
+          />
         </Paper>
       </div>
     );
