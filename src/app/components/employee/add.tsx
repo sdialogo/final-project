@@ -12,7 +12,10 @@ import {
   Paper,
   CardActions,
   Button,
-  MenuItem
+  RadioGroup,
+  FormLabel,
+  FormControlLabel,
+  Radio
 } from "@material-ui/core";
 
 import { TEmployee, TEmployeeError } from "../../common/types";
@@ -29,21 +32,11 @@ type TProps = {
   addEmployee: Function;
 };
 
-const options = [
-  {
-    value: "Yes",
-    label: "Yes"
-  },
-  {
-    value: "No",
-    label: "No"
-  }
-];
-
 type TStyles = {
   addEmployee: string;
   addForm: string;
   buttonStyle: string;
+  radioButton: string;
 };
 
 const styles: TStyles = require("../../styles/employeeStyles.less");
@@ -194,25 +187,25 @@ class AddEmployee extends React.Component<TProps, TState> {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField
-                    id="archived"
-                    select
-                    label="Archived"
-                    value={employee.archived}
+                  <FormLabel>Archived</FormLabel>
+                  <RadioGroup
+                    aria-label="Archived"
+                    name="archived"
+                    value={String(employee.archived)}
                     onChange={this.handleChange("archived")}
-                    margin="normal"
-                    fullWidth
-                    error={errors[4].isArchivedError}
-                    helperText={
-                      errors[4].isArchivedError ? errors[4].archivedError : ""
-                    }
+                    className={styles.radioButton}
                   >
-                    {options.map(option => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    <FormControlLabel
+                      value="true"
+                      control={<Radio />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="false"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
                 </Grid>
               </Grid>
             </Grid>

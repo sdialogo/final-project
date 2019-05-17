@@ -14,7 +14,10 @@ import {
   Grid,
   TextField,
   Divider,
-  MenuItem
+  FormLabel,
+  FormControlLabel,
+  Radio,
+  RadioGroup
 } from "@material-ui/core";
 
 type TState = {
@@ -31,21 +34,11 @@ type TProps = {
   deleteEmployee: Function;
 };
 
-const options = [
-  {
-    value: "Yes",
-    label: "Yes"
-  },
-  {
-    value: "No",
-    label: "No"
-  }
-];
-
 type TStyles = {
   gridContainer: string;
   textField: string;
   buttonStyle: string;
+  radioButton: string;
 };
 
 const styles: TStyles = require("../../styles/employeeStyles.less");
@@ -180,27 +173,27 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                className={styles.textField}
-                id="archived"
-                select
-                label="Archived"
-                value={data.archived}
+              <FormLabel>Archived</FormLabel>
+              <RadioGroup
+                aria-label="Archived"
+                name="archived"
+                value={String(data.archived)}
                 onChange={this.handleChange("archived")}
-                margin="normal"
-                variant="outlined"
-                disabled={!isEdit}
-                error={errors[4].isArchivedError}
-                helperText={
-                  errors[4].isArchivedError ? errors[4].archivedError : ""
-                }
+                className={styles.radioButton}
               >
-                {options.map(option => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+                <FormControlLabel
+                  value="true"
+                  control={<Radio />}
+                  label="Yes"
+                  disabled={!isEdit}
+                />
+                <FormControlLabel
+                  value="false"
+                  control={<Radio />}
+                  label="No"
+                  disabled={!isEdit}
+                />
+              </RadioGroup>
             </Grid>
           </Grid>
         </form>

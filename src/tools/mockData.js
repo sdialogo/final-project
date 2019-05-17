@@ -56,7 +56,7 @@ const employees = [
     firstName: "Yuri",
     middleName: "Yul",
     fullName: "Yuri Yul Jo",
-    archived: "No",
+    archived: false,
     hireDate: "2019-05-01"
   },
   {
@@ -65,7 +65,7 @@ const employees = [
     firstName: "Yena",
     middleName: "Duck",
     fullName: "Yena Duck Choi",
-    archived: "No",
+    archived: false,
     hireDate: "2019-05-01"
   },
   {
@@ -74,7 +74,7 @@ const employees = [
     firstName: "Eunbi",
     middleName: "Leader",
     fullName: "Eunbi Leader Kwon",
-    archived: "No",
+    archived: false,
     hireDate: "2019-05-01"
   },
   {
@@ -83,7 +83,7 @@ const employees = [
     firstName: "Hitomi",
     middleName: "Ppang",
     fullName: "Hitomi Ppang Honda",
-    archived: "No",
+    archived: false,
     hireDate: "2019-05-012"
   },
   {
@@ -92,7 +92,7 @@ const employees = [
     firstName: "Chaewon",
     middleName: "Ssam",
     fullName: "Chaewon Ssam Kim",
-    archived: "No",
+    archived: false,
     hireDate: "2019-05-012"
   },
   {
@@ -101,7 +101,7 @@ const employees = [
     firstName: "Yujin",
     middleName: "Puppy",
     fullName: "Yujin Puppy Ahn",
-    archived: "No",
+    archived: false,
     hireDate: "2019-05-012"
   }
 ];

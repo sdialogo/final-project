@@ -61,7 +61,7 @@ let employeeSchema = {
       minLength: 1
     },
     archived: {
-      type: "string"
+      type: "boolean"
     }
   },
   required: ["firstName", "middleName", "lastName", "hireDate", "archived"]
