@@ -13,6 +13,8 @@ export default function employeeReducer(
     case types.DELETE_EMPLOYEE:
       const id = action.employeeId;
       return state.filter(employee => employee.id !== id);
+    case types.UPDATE_EMPLOYEE:
+    //update state here
     default:
       return state;
   }

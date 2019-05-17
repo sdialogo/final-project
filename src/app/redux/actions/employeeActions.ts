@@ -26,3 +26,7 @@ export function addEmployee(employee: TEmployee) {
 export function deleteEmployee(employeeId: number) {
   return { type: types.DELETE_EMPLOYEE, employeeId };
 }
+
+export function updateEmployee(employee: TEmployee) {
+  return { type: types.UPDATE_EMPLOYEE, employee };
+}

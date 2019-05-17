@@ -13,6 +13,8 @@ export default function devPlanReducer(
     case types.DELETE_DEVPLAN:
       const id = action.devPlanId;
       return state.filter(devPlan => devPlan.id !== id);
+    case types.UPDATE_DEVPLAN:
+    //update state here
     default:
       return state;
   }
