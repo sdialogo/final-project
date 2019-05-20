@@ -53,6 +53,7 @@ type TState = {
   isSearch: boolean;
   isAddSuccess: boolean;
   isEditSuccess: boolean;
+  isDeleteSuccess: boolean;
 };
 
 type TProps = {
@@ -86,7 +87,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     redirectToAddPage: false,
     isSearch: false,
     isAddSuccess: false,
-    isEditSuccess: false
+    isEditSuccess: false,
+    isDeleteSuccess: false
   };
 
   componentDidMount() {
@@ -160,7 +162,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   };
 
   handleDelete = () => {
-    this.setState({ onDelete: false });
+    this.setState({ onDelete: false, isDeleteSuccess: true });
 
     //update app state
     this.props.deleteDevPlan(this.state.toDelete);
@@ -185,7 +187,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   };
 
   handleCloseSnackbar = () => {
-    this.setState({ isEditSuccess: false });
+    this.setState({ isEditSuccess: false, isDeleteSuccess: false });
   };
 
   handleChangePage(
@@ -209,6 +211,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       isSearch,
       isAddSuccess,
       isEditSuccess,
+      isDeleteSuccess,
       rowsPerPage,
       page
     } = this.state;
@@ -237,6 +240,13 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
         {isEditSuccess && (
           <CustomizedSnackbars
             message="Successfully edited development plan"
+            variant="success"
+            onClose={this.handleCloseSnackbar.bind(this)}
+          />
+        )}
+        {isDeleteSuccess && (
+          <CustomizedSnackbars
+            message="Successfully deleted development plan"
             variant="success"
             onClose={this.handleCloseSnackbar.bind(this)}
           />
