@@ -12,7 +12,11 @@ import {
 import { loadEmployees } from "../../redux/actions/employeeActions";
 
 import { TDevPlan, TEmployee, TAppState } from "../../common/types";
-import { findDataById, formatDate } from "../../common/functions";
+import {
+  findDataById,
+  formatDate,
+  sortDevPlanTableContentById
+} from "../../common/functions";
 import { devPlanRows } from "../../common/constants";
 import CustomizedSnackbars from "../shared/snackbars";
 
@@ -211,7 +215,9 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
 
     let tableContent = data;
     {
-      isSearch ? (tableContent = data) : (tableContent = this.props.devPlans);
+      isSearch
+        ? (tableContent = sortDevPlanTableContentById(data))
+        : (tableContent = sortDevPlanTableContentById(this.props.devPlans));
     }
     return (
       <div>

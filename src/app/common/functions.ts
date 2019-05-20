@@ -237,3 +237,19 @@ export function generateEmployeeId(data: TEmployee[]) {
 
   return Math.max(...ids);
 }
+
+export function sortDevPlanTableContentById(data: TDevPlan[]) {
+  let sortedData = data.sort((a: TDevPlan, b: TDevPlan) =>
+    a.id < b.id ? -1 : a.id > b.id ? 1 : 0
+  );
+
+  return sortedData;
+}
+
+export function sortEmployeeTableContentById(data: TEmployee[]) {
+  let sortedData = data.sort((a: TEmployee, b: TEmployee) =>
+    a.id < b.id ? -1 : a.id > b.id ? 1 : 0
+  );
+
+  return sortedData;
+}

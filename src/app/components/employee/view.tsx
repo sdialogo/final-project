@@ -12,7 +12,11 @@ import EnhancedTableHead from "../shared/enhancedTableHead";
 import EnhancedToolbar from "../shared/enhancedToolbar";
 import { employeeRows } from "../../common/constants";
 import { TEmployee, TAppState } from "../../common/types";
-import { findEmployeeById, formatDate } from "../../common/functions";
+import {
+  findEmployeeById,
+  formatDate,
+  sortEmployeeTableContentById
+} from "../../common/functions";
 
 import DeleteTwoTone from "@material-ui/icons/DeleteTwoTone";
 import {
@@ -237,7 +241,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
               <TableBody>
                 {tableContent
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((n: TEmployee) => {
+                  .map(n => {
                     return (
                       <TableRow
                         hover

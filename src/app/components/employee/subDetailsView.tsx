@@ -58,6 +58,22 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     };
   }
 
+  handleSave = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    event.preventDefault();
+    let returnObj = validateEmployee(this.state.data);
+
+    if (returnObj.isValid) {
+      console.log("Edit...");
+
+      this.props.deleteEmployee(this.state.data.id);
+      this.props.addEmployee(this.state.data);
+
+      this.props.closeDrawer(event);
+    } else {
+      this.setState({ errors: returnObj.errorList });
+    }
+  };
+
   handleChange = (name: string) => (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -85,22 +101,6 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     }
 
     this.setState({ data: employee, errors: errorsCopy });
-  };
-
-  handleSave = () => {
-    event.preventDefault();
-    let returnObj = validateEmployee(this.state.data);
-
-    if (returnObj.isValid) {
-      console.log("Edit...");
-
-      this.props.deleteEmployee(this.state.data.id);
-      this.props.addEmployee(this.state.data);
-
-      this.props.closeDrawer(event);
-    } else {
-      this.setState({ errors: returnObj.errorList });
-    }
   };
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
