@@ -51,6 +51,7 @@ type TState = {
   isAddSuccess: boolean;
   isEditSuccess: boolean;
   isDeleteSuccess: boolean;
+  searchInput: string;
 };
 
 type TProps = {
@@ -83,7 +84,8 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     isSearch: false,
     isAddSuccess: false,
     isEditSuccess: false,
-    isDeleteSuccess: false
+    isDeleteSuccess: false,
+    searchInput: ""
   };
 
   componentDidMount() {
@@ -202,7 +204,8 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
       isEditSuccess,
       isDeleteSuccess,
       page,
-      rowsPerPage
+      rowsPerPage,
+      searchInput
     } = this.state;
 
     let tableContent = data;

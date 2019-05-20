@@ -7,6 +7,7 @@ type TProps = {
   redirectToAddPage: any;
   dataFilter: any;
   clearSearch: any;
+  searchInput?: string;
 };
 
 type TState = {
@@ -37,7 +38,7 @@ class EnhancedToolbar extends React.Component<TProps, TState> {
   };
 
   render() {
-    const { redirectToAddPage, dataFilter, title } = this.props;
+    const { redirectToAddPage, dataFilter, title, searchInput } = this.props;
     const { isSearch } = this.state;
     return (
       <div>
@@ -65,6 +66,7 @@ class EnhancedToolbar extends React.Component<TProps, TState> {
               <Grid item hidden={!isSearch ? true : false}>
                 <InputBase
                   placeholder="Search"
+                  value={isSearch ? searchInput : ""}
                   className={styles.searchField}
                   onChange={dataFilter}
                 />

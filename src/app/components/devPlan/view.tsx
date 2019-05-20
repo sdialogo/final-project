@@ -54,6 +54,7 @@ type TState = {
   isAddSuccess: boolean;
   isEditSuccess: boolean;
   isDeleteSuccess: boolean;
+  searchInput: string;
 };
 
 type TProps = {
@@ -88,7 +89,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     isSearch: false,
     isAddSuccess: false,
     isEditSuccess: false,
-    isDeleteSuccess: false
+    isDeleteSuccess: false,
+    searchInput: ""
   };
 
   componentDidMount() {
@@ -179,11 +181,19 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       d.title.includes(event.target.value)
     );
 
-    this.setState({ data: filteredData, isSearch: true });
+    this.setState({
+      data: filteredData,
+      isSearch: true,
+      searchInput: event.target.value
+    });
   };
 
   handleClearSearch = () => {
-    this.setState({ data: this.props.devPlans, isSearch: false });
+    this.setState({
+      data: this.props.devPlans,
+      isSearch: false,
+      searchInput: ""
+    });
   };
 
   handleCloseSnackbar = () => {
@@ -213,7 +223,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       isEditSuccess,
       isDeleteSuccess,
       rowsPerPage,
-      page
+      page,
+      searchInput
     } = this.state;
 
     let tableContent = data;
