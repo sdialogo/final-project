@@ -4,6 +4,7 @@ import { Status } from "../../common/statusEnum";
 import { TextField } from "@material-ui/core";
 
 type TProps = {
+  // onChange(name: string, event: React.ChangeEvent<HTMLSelectElement>): void;
   onChange: any;
   value: any;
   error: boolean;

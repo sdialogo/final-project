@@ -125,6 +125,7 @@ export function validateDevPlan(data: TDevPlan) {
     isValid = true;
   } else {
     isValid = false;
+    debugger;
     ajv.errors.map((error: any) => {
       if (error.dataPath === ".title") {
         errorList[0].isTitleError = true;

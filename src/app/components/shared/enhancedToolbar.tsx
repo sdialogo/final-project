@@ -4,9 +4,9 @@ import { Add, Close } from "@material-ui/icons";
 
 type TProps = {
   title: string;
-  redirectToAddPage: any;
-  dataFilter: any;
-  clearSearch: any;
+  redirectToAddPage(): void;
+  dataFilter(event: React.ChangeEvent<HTMLInputElement>): void;
+  clearSearch(): void;
   searchInput?: string;
 };
 
@@ -34,7 +34,7 @@ class EnhancedToolbar extends React.Component<TProps, TState> {
   handleExit = () => {
     this.setState({ isSearch: false });
 
-    this.props.clearSearch(event);
+    this.props.clearSearch();
   };
 
   render() {

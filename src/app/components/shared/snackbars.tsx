@@ -7,7 +7,7 @@ import SnackbarContent from "@material-ui/core/SnackbarContent";
 type TProps = {
   message: string;
   variant: string;
-  onClose?: any;
+  onClose(): void;
 };
 
 type TState = {
@@ -30,7 +30,7 @@ class CustomizedSnackbars extends React.Component<TProps, TState> {
   handleClick = () => {
     this.setState({ open: false });
 
-    this.props.onClose(event);
+    this.props.onClose();
   };
 
   render() {

@@ -225,6 +225,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
           <CustomizedSnackbars
             message="Successfully added new employee"
             variant="success"
+            onClose={this.handleCloseSnackbar.bind(this)}
           />
         )}
         {isEditSuccess && (

@@ -89,6 +89,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
       errorsCopy[1].isDescError = false;
       errorsCopy[1].descError = "";
     } else if (name === "employeeId") {
+      devPlan.employeeId = Number(event.target.value);
       errorsCopy[2].isAssigneeError = false;
       errorsCopy[2].assigneeError = "";
     } else if (name === "statusCode") {
@@ -181,7 +182,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
               <EmployeeDropdown
                 employees={this.props.employees}
                 onChange={this.handleChange}
-                value={data.employeeId}
+                value={Number(data.employeeId)}
                 isEdit={!isEdit}
                 error={errors[2].isAssigneeError}
                 helperText={

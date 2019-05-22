@@ -246,6 +246,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
           <CustomizedSnackbars
             message="Successfully added new development plan"
             variant="success"
+            onClose={this.handleCloseSnackbar.bind(this)}
           />
         )}
         {isEditSuccess && (

@@ -24,8 +24,11 @@ type TState = {
 
 type TProps = {
   data: TDevPlan;
-  toggleDrawer: Function;
-  closeDrawer: Function;
+  toggleDrawer(): void;
+  closeDrawer(
+    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    button: string
+  ): void;
 };
 
 function TabContainer(props: any) {
@@ -78,7 +81,7 @@ export default class DetailsView extends React.Component<TProps, TState> {
       <Drawer
         anchor="right"
         open={this.state.open}
-        onClose={event => toggleDrawer(event)}
+        onClose={event => toggleDrawer()}
       >
         <Card className={styles.detailsHeader}>
           <CardContent>
