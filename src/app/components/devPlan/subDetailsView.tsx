@@ -1,6 +1,10 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { addDevPlan, deleteDevPlan } from "../../redux/actions/devPlanActions";
+import {
+  addDevPlan,
+  deleteDevPlan,
+  updateDevPlan
+} from "../../redux/actions/devPlanActions";
 
 import {
   TDevPlan,
@@ -32,6 +36,7 @@ type TProps = {
   tabValue: number;
   addDevPlan: Function;
   deleteDevPlan: Function;
+  updateDevPlan: Function;
   employees: TEmployee[];
 };
 
@@ -67,9 +72,10 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     if (returnObj.isValid) {
       console.log("Edit...");
 
-      this.props.deleteDevPlan(this.state.data.id);
-      this.props.addDevPlan(this.state.data);
+      // this.props.deleteDevPlan(this.state.data.id);
+      // this.props.addDevPlan(this.state.data);
 
+      this.props.updateDevPlan(this.state.data);
       this.props.closeDrawer(event);
     } else {
       this.setState({ errors: returnObj.errorList });
@@ -251,7 +257,8 @@ function mapStateToProps(state: TAppState) {
 
 const mapDispatchToProps = {
   addDevPlan,
-  deleteDevPlan
+  deleteDevPlan,
+  updateDevPlan
 };
 
 export default connect(

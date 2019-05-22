@@ -1,4 +1,6 @@
 import { handleResponse, handleError } from "./apiUtils";
+import { TDevPlan } from "../common/types";
+
 const baseUrl = process.env.API_URL + "/devPlans/";
 
 export function getDevPlans() {
@@ -7,9 +9,9 @@ export function getDevPlans() {
     .catch(handleError);
 }
 
-export function saveDevPlan(devPlan: any) {
-  return fetch(baseUrl + (devPlan.id || ""), {
-    method: devPlan.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
+export function saveDevPlan(devPlan: TDevPlan) {
+  return fetch(baseUrl + "create", {
+    method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(devPlan)
   })
@@ -17,19 +19,18 @@ export function saveDevPlan(devPlan: any) {
     .catch(handleError);
 }
 
-// export function saveDevPlan(devPlan: any) {
-//   debugger;
-//   return fetch(baseUrl + parseInt(devPlan.id), {
-//     method: "POST", // POST for create
-//     headers: { "content-type": "application/json" },
-//     body: JSON.stringify(devPlan)
-//   })
-//     .then(handleResponse)
-//     .catch(handleError);
-// }
-
 export function deleteDevPlan(devPlanId: number) {
   return fetch(baseUrl + devPlanId, { method: "DELETE" })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function updateDevPlan(devPlan: TDevPlan) {
+  return fetch(baseUrl + devPlan.id, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(devPlan)
+  })
     .then(handleResponse)
     .catch(handleError);
 }

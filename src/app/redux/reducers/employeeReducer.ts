@@ -15,7 +15,13 @@ export default function employeeReducer(
       const id = action.employeeId;
       return state.filter(employee => employee.id !== id);
     case types.UPDATE_EMPLOYEE:
-    //update state here
+      const updatedEmployee = state.map(item => {
+        if (item.id === action.employee.id) {
+          return { ...item, ...action.employee };
+        }
+        return item;
+      });
+      return updatedEmployee;
     default:
       return state;
   }

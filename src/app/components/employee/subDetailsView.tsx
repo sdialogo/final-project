@@ -5,7 +5,8 @@ import { TEmployee, TEmployeeError, TAppState } from "../../common/types";
 import { validateEmployee } from "../../common/functions";
 import {
   addEmployee,
-  deleteEmployee
+  deleteEmployee,
+  updateEmployee
 } from "../../redux/actions/employeeActions";
 
 import {
@@ -32,6 +33,7 @@ type TProps = {
   tabValue: number;
   addEmployee: Function;
   deleteEmployee: Function;
+  updateEmployee: Function;
 };
 
 type TStyles = {
@@ -65,9 +67,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     if (returnObj.isValid) {
       console.log("Edit...");
 
-      this.props.deleteEmployee(this.state.data.id);
-      this.props.addEmployee(this.state.data);
-
+      this.props.updateEmployee(this.state.data);
       this.props.closeDrawer(event);
     } else {
       this.setState({ errors: returnObj.errorList });
@@ -246,7 +246,8 @@ function mapStateToProps(state: TAppState) {
 
 const mapDispatchToProps = {
   addEmployee,
-  deleteEmployee
+  deleteEmployee,
+  updateEmployee
 };
 
 export default connect(

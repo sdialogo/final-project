@@ -14,7 +14,13 @@ export default function devPlanReducer(
       const id = action.devPlanId;
       return state.filter(devPlan => devPlan.id !== id);
     case types.UPDATE_DEVPLAN:
-    //update state here
+      const updatedDevPlan = state.map(item => {
+        if (item.id === action.devPlan.id) {
+          return { ...item, ...action.devPlan };
+        }
+        return item;
+      });
+      return updatedDevPlan;
     default:
       return state;
   }

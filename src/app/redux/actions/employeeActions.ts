@@ -6,6 +6,18 @@ export function loadEmployeesSuccess(employees: TEmployee[]) {
   return { type: types.LOAD_EMPLOYEES_SUCCESS, employees };
 }
 
+export function addEmployeeSuccess(employee: TEmployee) {
+  return { type: types.ADD_EMPLOYEE, employee };
+}
+
+export function updateEmployeeSuccess(employee: TEmployee) {
+  return { type: types.UPDATE_EMPLOYEE, employee };
+}
+
+export function deleteEmployeeSuccess(employeeId: number) {
+  return { type: types.DELETE_EMPLOYEE, employeeId };
+}
+
 export function loadEmployees() {
   return function(dispatch: Function) {
     return employeeApi
@@ -20,13 +32,40 @@ export function loadEmployees() {
 }
 
 export function addEmployee(employee: TEmployee) {
-  return { type: types.ADD_EMPLOYEE, employee };
+  return function(dispatch: Function) {
+    return employeeApi
+      .saveEmployee(employee)
+      .then(saveEmployee => {
+        dispatch(addEmployeeSuccess(saveEmployee));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
 }
 
 export function deleteEmployee(employeeId: number) {
-  return { type: types.DELETE_EMPLOYEE, employeeId };
+  return function(dispatch: Function) {
+    return employeeApi
+      .deleteEmployee(employeeId)
+      .then(id => {
+        dispatch(deleteEmployeeSuccess(employeeId));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
 }
 
 export function updateEmployee(employee: TEmployee) {
-  return { type: types.UPDATE_EMPLOYEE, employee };
+  return function(dispatch: Function) {
+    return employeeApi
+      .updateEmployee(employee)
+      .then(updatedEmployee => {
+        dispatch(updateEmployeeSuccess(updatedEmployee));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
 }
