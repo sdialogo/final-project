@@ -94,19 +94,15 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   };
 
   componentDidMount() {
-    const { devPlans, employees, loadDevPlans, loadEmployees } = this.props;
+    const { loadDevPlans, loadEmployees } = this.props;
 
-    if (devPlans.length === 0) {
-      loadDevPlans().catch((error: string) => {
-        alert("Loading dev plans failed: " + error);
-      });
-    }
+    loadDevPlans().catch((error: string) => {
+      alert("Loading dev plans failed: " + error);
+    });
 
-    if (employees.length === 0) {
-      loadEmployees().catch((error: string) => {
-        alert("Loading employees failed: " + error);
-      });
-    }
+    loadEmployees().catch((error: string) => {
+      alert("Loading employees failed: " + error);
+    });
   }
 
   handleRequestSort = (
@@ -149,7 +145,6 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   };
 
   handleCloseDialog = () => {
-    console.log("Delete cancelled");
     this.setState({ onDelete: false });
   };
 
@@ -157,7 +152,6 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     event: React.MouseEvent<HTMLElement, MouseEvent>,
     id: number
   ) => {
-    console.log("Deleting data...");
     event.stopPropagation();
 
     this.setState({ onDelete: true, toDelete: id });
@@ -165,10 +159,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
 
   handleDelete = () => {
     this.setState({ onDelete: false, isDeleteSuccess: true });
-
-    //update app state
     this.props.deleteDevPlan(this.state.toDelete);
-    console.log("Deleted");
   };
 
   handleRedirectToAddPage = () => {

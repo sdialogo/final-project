@@ -125,7 +125,6 @@ export function validateDevPlan(data: TDevPlan) {
     isValid = true;
   } else {
     isValid = false;
-    debugger;
     ajv.errors.map((error: any) => {
       if (error.dataPath === ".title") {
         errorList[0].isTitleError = true;
@@ -222,21 +221,28 @@ export function formatDate(date: string) {
 export function generateDevPlanId(data: TDevPlan[]) {
   let ids: number[] = [];
 
-  data.forEach(devPlan => {
-    ids.push(devPlan.id);
-  });
-
-  return Math.max(...ids);
+  if (data.length == 0) {
+    return 0;
+  } else {
+    data.forEach(devPlan => {
+      ids.push(devPlan.id);
+    });
+    return Math.max(...ids);
+  }
 }
 
 export function generateEmployeeId(data: TEmployee[]) {
   let ids: number[] = [];
 
-  data.forEach(employee => {
-    ids.push(employee.id);
-  });
+  if (data.length == 0) {
+    return 0;
+  } else {
+    data.forEach(employee => {
+      ids.push(employee.id);
+    });
 
-  return Math.max(...ids);
+    return Math.max(...ids);
+  }
 }
 
 export function sortDevPlanTableContentById(data: TDevPlan[]) {

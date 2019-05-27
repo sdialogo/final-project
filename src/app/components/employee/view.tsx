@@ -3,6 +3,7 @@ import {
   loadEmployees,
   deleteEmployee
 } from "../../redux/actions/employeeActions";
+import { loadDevPlans } from "../../redux/actions/devPlanActions";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import CustomizedSnackbars from "../shared/snackbars";
@@ -11,7 +12,7 @@ import EmployeeDetailsView from "./detailsView";
 import EnhancedTableHead from "../shared/enhancedTableHead";
 import EnhancedToolbar from "../shared/enhancedToolbar";
 import { employeeRows } from "../../common/constants";
-import { TEmployee, TAppState } from "../../common/types";
+import { TEmployee, TAppState, TDevPlan } from "../../common/types";
 import {
   findEmployeeById,
   formatDate,
@@ -56,7 +57,9 @@ type TState = {
 
 type TProps = {
   employees: TEmployee[];
+  devPlans: TDevPlan[];
   loadEmployees: Function;
+  loadDevPlans: Function;
   deleteEmployee: Function;
 };
 
@@ -89,14 +92,29 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
   };
 
   componentDidMount() {
-    const { employees, loadEmployees } = this.props;
+    const { loadDevPlans, loadEmployees } = this.props;
 
-    if (employees.length === 0) {
-      loadEmployees().catch((error: string) => {
-        alert("Loading employees failed: " + error);
-      });
-    }
+    loadDevPlans().catch((error: string) => {
+      alert("Loading dev plans failed: " + error);
+    });
+
+    loadEmployees().catch((error: string) => {
+      alert("Loading employees failed: " + error);
+    });
   }
+
+  componentDidUpdate() {
+    const { loadDevPlans, loadEmployees } = this.props;
+
+    loadDevPlans().catch((error: string) => {
+      alert("Loading dev plans on update failed: " + error);
+    });
+
+    loadEmployees().catch((error: string) => {
+      alert("Loading employees on update failed: " + error);
+    });
+  }
+
   handleRequestSort = (
     event: React.ChangeEvent<HTMLInputElement>,
     property: string
@@ -348,12 +366,14 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
 
 function mapStateToProps(state: TAppState) {
   return {
-    employees: state.employees
+    employees: state.employees,
+    devPlans: state.devPlans
   };
 }
 
 const mapDispatchToProps = {
   loadEmployees,
+  loadDevPlans,
   deleteEmployee
 };
 
