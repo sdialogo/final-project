@@ -94,15 +94,19 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   };
 
   componentDidMount() {
-    const { loadDevPlans, loadEmployees } = this.props;
+    const { devPlans, employees, loadDevPlans, loadEmployees } = this.props;
 
-    loadDevPlans().catch((error: string) => {
-      alert("Loading dev plans failed: " + error);
-    });
+    if (devPlans.length === 0) {
+      loadDevPlans().catch((error: string) => {
+        alert("Loading dev plans failed: " + error);
+      });
+    }
 
-    loadEmployees().catch((error: string) => {
-      alert("Loading employees failed: " + error);
-    });
+    if (employees.length === 0) {
+      loadEmployees().catch((error: string) => {
+        alert("Loading employees failed: " + error);
+      });
+    }
   }
 
   handleRequestSort = (
@@ -313,7 +317,9 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                 >
-                  <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
+                  <DialogTitle id="alert-dialog-title">
+                    {"Delete Development Plan"}
+                  </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                       Are you sure you want to delete this data?

@@ -3,7 +3,10 @@ import {
   loadEmployees,
   deleteEmployee
 } from "../../redux/actions/employeeActions";
-import { loadDevPlans } from "../../redux/actions/devPlanActions";
+import {
+  loadDevPlans,
+  deleteDevPlan
+} from "../../redux/actions/devPlanActions";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import CustomizedSnackbars from "../shared/snackbars";
@@ -61,6 +64,7 @@ type TProps = {
   loadEmployees: Function;
   loadDevPlans: Function;
   deleteEmployee: Function;
+  deleteDevPlan: Function;
 };
 
 class EmployeeViewPage extends React.Component<TProps, TState> {
@@ -92,27 +96,19 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
   };
 
   componentDidMount() {
-    const { loadDevPlans, loadEmployees } = this.props;
+    const { devPlans, employees, loadDevPlans, loadEmployees } = this.props;
 
-    loadDevPlans().catch((error: string) => {
-      alert("Loading dev plans failed: " + error);
-    });
+    if (devPlans.length === 0) {
+      loadDevPlans().catch((error: string) => {
+        alert("Loading dev plans failed: " + error);
+      });
+    }
 
-    loadEmployees().catch((error: string) => {
-      alert("Loading employees failed: " + error);
-    });
-  }
-
-  componentDidUpdate() {
-    const { loadDevPlans, loadEmployees } = this.props;
-
-    loadDevPlans().catch((error: string) => {
-      alert("Loading dev plans on update failed: " + error);
-    });
-
-    loadEmployees().catch((error: string) => {
-      alert("Loading employees on update failed: " + error);
-    });
+    if (employees.length === 0) {
+      loadEmployees().catch((error: string) => {
+        alert("Loading employees failed: " + error);
+      });
+    }
   }
 
   handleRequestSort = (
@@ -155,7 +151,6 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
   };
 
   handleCloseDialog = () => {
-    console.log("Delete cancelled");
     this.setState({ onDelete: false });
   };
 
@@ -163,17 +158,24 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     event: React.MouseEvent<HTMLElement, MouseEvent>,
     id: number
   ) => {
-    console.log("Deleting data...");
     event.stopPropagation();
 
     this.setState({ onDelete: true, toDelete: id });
   };
 
   handleDelete = () => {
-    this.setState({ onDelete: false, isDeleteSuccess: true });
+    const { toDelete } = this.state;
 
-    this.props.deleteEmployee(this.state.toDelete);
-    console.log("Deleted");
+    let devPlansAssigned = this.props.devPlans.filter(
+      d => d.employeeId === toDelete
+    );
+
+    devPlansAssigned.forEach(devPlan => {
+      this.props.deleteDevPlan(devPlan.id);
+    });
+
+    this.setState({ onDelete: false, isDeleteSuccess: true });
+    this.props.deleteEmployee(toDelete);
   };
 
   handleRedirectToAddPage = () => {
@@ -319,10 +321,13 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                 >
-                  <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
+                  <DialogTitle id="alert-dialog-title">
+                    {"Delete Employee"}
+                  </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                      Are you sure you want to delete this data?
+                      Assigned development plans to this employee will also be
+                      deleted. Are you sure you want to proceed?
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
@@ -374,7 +379,8 @@ function mapStateToProps(state: TAppState) {
 const mapDispatchToProps = {
   loadEmployees,
   loadDevPlans,
-  deleteEmployee
+  deleteEmployee,
+  deleteDevPlan
 };
 
 export default connect(
