@@ -68,6 +68,14 @@ type TProps = {
   deleteDevPlan: Function;
 };
 
+type TStyles = {
+  redButton: string;
+  greenButton: string;
+  yellowButton: string;
+};
+
+const styles: TStyles = require("../../styles/devPlanStyles.less");
+
 class DevPlanviewPage extends React.Component<TProps, TState> {
   state: TState = {
     data: this.props.devPlans,
@@ -302,7 +310,20 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                       >
                         <TableCell align="left">{n.title}</TableCell>
                         <TableCell align="left">{n.employeeName}</TableCell>
-                        <TableCell align="left">{n.statusCode}</TableCell>
+                        <TableCell align="left">
+                          {/* <Button
+                            className={
+                              n.statusCode == "Completed"
+                                ? styles.greenButton
+                                : n.statusCode == "Not Started"
+                                ? styles.redButton
+                                : styles.yellowButton
+                            }
+                          >
+                            {n.statusCode}
+                          </Button> */}
+                          {n.statusCode}
+                        </TableCell>
                         <TableCell align="left">
                           {formatDate(n.dueDate)}
                         </TableCell>
