@@ -17,6 +17,7 @@ type TProps = {
   rowCount?: number;
   onRequestSort: Function;
   rows: TRow[];
+  sortByProperty: Function;
 };
 
 export default class EnhancedTableHead extends React.Component<TProps, {}> {
@@ -26,7 +27,7 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
     this.props.onRequestSort(event, property);
   };
   render() {
-    const { order, orderBy, rows } = this.props;
+    const { order, orderBy, rows, sortByProperty } = this.props;
 
     return (
       <TableHead>
@@ -42,7 +43,8 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
                   <TableSortLabel
                     active={orderBy === row.id}
                     direction={order}
-                    onClick={this.createSortHandler(row.id)}
+                    // onClick={this.createSortHandler(row.id)}
+                    onClick={event => sortByProperty()}
                   >
                     {row.label}
                   </TableSortLabel>

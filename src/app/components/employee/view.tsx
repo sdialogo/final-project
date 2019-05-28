@@ -19,7 +19,8 @@ import { TEmployee, TAppState, TDevPlan } from "../../common/types";
 import {
   findEmployeeById,
   formatDate,
-  isEmployeeAddSuccessful
+  isEmployeeAddSuccessful,
+  sortEmployeeByName
 } from "../../common/functions";
 
 import DeleteTwoTone from "@material-ui/icons/DeleteTwoTone";
@@ -56,6 +57,7 @@ type TState = {
   isEditSuccess: boolean;
   isDeleteSuccess: boolean;
   searchInput: string;
+  isSortByName: boolean;
 };
 
 type TProps = {
@@ -92,7 +94,8 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     isAddSuccess: false,
     isEditSuccess: false,
     isDeleteSuccess: false,
-    searchInput: ""
+    searchInput: "",
+    isSortByName: false
   };
 
   componentDidMount() {
@@ -215,6 +218,14 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
     this.setState({ rowsPerPage: Number(event.target.value) });
   }
 
+  handleSortByName = () => {
+    if (this.state.order === "asc") {
+      this.setState({ isSortByName: true, order: "desc" });
+    } else {
+      this.setState({ isSortByName: true, order: "asc" });
+    }
+  };
+
   render() {
     const {
       data,
@@ -227,12 +238,18 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
       isEditSuccess,
       isDeleteSuccess,
       page,
-      rowsPerPage
+      rowsPerPage,
+      isSortByName
     } = this.state;
 
     let tableContent = data;
     {
       isSearch ? (tableContent = data) : (tableContent = this.props.employees);
+    }
+    {
+      isSortByName
+        ? (tableContent = sortEmployeeByName(tableContent, order))
+        : tableContent;
     }
     return (
       <div>
@@ -273,6 +290,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                 orderBy={orderBy}
                 onRequestSort={this.handleRequestSort}
                 rows={employeeRows}
+                sortByProperty={this.handleSortByName.bind(this)}
               />
               <TableBody>
                 {tableContent

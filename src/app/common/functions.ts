@@ -272,3 +272,39 @@ export function sortEmployeeTableContentById(data: TEmployee[]) {
 
   return sortedData;
 }
+
+export function sortDevPlanByTitle(data: TDevPlan[], order: string) {
+  let sortedData = data;
+
+  if (order === "desc") {
+    sortedData = data.sort((a: TDevPlan, b: TDevPlan) =>
+      a.title < b.title ? -1 : a.title > b.title ? 1 : 0
+    );
+  }
+
+  if (order === "asc") {
+    sortedData = data.sort((a: TDevPlan, b: TDevPlan) =>
+      a.title > b.title ? -1 : a.title < b.title ? 1 : 0
+    );
+  }
+
+  return sortedData;
+}
+
+export function sortEmployeeByName(data: TEmployee[], order: string) {
+  let sortedData = data;
+
+  if (order === "desc") {
+    sortedData = data.sort((a: TEmployee, b: TEmployee) =>
+      a.lastName < b.lastName ? -1 : a.lastName > b.lastName ? 1 : 0
+    );
+  }
+
+  if (order === "asc") {
+    sortedData = data.sort((a: TEmployee, b: TEmployee) =>
+      a.lastName > b.lastName ? -1 : a.lastName < b.lastName ? 1 : 0
+    );
+  }
+
+  return sortedData;
+}

@@ -16,7 +16,8 @@ import {
   findDataById,
   formatDate,
   sortDevPlanTableContentById,
-  isDevPlanAddSuccessful
+  isDevPlanAddSuccessful,
+  sortDevPlanByTitle
 } from "../../common/functions";
 import { devPlanRows } from "../../common/constants";
 import CustomizedSnackbars from "../shared/snackbars";
@@ -56,6 +57,7 @@ type TState = {
   isEditSuccess: boolean;
   isDeleteSuccess: boolean;
   searchInput: string;
+  isSortByTitle: boolean;
 };
 
 type TProps = {
@@ -91,7 +93,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     isAddSuccess: false,
     isEditSuccess: false,
     isDeleteSuccess: false,
-    searchInput: ""
+    searchInput: "",
+    isSortByTitle: false
   };
 
   componentDidMount() {
@@ -208,6 +211,14 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ rowsPerPage: Number(event.target.value) });
   }
 
+  handleSortByTitle = () => {
+    if (this.state.order === "asc") {
+      this.setState({ isSortByTitle: true, order: "desc" });
+    } else {
+      this.setState({ isSortByTitle: true, order: "asc" });
+    }
+  };
+
   render() {
     const {
       data,
@@ -220,7 +231,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       isEditSuccess,
       isDeleteSuccess,
       rowsPerPage,
-      page
+      page,
+      isSortByTitle
     } = this.state;
 
     let tableContent = data;
@@ -228,6 +240,12 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       isSearch
         ? (tableContent = sortDevPlanTableContentById(data))
         : (tableContent = sortDevPlanTableContentById(this.props.devPlans));
+    }
+
+    {
+      isSortByTitle
+        ? (tableContent = sortDevPlanByTitle(tableContent, order))
+        : tableContent;
     }
     return (
       <div>
@@ -268,6 +286,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                 orderBy={orderBy}
                 onRequestSort={this.handleRequestSort}
                 rows={devPlanRows}
+                sortByProperty={this.handleSortByTitle.bind(this)}
               />
               <TableBody>
                 {tableContent
