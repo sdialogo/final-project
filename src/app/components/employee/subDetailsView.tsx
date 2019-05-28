@@ -65,8 +65,6 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     let returnObj = validateEmployee(this.state.data);
 
     if (returnObj.isValid) {
-      console.log("Edit...");
-
       this.props.updateEmployee(this.state.data);
       this.props.closeDrawer(event);
     } else {

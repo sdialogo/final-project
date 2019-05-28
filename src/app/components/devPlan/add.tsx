@@ -110,8 +110,6 @@ class AddDevPlan extends React.Component<TProps, TState> {
     let returnObj = validateDevPlan(this.state.devPlan);
 
     if (returnObj.isValid) {
-      console.log("Save...");
-
       this.setState({ redirectToViewPage: true });
       this.props.addDevPlan(this.state.devPlan);
     } else {
@@ -120,7 +118,6 @@ class AddDevPlan extends React.Component<TProps, TState> {
   };
 
   handleCancel = () => {
-    console.log("Cancel...");
     this.setState({ redirectToViewPage: true });
   };
 

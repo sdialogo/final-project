@@ -35,18 +35,19 @@ class CustomizedSnackbars extends React.Component<TProps, TState> {
 
   render() {
     const { open } = this.state;
-    const { message, variant } = this.props;
+    const { message, variant, onClose } = this.props;
 
     return (
       <div>
         <Snackbar
           anchorOrigin={{
-            vertical: "top",
-            horizontal: "center"
+            vertical: "bottom",
+            horizontal: "right"
           }}
           open={open}
-          autoHideDuration={2000}
+          autoHideDuration={3000}
           className={styles.snackbar}
+          onClose={onClose}
         >
           {variant === "success" && (
             <SnackbarContent

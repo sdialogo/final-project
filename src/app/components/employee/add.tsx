@@ -104,8 +104,6 @@ class AddEmployee extends React.Component<TProps, TState> {
     let returnObj = validateEmployee(this.state.employee);
 
     if (returnObj.isValid) {
-      console.log("Save...");
-
       this.setState({ redirectToViewPage: true });
       this.props.addEmployee(this.state.employee);
     } else {
@@ -114,7 +112,6 @@ class AddEmployee extends React.Component<TProps, TState> {
   };
 
   handleCancel = () => {
-    console.log("Cancel...");
     this.setState({ redirectToViewPage: true });
   };
 

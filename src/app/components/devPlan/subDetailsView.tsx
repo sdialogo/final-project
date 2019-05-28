@@ -70,8 +70,6 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     let returnObj = validateDevPlan(this.state.data);
 
     if (returnObj.isValid) {
-      console.log("Edit...");
-
       this.props.updateDevPlan(this.state.data);
       this.props.closeDrawer(event);
     } else {

@@ -16,6 +16,9 @@ let employeeErrorList: TEmployeeError = [
   { isArchivedError: false, archivedError: "" }
 ];
 
+let successfulDevPlanAdd = false;
+let successfulEmployeeAdd = false;
+
 let devPlanSchema = {
   properties: {
     title: {
@@ -114,8 +117,6 @@ export function findEmployeeById(id: number, arr: TEmployee[]): TEmployee {
 }
 
 export function validateDevPlan(data: TDevPlan) {
-  console.log("Validating dev plan...");
-
   var Ajv = require("ajv");
   var ajv = Ajv({ allErrors: true });
   var valid = ajv.validate(devPlanSchema, data);
@@ -123,6 +124,7 @@ export function validateDevPlan(data: TDevPlan) {
 
   if (valid) {
     isValid = true;
+    successfulDevPlanAdd = true;
   } else {
     isValid = false;
     ajv.errors.map((error: any) => {
@@ -157,9 +159,13 @@ export function validateDevPlan(data: TDevPlan) {
   return returnObj;
 }
 
-export function validateEmployee(data: TEmployee) {
-  console.log("Validating employee...");
+export function isDevPlanAddSuccessful() {
+  let isSuccess = successfulDevPlanAdd;
+  successfulDevPlanAdd = false;
+  return isSuccess;
+}
 
+export function validateEmployee(data: TEmployee) {
   var Ajv = require("ajv");
   var ajv = Ajv({ allErrors: true });
   var valid = ajv.validate(employeeSchema, data);
@@ -167,9 +173,9 @@ export function validateEmployee(data: TEmployee) {
 
   if (valid) {
     isValid = true;
+    successfulEmployeeAdd = true;
   } else {
     isValid = false;
-    console.log(ajv.errors);
     ajv.errors.map((error: any) => {
       if (error.dataPath === ".firstName") {
         employeeErrorList[0].isFirstNameError = true;
@@ -200,6 +206,12 @@ export function validateEmployee(data: TEmployee) {
   };
 
   return returnObj;
+}
+
+export function isEmployeeAddSuccessful() {
+  let isSuccess = successfulEmployeeAdd;
+  successfulEmployeeAdd = false;
+  return isSuccess;
 }
 
 export function formatDate(date: string) {

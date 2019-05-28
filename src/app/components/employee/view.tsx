@@ -5,7 +5,7 @@ import {
 } from "../../redux/actions/employeeActions";
 import {
   loadDevPlans,
-  deleteDevPlan
+  deleteDevPlanSuccess
 } from "../../redux/actions/devPlanActions";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
@@ -19,7 +19,7 @@ import { TEmployee, TAppState, TDevPlan } from "../../common/types";
 import {
   findEmployeeById,
   formatDate,
-  sortEmployeeTableContentById
+  isEmployeeAddSuccessful
 } from "../../common/functions";
 
 import DeleteTwoTone from "@material-ui/icons/DeleteTwoTone";
@@ -64,7 +64,7 @@ type TProps = {
   loadEmployees: Function;
   loadDevPlans: Function;
   deleteEmployee: Function;
-  deleteDevPlan: Function;
+  deleteDevPlanSuccess: Function;
 };
 
 class EmployeeViewPage extends React.Component<TProps, TState> {
@@ -109,6 +109,8 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
         alert("Loading employees failed: " + error);
       });
     }
+
+    this.setState({ isAddSuccess: isEmployeeAddSuccessful() });
   }
 
   handleRequestSort = (
@@ -165,14 +167,15 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
 
   handleDelete = () => {
     const { toDelete } = this.state;
+    let i = 0;
 
     let devPlansAssigned = this.props.devPlans.filter(
       d => d.employeeId === toDelete
     );
 
-    devPlansAssigned.forEach(devPlan => {
-      this.props.deleteDevPlan(devPlan.id);
-    });
+    for (i = 0; i < devPlansAssigned.length; i++) {
+      this.props.deleteDevPlanSuccess(devPlansAssigned[i].id);
+    }
 
     this.setState({ onDelete: false, isDeleteSuccess: true });
     this.props.deleteEmployee(toDelete);
@@ -224,8 +227,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
       isEditSuccess,
       isDeleteSuccess,
       page,
-      rowsPerPage,
-      searchInput
+      rowsPerPage
     } = this.state;
 
     let tableContent = data;
@@ -257,7 +259,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
         )}
         {isDeleteSuccess && (
           <CustomizedSnackbars
-            message="Successfully deleted development plan"
+            message="Successfully deleted employee"
             variant="success"
             onClose={this.handleCloseSnackbar.bind(this)}
           />
@@ -326,7 +328,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                      Assigned development plans to this employee will also be
+                      Development plans assigned to this employee will also be
                       deleted. Are you sure you want to proceed?
                     </DialogContentText>
                   </DialogContent>
@@ -336,7 +338,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                       color="primary"
                       autoFocus
                     >
-                      Delete
+                      Delete Anyway
                     </Button>
                     <Button onClick={this.handleCloseDialog} color="primary">
                       Cancel
@@ -380,7 +382,7 @@ const mapDispatchToProps = {
   loadEmployees,
   loadDevPlans,
   deleteEmployee,
-  deleteDevPlan
+  deleteDevPlanSuccess
 };
 
 export default connect(

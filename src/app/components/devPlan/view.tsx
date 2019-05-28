@@ -15,7 +15,8 @@ import { TDevPlan, TEmployee, TAppState } from "../../common/types";
 import {
   findDataById,
   formatDate,
-  sortDevPlanTableContentById
+  sortDevPlanTableContentById,
+  isDevPlanAddSuccessful
 } from "../../common/functions";
 import { devPlanRows } from "../../common/constants";
 import CustomizedSnackbars from "../shared/snackbars";
@@ -107,6 +108,8 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
         alert("Loading employees failed: " + error);
       });
     }
+
+    this.setState({ isAddSuccess: isDevPlanAddSuccessful() });
   }
 
   handleRequestSort = (
@@ -171,7 +174,6 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   };
 
   handleDataFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     const filteredData = this.state.data.filter(d =>
       d.title.includes(event.target.value)
     );
@@ -218,8 +220,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
       isEditSuccess,
       isDeleteSuccess,
       rowsPerPage,
-      page,
-      searchInput
+      page
     } = this.state;
 
     let tableContent = data;
@@ -322,7 +323,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                      Are you sure you want to delete this data?
+                      Are you sure you want to delete this development plan?
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
