@@ -9,6 +9,9 @@
 @red-button : ~':local(.redButton)';
 @green-button : ~':local(.greenButton)';
 @yellow-button : ~':local(.yellowButton)';
+@sub-green-button : ~':local(.subGreenButton)';
+@sub-yellow-button : ~':local(.subYellowButton)';
+@sub-red-button : ~':local(.subRedButton)';
 
 @{button-style} {
   background: rgba(73, 155, 234, 1) !important;
@@ -51,23 +54,53 @@
   padding-left: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
+  width: 800px !important;
 }
 
 @{red-button} {
   background: #d32f2f !important;
   color: white !important;
   width: 50%;
-  height: 50%;
+  height: 100%;
+  text-align: center;
 }
 
 @{green-button} {
   background: #43a047 !important;
   color: white !important;
   width: 50%;
+  height: 100%;
+  text-align: center;
 }
 
 @{yellow-button} {
   background: #ffa000 !important;
   color: white !important;
   width: 50%;
+  height: 100%;
+  text-align: center;
+}
+
+@{sub-yellow-button} {
+  background: #ffa000 !important;
+  color: white !important;
+  width: 30%;
+  height: 50%;
+  text-align: center;
+}
+
+@{sub-green-button} {
+  background: #43a047 !important;
+  color: white !important;
+  width: 30%;
+  height: 50%;
+  text-align: center;
+}
+
+@{sub-red-button} {
+  background: #d32f2f !important;
+  color: white !important;
+  width: 30%;
+  height: 50%;
+  text-align: center;
 }

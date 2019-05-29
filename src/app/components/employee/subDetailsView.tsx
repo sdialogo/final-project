@@ -18,12 +18,21 @@ import {
   FormLabel,
   FormControlLabel,
   Radio,
-  RadioGroup
+  RadioGroup,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from "@material-ui/core";
 
 type TState = {
   data: TEmployee;
   errors: TEmployeeError;
+  discardChanges: boolean;
+  hasChanges: boolean;
+  open: boolean;
 };
 
 type TProps = {
@@ -56,7 +65,10 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
         { isLastNameError: false, lastNameError: "" },
         { isHireDateError: false, hireDateError: "" },
         { isArchivedError: false, archivedError: "" }
-      ]
+      ],
+      discardChanges: false,
+      hasChanges: false,
+      open: false
     };
   }
 
@@ -98,16 +110,61 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
       errorsCopy[4].archivedError = "";
     }
 
-    this.setState({ data: employee, errors: errorsCopy });
+    this.setState({ data: employee, errors: errorsCopy, hasChanges: true });
   };
+
+  handleCancel = () => {
+    this.setState({ discardChanges: true, open: true });
+  };
+
+  handleDiscardChanges = () => {
+    this.props.closeDrawer(event, "close");
+  };
+
+  handleCloseDialog = () => {
+    this.setState({ open: false });
+  };
+
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
-    const { data, errors } = this.state;
+    const { data, errors, discardChanges, hasChanges, open } = this.state;
     return (
       <div>
+        {discardChanges && (
+          <div>
+            <Dialog
+              open={open}
+              onClose={this.handleCloseDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Discard Changes"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Exiting will discard changes made. Are you sure you want to
+                  leave edit screen?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={this.handleDiscardChanges}
+                  color="primary"
+                  autoFocus
+                >
+                  Discard Changes
+                </Button>
+                <Button onClick={this.handleCloseDialog} color="primary">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
         <form noValidate autoComplete="off">
           <Grid container spacing={16} className={styles.gridContainer}>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={!isEdit}>
               <TextField
                 className={styles.textField}
                 id="firstName"
@@ -123,7 +180,11 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption">First Name</Typography>
+              <Typography variant="subheading">{data.firstName}</Typography>
+            </Grid>
+            <Grid item xs={6} hidden={!isEdit}>
               <TextField
                 className={styles.textField}
                 id="lastName"
@@ -139,7 +200,11 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption">Last Name</Typography>
+              <Typography variant="subheading">{data.lastName}</Typography>
+            </Grid>
+            <Grid item xs={6} hidden={!isEdit}>
               <TextField
                 className={styles.textField}
                 id="middleName"
@@ -155,7 +220,11 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption">Middle Name</Typography>
+              <Typography variant="subheading">{data.middleName}</Typography>
+            </Grid>
+            <Grid item xs={6} hidden={!isEdit}>
               <TextField
                 className={styles.textField}
                 id="hireDate"
@@ -172,7 +241,11 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption">Hire Date</Typography>
+              <Typography variant="subheading">{data.hireDate}</Typography>
+            </Grid>
+            <Grid item xs={6} hidden={!isEdit}>
               <FormLabel>Archived</FormLabel>
               <RadioGroup
                 aria-label="Archived"
@@ -195,6 +268,14 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 />
               </RadioGroup>
             </Grid>
+            <Grid item xs={6} hidden={isEdit}>
+              <p>
+                <Typography variant="caption">Archived</Typography>
+                <Typography variant="subheading">
+                  {data.archived ? "Yes" : "No"}
+                </Typography>
+              </p>
+            </Grid>
           </Grid>
         </form>
         <Divider />
@@ -212,7 +293,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
               <Grid item>
                 <Button
                   className={styles.buttonStyle}
-                  onClick={event => closeDrawer(event, "close")}
+                  onClick={
+                    hasChanges ? this.handleCancel : this.handleDiscardChanges
+                  }
                 >
                   Cancel
                 </Button>

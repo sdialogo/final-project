@@ -311,7 +311,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                         <TableCell align="left">{n.title}</TableCell>
                         <TableCell align="left">{n.employeeName}</TableCell>
                         <TableCell align="left">
-                          {/* <Button
+                          <div
                             className={
                               n.statusCode == "Completed"
                                 ? styles.greenButton
@@ -321,8 +321,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                             }
                           >
                             {n.statusCode}
-                          </Button> */}
-                          {n.statusCode}
+                          </div>
                         </TableCell>
                         <TableCell align="left">
                           {formatDate(n.dueDate)}

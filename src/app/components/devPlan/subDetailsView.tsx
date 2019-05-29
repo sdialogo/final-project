@@ -21,12 +21,21 @@ import {
   Button,
   Grid,
   TextField,
-  Divider
+  Divider,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from "@material-ui/core";
 
 type TState = {
   data: TDevPlan;
   errors: TDevPlanError;
+  discardChanges: boolean;
+  hasChanges: boolean;
+  open: boolean;
 };
 
 type TProps = {
@@ -43,9 +52,9 @@ type TProps = {
 type TStyles = {
   gridContainer: string;
   buttonStyle: string;
-  redButton: string;
-  greenButton: string;
-  yellowButton: string;
+  subGreenButton: string;
+  subRedButton: string;
+  subYellowButton: string;
 };
 
 const styles: TStyles = require("../../styles/devPlanStyles.less");
@@ -61,7 +70,10 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
         { isAssigneeError: false, assigneeError: "" },
         { isStatusError: false, statusError: "" },
         { isDueDateError: false, dueDateError: "" }
-      ]
+      ],
+      discardChanges: false,
+      hasChanges: false,
+      open: false
     };
   }
 
@@ -101,16 +113,61 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
       errorsCopy[4].dueDateError = "";
     }
 
-    this.setState({ data: devPlan, errors: errorsCopy });
+    this.setState({ data: devPlan, errors: errorsCopy, hasChanges: true });
   };
+
+  handleCancel = () => {
+    this.setState({ discardChanges: true, open: true });
+  };
+
+  handleDiscardChanges = () => {
+    this.props.closeDrawer(event, "close");
+  };
+
+  handleCloseDialog = () => {
+    this.setState({ open: false });
+  };
+
   render() {
     const { isEdit, closeDrawer, tabValue } = this.props;
-    const { data, errors } = this.state;
+    const { data, errors, discardChanges, hasChanges, open } = this.state;
     return (
       <div>
+        {discardChanges && (
+          <div>
+            <Dialog
+              open={open}
+              onClose={this.handleCloseDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Discard Changes"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Exiting will discard changes made. Are you sure you want to
+                  leave edit screen?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={this.handleDiscardChanges}
+                  color="primary"
+                  autoFocus
+                >
+                  Discard Changes
+                </Button>
+                <Button onClick={this.handleCloseDialog} color="primary">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
         <form noValidate autoComplete="off">
           <Grid container spacing={16} className={styles.gridContainer}>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={!isEdit}>
               <TextField
                 fullWidth
                 id="title"
@@ -124,7 +181,11 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 helperText={errors[0].isTitleError ? errors[0].titleError : ""}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption">Title</Typography>
+              <Typography variant="subheading">{data.title}</Typography>
+            </Grid>
+            <Grid item xs={6} hidden={!isEdit}>
               <TextField
                 fullWidth
                 id="description"
@@ -139,7 +200,11 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 helperText={errors[1].isDescError ? errors[1].descError : ""}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption">Description</Typography>
+              <Typography variant="subheading">{data.description}</Typography>
+            </Grid>
+            <Grid item xs={6} hidden={!isEdit}>
               <TextField
                 fullWidth
                 id="dueDate"
@@ -159,7 +224,11 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption">Due Date</Typography>
+              <Typography variant="subheading">{data.dueDate}</Typography>
+            </Grid>
+            <Grid item xs={6} hidden={!isEdit}>
               <TextField
                 fullWidth
                 id="dateCompleted"
@@ -179,7 +248,11 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption">Date Completed</Typography>
+              <Typography variant="subheading">{data.dueDate}</Typography>
+            </Grid>
+            <Grid item xs={6} hidden={!isEdit}>
               <EmployeeDropdown
                 employees={this.props.employees}
                 onChange={this.handleChange}
@@ -191,7 +264,11 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption">Assignee</Typography>
+              <Typography variant="subheading">{data.employeeName}</Typography>
+            </Grid>
+            <Grid item xs={6} hidden={!isEdit}>
               <StatusDropdown
                 onChange={this.handleChange}
                 value={data.statusCode}
@@ -201,6 +278,22 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                   errors[3].isStatusError ? errors[3].statusError : ""
                 }
               />
+            </Grid>
+            <Grid item xs={6} hidden={isEdit}>
+              <Typography variant="caption" style={{ paddingBottom: "5px" }}>
+                Status
+              </Typography>
+              <div
+                className={
+                  data.statusCode == "Completed"
+                    ? styles.subGreenButton
+                    : data.statusCode == "Not Started"
+                    ? styles.subRedButton
+                    : styles.subYellowButton
+                }
+              >
+                {data.statusCode}
+              </div>
             </Grid>
           </Grid>
         </form>
@@ -219,7 +312,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
               <Grid item>
                 <Button
                   className={styles.buttonStyle}
-                  onClick={event => closeDrawer(event, "close")}
+                  onClick={
+                    hasChanges ? this.handleCancel : this.handleDiscardChanges
+                  }
                 >
                   Cancel
                 </Button>
