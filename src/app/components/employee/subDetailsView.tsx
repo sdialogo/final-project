@@ -51,6 +51,7 @@ type TStyles = {
   buttonStyle: string;
   radioButton: string;
   secondaryButtonStyle: string;
+  closeButtonStyle: string;
 };
 
 const styles: TStyles = require("../../styles/employeeStyles.less");
@@ -147,15 +148,18 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleCloseDialog} color="secondary">
-                  Cancel
+                <Button
+                  className={styles.closeButtonStyle}
+                  onClick={this.handleCloseDialog}
+                >
+                  Stay
                 </Button>
                 <Button
+                  className={styles.secondaryButtonStyle}
                   onClick={this.handleDiscardChanges}
-                  color="primary"
                   autoFocus
                 >
-                  Discard Changes
+                  Leave
                 </Button>
               </DialogActions>
             </Dialog>
@@ -293,7 +297,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.secondaryButtonStyle}
+                  className={styles.closeButtonStyle}
                   onClick={
                     hasChanges ? this.handleCancel : this.handleDiscardChanges
                   }
@@ -314,7 +318,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.secondaryButtonStyle}
+                  className={styles.closeButtonStyle}
                   onClick={event => closeDrawer(event, "close")}
                 >
                   Close

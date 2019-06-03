@@ -56,6 +56,7 @@ type TStyles = {
   subRedButton: string;
   subYellowButton: string;
   secondaryButtonStyle: string;
+  closeButtonStyle: string;
 };
 
 const styles: TStyles = require("../../styles/devPlanStyles.less");
@@ -145,20 +146,23 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  Exiting will discard changes made. Are you sure you want to
-                  leave edit screen?
+                  Leaving this page will discard the changes made. Are you sure
+                  you want to leave?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleCloseDialog} color="secondary">
-                  Cancel
+                <Button
+                  className={styles.closeButtonStyle}
+                  onClick={this.handleCloseDialog}
+                >
+                  Stay
                 </Button>
                 <Button
+                  className={styles.secondaryButtonStyle}
                   onClick={this.handleDiscardChanges}
-                  color="primary"
                   autoFocus
                 >
-                  Discard Changes
+                  Leave
                 </Button>
               </DialogActions>
             </Dialog>
@@ -310,7 +314,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.secondaryButtonStyle}
+                  className={styles.closeButtonStyle}
                   onClick={
                     hasChanges ? this.handleCancel : this.handleDiscardChanges
                   }
@@ -331,7 +335,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.secondaryButtonStyle}
+                  className={styles.closeButtonStyle}
                   onClick={event => closeDrawer(event, "close")}
                 >
                   Close

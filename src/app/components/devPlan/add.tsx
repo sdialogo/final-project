@@ -14,12 +14,26 @@ import {
 } from "../../common/types";
 import { validateDevPlan, generateDevPlanId } from "../../common/functions";
 
-import { Grid, TextField, Paper, CardActions, Button } from "@material-ui/core";
+import {
+  Grid,
+  TextField,
+  Paper,
+  CardActions,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
+} from "@material-ui/core";
 
 type TState = {
   devPlan: TDevPlan;
   redirectToViewPage: boolean;
   errors: TDevPlanError;
+  discardChanges: boolean;
+  hasChanges: boolean;
+  open: boolean;
 };
 
 type TProps = {
@@ -35,6 +49,7 @@ type TStyles = {
   addForm: string;
   buttonStyle: string;
   secondaryButtonStyle: string;
+  closeButtonStyle: string;
 };
 
 const styles: TStyles = require("../../styles/devPlanStyles.less");
@@ -57,7 +72,10 @@ class AddDevPlan extends React.Component<TProps, TState> {
       { isAssigneeError: false, assigneeError: "" },
       { isStatusError: false, statusError: "" },
       { isDueDateError: false, dueDateError: "" }
-    ]
+    ],
+    discardChanges: false,
+    hasChanges: false,
+    open: false
   };
 
   componentDidMount() {
@@ -101,7 +119,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
 
     devPlan.id = currId + 1;
 
-    this.setState({ devPlan: devPlan, errors: errorsCopy });
+    this.setState({ devPlan: devPlan, errors: errorsCopy, hasChanges: true });
   };
 
   handleSave = (event: React.FormEvent<HTMLFormElement>) => {
@@ -117,11 +135,26 @@ class AddDevPlan extends React.Component<TProps, TState> {
   };
 
   handleCancel = () => {
+    this.setState({ discardChanges: true, open: true });
+  };
+
+  handleCloseDialog = () => {
+    this.setState({ open: false });
+  };
+
+  handleDiscardChanges = (event: React.MouseEvent) => {
     this.setState({ redirectToViewPage: true });
   };
 
   render() {
-    const { redirectToViewPage, devPlan, errors } = this.state;
+    const {
+      redirectToViewPage,
+      devPlan,
+      errors,
+      discardChanges,
+      hasChanges,
+      open
+    } = this.state;
 
     return (
       <div>
@@ -131,6 +164,41 @@ class AddDevPlan extends React.Component<TProps, TState> {
             <h2 className={styles.addHeader}>Add Development Plan</h2>
           </Grid>
         </Grid>
+        {discardChanges && (
+          <div>
+            <Dialog
+              open={open}
+              onClose={this.handleCloseDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Discard Changes"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Leaving this page will discard the changes made. Are you sure
+                  you want to leave?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  className={styles.closeButtonStyle}
+                  onClick={this.handleCloseDialog}
+                >
+                  Stay
+                </Button>
+                <Button
+                  className={styles.secondaryButtonStyle}
+                  onClick={this.handleDiscardChanges}
+                  autoFocus
+                >
+                  Leave
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
         <form autoComplete="off" onSubmit={this.handleSave}>
           <Paper>
             <Grid container className={styles.addForm}>
@@ -221,8 +289,10 @@ class AddDevPlan extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.secondaryButtonStyle}
-                  onClick={this.handleCancel}
+                  className={styles.closeButtonStyle}
+                  onClick={
+                    hasChanges ? this.handleCancel : this.handleDiscardChanges
+                  }
                 >
                   Cancel
                 </Button>

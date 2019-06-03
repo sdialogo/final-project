@@ -15,7 +15,12 @@ import {
   RadioGroup,
   FormLabel,
   FormControlLabel,
-  Radio
+  Radio,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from "@material-ui/core";
 
 import { TEmployee, TEmployeeError, TAppState } from "../../common/types";
@@ -29,6 +34,9 @@ type TState = {
   employee: TEmployee;
   redirectToViewPage: boolean;
   errors: TEmployeeError;
+  discardChanges: boolean;
+  hasChanges: boolean;
+  open: boolean;
 };
 
 type TProps = {
@@ -43,6 +51,7 @@ type TStyles = {
   buttonStyle: string;
   radioButton: string;
   secondaryButtonStyle: string;
+  closeButtonStyle: string;
 };
 
 const styles: TStyles = require("../../styles/employeeStyles.less");
@@ -65,7 +74,10 @@ class AddEmployee extends React.Component<TProps, TState> {
       { isLastNameError: false, lastNameError: "" },
       { isHireDateError: false, hireDateError: "" },
       { isArchivedError: false, archivedError: "" }
-    ]
+    ],
+    discardChanges: false,
+    hasChanges: false,
+    open: false
   };
 
   handleChange = (name: string, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +107,7 @@ class AddEmployee extends React.Component<TProps, TState> {
       errorsCopy[4].archivedError = "";
     }
 
-    this.setState({ employee: employee, errors: errorsCopy });
+    this.setState({ employee: employee, errors: errorsCopy, hasChanges: true });
   };
 
   handleSave = (event: React.FormEvent<HTMLFormElement>) => {
@@ -111,11 +123,26 @@ class AddEmployee extends React.Component<TProps, TState> {
   };
 
   handleCancel = () => {
+    this.setState({ discardChanges: true, open: true });
+  };
+
+  handleCloseDialog = () => {
+    this.setState({ open: false });
+  };
+
+  handleDiscardChanges = (event: React.MouseEvent) => {
     this.setState({ redirectToViewPage: true });
   };
 
   render() {
-    const { redirectToViewPage, employee, errors } = this.state;
+    const {
+      redirectToViewPage,
+      employee,
+      errors,
+      discardChanges,
+      hasChanges,
+      open
+    } = this.state;
 
     return (
       <div>
@@ -125,6 +152,41 @@ class AddEmployee extends React.Component<TProps, TState> {
             <h2 className={styles.addEmployee}>Add Employee</h2>
           </Grid>
         </Grid>
+        {discardChanges && (
+          <div>
+            <Dialog
+              open={open}
+              onClose={this.handleCloseDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Discard Changes"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Leaving this page will discard the changes made. Are you sure
+                  you want to leave?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  className={styles.closeButtonStyle}
+                  onClick={this.handleCloseDialog}
+                >
+                  Stay
+                </Button>
+                <Button
+                  className={styles.secondaryButtonStyle}
+                  onClick={this.handleDiscardChanges}
+                  autoFocus
+                >
+                  Leave
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
         <form autoComplete="off" onSubmit={this.handleSave}>
           <Paper>
             <Grid container className={styles.addForm}>
@@ -229,8 +291,10 @@ class AddEmployee extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.secondaryButtonStyle}
-                  onClick={this.handleCancel}
+                  className={styles.closeButtonStyle}
+                  onClick={
+                    hasChanges ? this.handleCancel : this.handleDiscardChanges
+                  }
                 >
                   Cancel
                 </Button>

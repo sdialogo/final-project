@@ -72,6 +72,8 @@ type TStyles = {
   redButton: string;
   greenButton: string;
   yellowButton: string;
+  secondaryButtonStyle: string;
+  closeButtonStyle: string;
 };
 
 const styles: TStyles = require("../../styles/devPlanStyles.less");
@@ -363,14 +365,17 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                   </DialogContent>
                   <DialogActions>
                     <Button
+                      className={styles.closeButtonStyle}
+                      onClick={this.handleCloseDialog}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className={styles.secondaryButtonStyle}
                       onClick={this.handleDelete}
-                      color="primary"
                       autoFocus
                     >
                       Delete
-                    </Button>
-                    <Button onClick={this.handleCloseDialog} color="secondary">
-                      Cancel
                     </Button>
                   </DialogActions>
                 </Dialog>

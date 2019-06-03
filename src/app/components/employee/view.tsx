@@ -69,6 +69,13 @@ type TProps = {
   deleteDevPlanSuccess: Function;
 };
 
+type TStyles = {
+  secondaryButtonStyle: string;
+  closeButtonStyle: string;
+};
+
+const styles: TStyles = require("../../styles/employeeStyles.less");
+
 class EmployeeViewPage extends React.Component<TProps, TState> {
   state: TState = {
     data: this.props.employees,
@@ -343,19 +350,22 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                       Development plans assigned to this employee will also be
-                      deleted. Are you sure you want to proceed?
+                      deleted. Are you sure you want to delete this employee?
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={this.handleCloseDialog} color="secondary">
+                    <Button
+                      className={styles.closeButtonStyle}
+                      onClick={this.handleCloseDialog}
+                    >
                       Cancel
                     </Button>
                     <Button
+                      className={styles.secondaryButtonStyle}
                       onClick={this.handleDelete}
-                      color="primary"
                       autoFocus
                     >
-                      Delete Anyway
+                      Delete
                     </Button>
                   </DialogActions>
                 </Dialog>

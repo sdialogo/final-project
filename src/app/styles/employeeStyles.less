@@ -5,6 +5,7 @@
 @text-field : ~':local(.textField)';
 @button-style : ~':local(.buttonStyle)';
 @secondary-button-style : ~':local(.secondaryButtonStyle)';
+@close-button-style : ~':local(.closeButtonStyle)';
 @add-employee : ~':local(.addEmployee)';
 @add-form : ~':local(.addForm)';
 @radio-button : ~':local(.radioButton)';
@@ -42,6 +43,13 @@
 
 @{secondary-button-style} {
   background: rgb(225, 0, 80) !important;
+  color: white !important;
+  font-size: 15px !important;
+  width: 100px;
+}
+
+@{close-button-style} {
+  background: #bdbaba !important;
   color: white !important;
   font-size: 15px !important;
   width: 100px;

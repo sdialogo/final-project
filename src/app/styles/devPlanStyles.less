@@ -1,5 +1,6 @@
 @button-style : ~':local(.buttonStyle)';
 @secondary-button-style : ~':local(.secondaryButtonStyle)';
+@close-button-style : ~':local(.closeButtonStyle)';
 @add-header : ~':local(.addHeader)';
 @add-form : ~':local(.addForm)';
 @text-color : ~':local(.textColor)';
@@ -23,6 +24,13 @@
 
 @{secondary-button-style} {
   background: rgb(225, 0, 80) !important;
+  color: white !important;
+  font-size: 15px !important;
+  width: 100px;
+}
+
+@{close-button-style} {
+  background: #bdbaba !important;
   color: white !important;
   font-size: 15px !important;
   width: 100px;
