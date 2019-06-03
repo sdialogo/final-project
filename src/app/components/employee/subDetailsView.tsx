@@ -38,7 +38,7 @@ type TState = {
 type TProps = {
   data: TEmployee;
   isEdit: boolean;
-  closeDrawer: Function;
+  closeDrawer(event: React.MouseEvent, button?: string): void;
   tabValue: number;
   addEmployee: Function;
   deleteEmployee: Function;
@@ -73,9 +73,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     };
   }
 
-  handleSave = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  handleSave = (event: React.MouseEvent) => {
     event.preventDefault();
-    let returnObj = validateEmployee(this.state.data);
+    let returnObj = validateEmployee(this.state.data, "edit");
 
     if (returnObj.isValid) {
       this.props.updateEmployee(this.state.data);
@@ -85,9 +85,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     }
   };
 
-  handleChange = (name: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  handleChange = (name: string, event: React.ChangeEvent<HTMLInputElement>) => {
     let employee = { ...this.state.data, [name]: event.target.value };
     let errorsCopy = this.state.errors;
 
@@ -118,7 +116,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
     this.setState({ discardChanges: true, open: true });
   };
 
-  handleDiscardChanges = () => {
+  handleDiscardChanges = (event: React.MouseEvent) => {
     this.props.closeDrawer(event, "close");
   };
 
@@ -171,7 +169,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 id="firstName"
                 label="First Name"
                 value={data.firstName}
-                onChange={this.handleChange("firstName")}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleChange("firstName", event)
+                }
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -191,7 +191,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 id="lastName"
                 label="Last Name"
                 value={data.lastName}
-                onChange={this.handleChange("lastName")}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleChange("lastName", event)
+                }
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -211,7 +213,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 id="middleName"
                 label="Middle Name"
                 value={data.middleName}
-                onChange={this.handleChange("middleName")}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleChange("middleName", event)
+                }
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -232,7 +236,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 label="Hire Date"
                 type="date"
                 value={data.hireDate}
-                onChange={this.handleChange("hireDate")}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleChange("hireDate", event)
+                }
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -252,7 +258,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 aria-label="Archived"
                 name="archived"
                 value={String(data.archived)}
-                onChange={this.handleChange("archived")}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleChange("archived", event)
+                }
                 className={styles.radioButton}
               >
                 <FormControlLabel

@@ -116,7 +116,7 @@ export function findEmployeeById(id: number, arr: TEmployee[]): TEmployee {
   };
 }
 
-export function validateDevPlan(data: TDevPlan) {
+export function validateDevPlan(data: TDevPlan, action: string) {
   var Ajv = require("ajv");
   var ajv = Ajv({ allErrors: true });
   var valid = ajv.validate(devPlanSchema, data);
@@ -124,7 +124,9 @@ export function validateDevPlan(data: TDevPlan) {
 
   if (valid) {
     isValid = true;
-    successfulDevPlanAdd = true;
+    if (action === "add") {
+      successfulDevPlanAdd = true;
+    }
   } else {
     isValid = false;
     ajv.errors.map((error: any) => {
@@ -165,7 +167,7 @@ export function isDevPlanAddSuccessful() {
   return isSuccess;
 }
 
-export function validateEmployee(data: TEmployee) {
+export function validateEmployee(data: TEmployee, action: string) {
   var Ajv = require("ajv");
   var ajv = Ajv({ allErrors: true });
   var valid = ajv.validate(employeeSchema, data);
@@ -173,7 +175,9 @@ export function validateEmployee(data: TEmployee) {
 
   if (valid) {
     isValid = true;
-    successfulEmployeeAdd = true;
+    if (action === "add") {
+      successfulEmployeeAdd = true;
+    }
   } else {
     isValid = false;
     ajv.errors.map((error: any) => {

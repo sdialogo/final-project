@@ -10,22 +10,15 @@ import {
 } from "@material-ui/core";
 
 type TProps = {
-  onSelectAllClick?: Function;
   order: any;
   orderBy: string;
   numSelected: number;
   rowCount?: number;
-  onRequestSort: Function;
   rows: TRow[];
-  sortByProperty: Function;
+  sortByProperty(): void;
 };
 
 export default class EnhancedTableHead extends React.Component<TProps, {}> {
-  createSortHandler = (property: string) => (
-    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>
-  ) => {
-    this.props.onRequestSort(event, property);
-  };
   render() {
     const { order, orderBy, rows, sortByProperty } = this.props;
 
@@ -43,7 +36,6 @@ export default class EnhancedTableHead extends React.Component<TProps, {}> {
                   <TableSortLabel
                     active={orderBy === row.id}
                     direction={order}
-                    // onClick={this.createSortHandler(row.id)}
                     onClick={event => sortByProperty()}
                   >
                     {row.label}

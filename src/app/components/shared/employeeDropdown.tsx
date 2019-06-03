@@ -5,7 +5,7 @@ import { TextField } from "@material-ui/core";
 
 type TProps = {
   employees: TEmployee[];
-  onChange: Function;
+  onChange(name: string, event: React.ChangeEvent<HTMLInputElement>): void;
   value: number;
   error: boolean;
   helperText: string;
@@ -31,7 +31,9 @@ export default class EmployeeDropdown extends React.Component<TProps, {}> {
         label="Assignee"
         value={value}
         disabled={isEdit}
-        onChange={onChange("employeeId")}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          onChange("employeeId", event)
+        }
         margin="normal"
         error={error}
         helperText={helperText}

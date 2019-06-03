@@ -149,10 +149,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
     this.setState({ ediTDevPlan: currData, open: true });
   };
 
-  handleClose = (
-    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    button: string
-  ) => {
+  handleClose = (event: React.MouseEvent, button: string) => {
     event.stopPropagation();
 
     if (button === "close") {
@@ -292,7 +289,6 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                 numSelected={selected.length}
                 order={order}
                 orderBy={orderBy}
-                onRequestSort={this.handleRequestSort}
                 rows={devPlanRows}
                 sortByProperty={this.handleSortByTitle.bind(this)}
               />

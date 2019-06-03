@@ -25,10 +25,7 @@ type TState = {
 type TProps = {
   data: TDevPlan;
   toggleDrawer(): void;
-  closeDrawer(
-    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    button: string
-  ): void;
+  closeDrawer(event: React.MouseEvent, button: string): void;
 };
 
 function TabContainer(props: any) {

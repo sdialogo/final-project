@@ -41,7 +41,7 @@ type TState = {
 type TProps = {
   data: TDevPlan;
   isEdit: boolean;
-  closeDrawer: Function;
+  closeDrawer(event: React.MouseEvent, button?: string): void;
   tabValue: number;
   addDevPlan: Function;
   deleteDevPlan: Function;
@@ -78,9 +78,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     };
   }
 
-  handleSave = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  handleSave = (event: React.MouseEvent) => {
     event.preventDefault();
-    let returnObj = validateDevPlan(this.state.data);
+    let returnObj = validateDevPlan(this.state.data, "edit");
 
     if (returnObj.isValid) {
       this.props.updateDevPlan(this.state.data);
@@ -90,9 +90,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     }
   };
 
-  handleChange = (name: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  handleChange = (name: string, event: React.ChangeEvent<HTMLInputElement>) => {
     let devPlan = { ...this.state.data, [name]: event.target.value };
     let errorsCopy = this.state.errors;
 
@@ -121,7 +119,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
     this.setState({ discardChanges: true, open: true });
   };
 
-  handleDiscardChanges = () => {
+  handleDiscardChanges = (event: React.MouseEvent) => {
     this.props.closeDrawer(event, "close");
   };
 
@@ -174,7 +172,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 id="title"
                 label="Title"
                 value={data.title}
-                onChange={this.handleChange("title")}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleChange("title", event)
+                }
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -192,7 +192,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 id="description"
                 label="Description"
                 value={data.description}
-                onChange={this.handleChange("description")}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleChange("description", event)
+                }
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -212,7 +214,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 label="Due Date"
                 type="date"
                 value={data.dueDate}
-                onChange={this.handleChange("dueDate")}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleChange("dueDate", event)
+                }
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -236,7 +240,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 label="Date Completed"
                 type="date"
                 value={data.dueDate}
-                onChange={this.handleChange("dateCompleted")}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  this.handleChange("dateCompleted", event)
+                }
                 margin="normal"
                 variant="outlined"
                 disabled={!isEdit}
@@ -256,7 +262,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             <Grid item xs={6} hidden={!isEdit}>
               <EmployeeDropdown
                 employees={this.props.employees}
-                onChange={this.handleChange}
+                onChange={this.handleChange.bind(this)}
                 value={Number(data.employeeId)}
                 isEdit={!isEdit}
                 error={errors[2].isAssigneeError}
@@ -271,7 +277,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6} hidden={!isEdit}>
               <StatusDropdown
-                onChange={this.handleChange}
+                onChange={this.handleChange.bind(this)}
                 value={data.statusCode}
                 isEdit={!isEdit}
                 error={errors[3].isStatusError}

@@ -68,9 +68,7 @@ class AddEmployee extends React.Component<TProps, TState> {
     ]
   };
 
-  handleChange = (name: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  handleChange = (name: string, event: React.ChangeEvent<HTMLInputElement>) => {
     let employee = { ...this.state.employee, [name]: event.target.value };
     let errorsCopy = this.state.errors;
 
@@ -100,9 +98,9 @@ class AddEmployee extends React.Component<TProps, TState> {
     this.setState({ employee: employee, errors: errorsCopy });
   };
 
-  handleSave = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  handleSave = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    let returnObj = validateEmployee(this.state.employee);
+    let returnObj = validateEmployee(this.state.employee, "add");
 
     if (returnObj.isValid) {
       this.setState({ redirectToViewPage: true });
@@ -127,8 +125,8 @@ class AddEmployee extends React.Component<TProps, TState> {
             <h2 className={styles.addEmployee}>Add Employee</h2>
           </Grid>
         </Grid>
-        <Paper>
-          <form noValidate autoComplete="off">
+        <form autoComplete="off" onSubmit={this.handleSave}>
+          <Paper>
             <Grid container className={styles.addForm}>
               <Grid container alignItems="center" spacing={32}>
                 <Grid item sm={6}>
@@ -136,7 +134,9 @@ class AddEmployee extends React.Component<TProps, TState> {
                     id="firstName"
                     label="First Name"
                     value={employee.firstName}
-                    onChange={this.handleChange("firstName")}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      this.handleChange("firstName", event)
+                    }
                     margin="normal"
                     fullWidth
                     error={errors[0].isFirstNameError}
@@ -150,7 +150,9 @@ class AddEmployee extends React.Component<TProps, TState> {
                     id="lastName"
                     label="Last Name"
                     value={employee.lastName}
-                    onChange={this.handleChange("lastName")}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      this.handleChange("lastName", event)
+                    }
                     margin="normal"
                     fullWidth
                     error={errors[2].isLastNameError}
@@ -164,7 +166,9 @@ class AddEmployee extends React.Component<TProps, TState> {
                     id="middleName"
                     label="Middle Name"
                     value={employee.middleName}
-                    onChange={this.handleChange("middleName")}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      this.handleChange("middleName", event)
+                    }
                     margin="normal"
                     fullWidth
                     error={errors[1].isMiddleNameError}
@@ -181,7 +185,9 @@ class AddEmployee extends React.Component<TProps, TState> {
                     label="Hire Date"
                     type="date"
                     value={employee.hireDate}
-                    onChange={this.handleChange("hireDate")}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      this.handleChange("hireDate", event)
+                    }
                     margin="normal"
                     fullWidth
                     InputLabelProps={{
@@ -199,7 +205,9 @@ class AddEmployee extends React.Component<TProps, TState> {
                     aria-label="Archived"
                     name="archived"
                     value={String(employee.archived)}
-                    onChange={this.handleChange("archived")}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      this.handleChange("archived", event)
+                    }
                     className={styles.radioButton}
                   >
                     <FormControlLabel
@@ -216,25 +224,25 @@ class AddEmployee extends React.Component<TProps, TState> {
                 </Grid>
               </Grid>
             </Grid>
-          </form>
-        </Paper>
-        <CardActions>
-          <Grid spacing={8} justify="flex-end" container>
-            <Grid item>
-              <Button
-                className={styles.secondaryButtonStyle}
-                onClick={this.handleCancel}
-              >
-                Cancel
-              </Button>
+          </Paper>
+          <CardActions>
+            <Grid spacing={8} justify="flex-end" container>
+              <Grid item>
+                <Button
+                  className={styles.secondaryButtonStyle}
+                  onClick={this.handleCancel}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button className={styles.buttonStyle} type="submit">
+                  Save
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Button className={styles.buttonStyle} onClick={this.handleSave}>
-                Save
-              </Button>
-            </Grid>
-          </Grid>
-        </CardActions>
+          </CardActions>
+        </form>
       </div>
     );
   }

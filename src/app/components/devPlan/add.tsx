@@ -76,9 +76,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
     }
   }
 
-  handleChange = (name: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  handleChange = (name: string, event: React.ChangeEvent<HTMLInputElement>) => {
     let devPlan = { ...this.state.devPlan, [name]: event.target.value };
     let errorsCopy = this.state.errors;
     let currId = generateDevPlanId(this.props.devPlans);
@@ -108,7 +106,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
 
   handleSave = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    let returnObj = validateDevPlan(this.state.devPlan);
+    let returnObj = validateDevPlan(this.state.devPlan, "add");
 
     if (returnObj.isValid) {
       this.setState({ redirectToViewPage: true });
@@ -143,7 +141,9 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     id="title"
                     label="Title"
                     value={devPlan.title}
-                    onChange={this.handleChange("title")}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      this.handleChange("title", event)
+                    }
                     margin="normal"
                     fullWidth
                     error={errors[0].isTitleError}
@@ -158,7 +158,9 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     id="description"
                     label="Description"
                     value={devPlan.description}
-                    onChange={this.handleChange("description")}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      this.handleChange("description", event)
+                    }
                     margin="normal"
                     fullWidth
                     multiline
@@ -171,7 +173,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                 <Grid item xs={6}>
                   <EmployeeDropdown
                     employees={this.props.employees}
-                    onChange={this.handleChange}
+                    onChange={this.handleChange.bind(this)}
                     value={Number(devPlan.employeeId)}
                     isEdit={false}
                     error={errors[2].isAssigneeError}
@@ -187,7 +189,9 @@ class AddDevPlan extends React.Component<TProps, TState> {
                     label="Due Date"
                     type="date"
                     value={devPlan.dueDate}
-                    onChange={this.handleChange("dueDate")}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      this.handleChange("dueDate", event)
+                    }
                     margin="normal"
                     fullWidth
                     error={errors[4].isDueDateError}
@@ -201,7 +205,7 @@ class AddDevPlan extends React.Component<TProps, TState> {
                 </Grid>
                 <Grid item xs={6}>
                   <StatusDropdown
-                    onChange={this.handleChange}
+                    onChange={this.handleChange.bind(this)}
                     value={devPlan.statusCode}
                     isEdit={false}
                     error={errors[3].isStatusError}
