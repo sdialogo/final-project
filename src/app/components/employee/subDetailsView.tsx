@@ -50,6 +50,7 @@ type TStyles = {
   textField: string;
   buttonStyle: string;
   radioButton: string;
+  secondaryButtonStyle: string;
 };
 
 const styles: TStyles = require("../../styles/employeeStyles.less");
@@ -148,15 +149,15 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
+                <Button onClick={this.handleCloseDialog} color="secondary">
+                  Cancel
+                </Button>
                 <Button
                   onClick={this.handleDiscardChanges}
                   color="primary"
                   autoFocus
                 >
                   Discard Changes
-                </Button>
-                <Button onClick={this.handleCloseDialog} color="primary">
-                  Cancel
                 </Button>
               </DialogActions>
             </Dialog>
@@ -284,15 +285,7 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.buttonStyle}
-                  onClick={this.handleSave}
-                >
-                  Save
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  className={styles.buttonStyle}
+                  className={styles.secondaryButtonStyle}
                   onClick={
                     hasChanges ? this.handleCancel : this.handleDiscardChanges
                   }
@@ -300,12 +293,20 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
                   Cancel
                 </Button>
               </Grid>
+              <Grid item>
+                <Button
+                  className={styles.buttonStyle}
+                  onClick={this.handleSave}
+                >
+                  Save
+                </Button>
+              </Grid>
             </Grid>
           ) : (
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.buttonStyle}
+                  className={styles.secondaryButtonStyle}
                   onClick={event => closeDrawer(event, "close")}
                 >
                   Close

@@ -4,6 +4,7 @@
 @grid-container : ~':local(.gridContainer)';
 @text-field : ~':local(.textField)';
 @button-style : ~':local(.buttonStyle)';
+@secondary-button-style : ~':local(.secondaryButtonStyle)';
 @add-employee : ~':local(.addEmployee)';
 @add-form : ~':local(.addForm)';
 @radio-button : ~':local(.radioButton)';
@@ -35,6 +36,15 @@
 @{button-style} {
   background: rgba(73, 155, 234, 1) !important;
   color: white !important;
+  font-size: 15px !important;
+  width: 100px;
+}
+
+@{secondary-button-style} {
+  background: rgb(225, 0, 80) !important;
+  color: white !important;
+  font-size: 15px !important;
+  width: 100px;
 }
 
 @{add-employee} {

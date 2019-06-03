@@ -42,6 +42,7 @@ type TStyles = {
   addForm: string;
   buttonStyle: string;
   radioButton: string;
+  secondaryButtonStyle: string;
 };
 
 const styles: TStyles = require("../../styles/employeeStyles.less");
@@ -220,16 +221,16 @@ class AddEmployee extends React.Component<TProps, TState> {
         <CardActions>
           <Grid spacing={8} justify="flex-end" container>
             <Grid item>
-              <Button className={styles.buttonStyle} onClick={this.handleSave}>
-                Save
-              </Button>
-            </Grid>
-            <Grid item>
               <Button
-                className={styles.buttonStyle}
+                className={styles.secondaryButtonStyle}
                 onClick={this.handleCancel}
               >
                 Cancel
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button className={styles.buttonStyle} onClick={this.handleSave}>
+                Save
               </Button>
             </Grid>
           </Grid>

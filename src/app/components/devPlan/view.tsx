@@ -373,7 +373,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
                     >
                       Delete
                     </Button>
-                    <Button onClick={this.handleCloseDialog} color="primary">
+                    <Button onClick={this.handleCloseDialog} color="secondary">
                       Cancel
                     </Button>
                   </DialogActions>

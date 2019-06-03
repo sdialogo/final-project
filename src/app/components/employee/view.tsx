@@ -351,15 +351,15 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
+                    <Button onClick={this.handleCloseDialog} color="secondary">
+                      Cancel
+                    </Button>
                     <Button
                       onClick={this.handleDelete}
                       color="primary"
                       autoFocus
                     >
                       Delete Anyway
-                    </Button>
-                    <Button onClick={this.handleCloseDialog} color="primary">
-                      Cancel
                     </Button>
                   </DialogActions>
                 </Dialog>

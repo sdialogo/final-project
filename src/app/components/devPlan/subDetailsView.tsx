@@ -55,6 +55,7 @@ type TStyles = {
   subGreenButton: string;
   subRedButton: string;
   subYellowButton: string;
+  secondaryButtonStyle: string;
 };
 
 const styles: TStyles = require("../../styles/devPlanStyles.less");
@@ -151,15 +152,15 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
+                <Button onClick={this.handleCloseDialog} color="secondary">
+                  Cancel
+                </Button>
                 <Button
                   onClick={this.handleDiscardChanges}
                   color="primary"
                   autoFocus
                 >
                   Discard Changes
-                </Button>
-                <Button onClick={this.handleCloseDialog} color="primary">
-                  Cancel
                 </Button>
               </DialogActions>
             </Dialog>
@@ -303,15 +304,7 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.buttonStyle}
-                  onClick={this.handleSave}
-                >
-                  Save
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  className={styles.buttonStyle}
+                  className={styles.secondaryButtonStyle}
                   onClick={
                     hasChanges ? this.handleCancel : this.handleDiscardChanges
                   }
@@ -319,12 +312,20 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
                   Cancel
                 </Button>
               </Grid>
+              <Grid item>
+                <Button
+                  className={styles.buttonStyle}
+                  onClick={this.handleSave}
+                >
+                  Save
+                </Button>
+              </Grid>
             </Grid>
           ) : (
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
                 <Button
-                  className={styles.buttonStyle}
+                  className={styles.secondaryButtonStyle}
                   onClick={event => closeDrawer(event, "close")}
                 >
                   Close

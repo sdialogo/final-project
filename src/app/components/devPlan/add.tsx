@@ -34,6 +34,7 @@ type TStyles = {
   addHeader: string;
   addForm: string;
   buttonStyle: string;
+  secondaryButtonStyle: string;
 };
 
 const styles: TStyles = require("../../styles/devPlanStyles.less");
@@ -215,16 +216,16 @@ class AddDevPlan extends React.Component<TProps, TState> {
           <CardActions>
             <Grid spacing={8} justify="flex-end" container>
               <Grid item>
-                <Button className={styles.buttonStyle} type="submit">
-                  Save
-                </Button>
-              </Grid>
-              <Grid item>
                 <Button
-                  className={styles.buttonStyle}
+                  className={styles.secondaryButtonStyle}
                   onClick={this.handleCancel}
                 >
                   Cancel
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button className={styles.buttonStyle} type="submit">
+                  Save
                 </Button>
               </Grid>
             </Grid>
