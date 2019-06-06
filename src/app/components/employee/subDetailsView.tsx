@@ -106,6 +106,11 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
       errorsCopy[3].isHireDateError = false;
       errorsCopy[3].hireDateError = "";
     } else if (name === "archived") {
+      if (event.target.value === "true") {
+        employee.archived = true;
+      } else if (event.target.value === "false") {
+        employee.archived = false;
+      }
       errorsCopy[4].isArchivedError = false;
       errorsCopy[4].archivedError = "";
     }
