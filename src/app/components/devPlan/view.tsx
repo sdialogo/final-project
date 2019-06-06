@@ -15,6 +15,7 @@ import { TDevPlan, TEmployee, TAppState } from "../../common/types";
 import {
   findDataById,
   formatDate,
+  convertDate,
   sortDevPlanTableContentById,
   isDevPlanAddSuccessful,
   sortDevPlanByTitle
@@ -147,6 +148,7 @@ class DevPlanviewPage extends React.Component<TProps, TState> {
   ) => {
     event.stopPropagation();
     let currData = findDataById(id, this.props.devPlans);
+    currData.dueDate = convertDate(currData.dueDate);
 
     this.setState({ ediTDevPlan: currData, open: true });
   };

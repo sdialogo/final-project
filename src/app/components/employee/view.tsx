@@ -19,6 +19,7 @@ import { TEmployee, TAppState, TDevPlan } from "../../common/types";
 import {
   findEmployeeById,
   formatDate,
+  convertDate,
   isEmployeeAddSuccessful,
   sortEmployeeByName
 } from "../../common/functions";
@@ -145,6 +146,7 @@ class EmployeeViewPage extends React.Component<TProps, TState> {
   ) => {
     event.stopPropagation();
     let currData = findEmployeeById(id, this.props.employees);
+    currData.hireDate = convertDate(currData.hireDate);
 
     this.setState({ editData: currData, open: true });
   };

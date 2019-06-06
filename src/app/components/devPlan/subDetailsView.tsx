@@ -14,7 +14,7 @@ import {
 } from "../../common/types";
 import StatusDropdown from "../shared/statusDropdown";
 import EmployeeDropdown from "../shared/employeeDropdown";
-import { validateDevPlan } from "../../common/functions";
+import { validateDevPlan, formatDate } from "../../common/functions";
 
 import {
   CardActions,
@@ -235,7 +235,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6} hidden={isEdit}>
               <Typography variant="caption">Due Date</Typography>
-              <Typography variant="subheading">{data.dueDate}</Typography>
+              <Typography variant="subheading">
+                {formatDate(data.dueDate)}
+              </Typography>
             </Grid>
             <Grid item xs={6} hidden={!isEdit}>
               <TextField
@@ -261,7 +263,9 @@ class DevPlanSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6} hidden={isEdit}>
               <Typography variant="caption">Date Completed</Typography>
-              <Typography variant="subheading">{data.dueDate}</Typography>
+              <Typography variant="subheading">
+                {formatDate(data.dueDate)}
+              </Typography>
             </Grid>
             <Grid item xs={6} hidden={!isEdit}>
               <EmployeeDropdown

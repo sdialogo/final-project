@@ -234,6 +234,22 @@ export function formatDate(date: string) {
   return [month, day, year].join("/");
 }
 
+export function convertDate(date: string) {
+  let formattedDate = new Date(date);
+  let day = "" + formattedDate.getDate();
+  let month = "" + (formattedDate.getMonth() + 1);
+  let year = formattedDate.getFullYear();
+
+  if (month.length < 2) {
+    month = "0" + month;
+  }
+  if (day.length < 2) {
+    day = "0" + day;
+  }
+
+  return [year, month, day].join("-");
+}
+
 export function generateDevPlanId(data: TDevPlan[]) {
   let ids: number[] = [];
 

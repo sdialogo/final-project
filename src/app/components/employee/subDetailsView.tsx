@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { getFullName } from "../../common/functions";
 import { TEmployee, TEmployeeError, TAppState } from "../../common/types";
-import { validateEmployee } from "../../common/functions";
+import { validateEmployee, formatDate } from "../../common/functions";
 import {
   addEmployee,
   deleteEmployee,
@@ -259,7 +259,9 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
             </Grid>
             <Grid item xs={6} hidden={isEdit}>
               <Typography variant="caption">Hire Date</Typography>
-              <Typography variant="subheading">{data.hireDate}</Typography>
+              <Typography variant="subheading">
+                {formatDate(data.hireDate)}
+              </Typography>
             </Grid>
             <Grid item xs={6} hidden={!isEdit}>
               <FormLabel>Archived</FormLabel>
