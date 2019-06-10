@@ -289,12 +289,10 @@ class EmployeeSubViewPage extends React.Component<TProps, TState> {
               </RadioGroup>
             </Grid>
             <Grid item xs={6} hidden={isEdit}>
-              <p>
-                <Typography variant="caption">Archived</Typography>
-                <Typography variant="subheading">
-                  {data.archived ? "Yes" : "No"}
-                </Typography>
-              </p>
+              <Typography variant="caption">Archived</Typography>
+              <Typography variant="subheading">
+                {data.archived ? "Yes" : "No"}
+              </Typography>
             </Grid>
           </Grid>
         </form>
