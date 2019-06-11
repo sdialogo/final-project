@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Redirect } from "react-router";
+import { connect } from "react-redux";
 import {
   loadEmployees,
   deleteEmployee
@@ -7,24 +9,6 @@ import {
   loadDevPlans,
   deleteDevPlanSuccess
 } from "../../redux/actions/devPlanActions";
-import { Redirect } from "react-router";
-import { connect } from "react-redux";
-import CustomizedSnackbars from "../shared/snackbars";
-
-import EmployeeDetailsView from "./detailsView";
-import EnhancedTableHead from "../shared/enhancedTableHead";
-import EnhancedToolbar from "../shared/enhancedToolbar";
-import { employeeRows } from "../../common/constants";
-import { TEmployee, TAppState, TDevPlan } from "../../common/types";
-import {
-  findEmployeeById,
-  formatDate,
-  convertDate,
-  isEmployeeAddSuccessful,
-  sortEmployeeByName
-} from "../../common/functions";
-
-import DeleteTwoTone from "@material-ui/icons/DeleteTwoTone";
 import {
   Table,
   TableBody,
@@ -40,6 +24,20 @@ import {
   IconButton,
   TablePagination
 } from "@material-ui/core";
+import DeleteTwoTone from "@material-ui/icons/DeleteTwoTone";
+import CustomizedSnackbars from "../shared/snackbars";
+import EmployeeDetailsView from "./detailsView";
+import EnhancedTableHead from "../shared/enhancedTableHead";
+import EnhancedToolbar from "../shared/enhancedToolbar";
+import {
+  findEmployeeById,
+  formatDate,
+  convertDate,
+  isEmployeeAddSuccessful,
+  sortEmployeeByName
+} from "../../common/functions";
+import { employeeRows } from "../../common/constants";
+import { TEmployee, TAppState, TDevPlan } from "../../common/types";
 
 type TState = {
   data: TEmployee[];

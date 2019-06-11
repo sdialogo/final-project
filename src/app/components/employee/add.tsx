@@ -2,11 +2,6 @@ import * as React from "react";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import {
-  loadEmployees,
-  addEmployee
-} from "../../redux/actions/employeeActions";
-
-import {
   Grid,
   TextField,
   Paper,
@@ -22,13 +17,16 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
-
-import { TEmployee, TEmployeeError, TAppState } from "../../common/types";
 import {
   getFullName,
   validateEmployee,
   generateEmployeeId
 } from "../../common/functions";
+import {
+  loadEmployees,
+  addEmployee
+} from "../../redux/actions/employeeActions";
+import { TEmployee, TEmployeeError, TAppState } from "../../common/types";
 
 type TState = {
   employee: TEmployee;

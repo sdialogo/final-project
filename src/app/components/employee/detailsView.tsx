@@ -1,7 +1,5 @@
 import * as React from "react";
 import EmployeeSubDetailsView from "./subDetailsView";
-import { TEmployee } from "../../common/types";
-
 import {
   Drawer,
   Grid,
@@ -12,6 +10,7 @@ import {
   Tabs,
   Tab
 } from "@material-ui/core";
+import { TEmployee } from "../../common/types";
 
 type TState = {
   open: boolean;

@@ -1,8 +1,4 @@
 import * as React from "react";
-
-import SubDetailsView from "./subDetailsView";
-import { TDevPlan } from "../../common/types";
-
 import {
   Drawer,
   Card,
@@ -14,6 +10,8 @@ import {
   Tabs,
   Tab
 } from "@material-ui/core";
+import SubDetailsView from "./subDetailsView";
+import { TDevPlan } from "../../common/types";
 
 type TState = {
   open: boolean;

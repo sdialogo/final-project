@@ -4,25 +4,7 @@ import { connect } from "react-redux";
 import EnhancedToolbar from "../shared/enhancedToolbar";
 import DetailsView from "./detailsView";
 import EnhancedTableHead from "../shared/enhancedTableHead";
-
-import {
-  loadDevPlans,
-  deleteDevPlan
-} from "../../redux/actions/devPlanActions";
-import { loadEmployees } from "../../redux/actions/employeeActions";
-
-import { TDevPlan, TEmployee, TAppState } from "../../common/types";
-import {
-  findDataById,
-  formatDate,
-  convertDate,
-  sortDevPlanTableContentById,
-  isDevPlanAddSuccessful,
-  sortDevPlanByTitle
-} from "../../common/functions";
-import { devPlanRows } from "../../common/constants";
 import CustomizedSnackbars from "../shared/snackbars";
-
 import {
   Table,
   TableBody,
@@ -38,8 +20,23 @@ import {
   IconButton,
   TablePagination
 } from "@material-ui/core";
-
 import { DeleteTwoTone } from "@material-ui/icons";
+import {
+  findDataById,
+  formatDate,
+  convertDate,
+  sortDevPlanTableContentById,
+  isDevPlanAddSuccessful,
+  sortDevPlanByTitle
+} from "../../common/functions";
+import { devPlanRows } from "../../common/constants";
+import {
+  loadDevPlans,
+  deleteDevPlan
+} from "../../redux/actions/devPlanActions";
+import { loadEmployees } from "../../redux/actions/employeeActions";
+
+import { TDevPlan, TEmployee, TAppState } from "../../common/types";
 
 type TState = {
   data: TDevPlan[];

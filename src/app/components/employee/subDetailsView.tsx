@@ -1,14 +1,5 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { getFullName } from "../../common/functions";
-import { TEmployee, TEmployeeError, TAppState } from "../../common/types";
-import { validateEmployee, formatDate } from "../../common/functions";
-import {
-  addEmployee,
-  deleteEmployee,
-  updateEmployee
-} from "../../redux/actions/employeeActions";
-
 import {
   CardActions,
   Button,
@@ -26,6 +17,17 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
+import {
+  validateEmployee,
+  formatDate,
+  getFullName
+} from "../../common/functions";
+import {
+  addEmployee,
+  deleteEmployee,
+  updateEmployee
+} from "../../redux/actions/employeeActions";
+import { TEmployee, TEmployeeError, TAppState } from "../../common/types";
 
 type TState = {
   data: TEmployee;

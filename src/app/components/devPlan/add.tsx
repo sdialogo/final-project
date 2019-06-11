@@ -1,19 +1,8 @@
 import * as React from "react";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
-import { loadDevPlans, addDevPlan } from "../../redux/actions/devPlanActions";
-import { loadEmployees } from "../../redux/actions/employeeActions";
-
 import StatusDropdown from "../shared/statusDropdown";
 import EmployeeDropdown from "../shared/employeeDropdown";
-import {
-  TDevPlan,
-  TDevPlanError,
-  TEmployee,
-  TAppState
-} from "../../common/types";
-import { validateDevPlan, generateDevPlanId } from "../../common/functions";
-
 import {
   Grid,
   TextField,
@@ -26,6 +15,15 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
+import { validateDevPlan, generateDevPlanId } from "../../common/functions";
+import { loadDevPlans, addDevPlan } from "../../redux/actions/devPlanActions";
+import { loadEmployees } from "../../redux/actions/employeeActions";
+import {
+  TDevPlan,
+  TDevPlanError,
+  TEmployee,
+  TAppState
+} from "../../common/types";
 
 type TState = {
   devPlan: TDevPlan;

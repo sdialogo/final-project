@@ -1,21 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import {
-  addDevPlan,
-  deleteDevPlan,
-  updateDevPlan
-} from "../../redux/actions/devPlanActions";
-
-import {
-  TDevPlan,
-  TEmployee,
-  TDevPlanError,
-  TAppState
-} from "../../common/types";
 import StatusDropdown from "../shared/statusDropdown";
 import EmployeeDropdown from "../shared/employeeDropdown";
-import { validateDevPlan, formatDate } from "../../common/functions";
-
 import {
   CardActions,
   Button,
@@ -29,6 +15,18 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
+import { validateDevPlan, formatDate } from "../../common/functions";
+import {
+  addDevPlan,
+  deleteDevPlan,
+  updateDevPlan
+} from "../../redux/actions/devPlanActions";
+import {
+  TDevPlan,
+  TEmployee,
+  TDevPlanError,
+  TAppState
+} from "../../common/types";
 
 type TState = {
   data: TDevPlan;
